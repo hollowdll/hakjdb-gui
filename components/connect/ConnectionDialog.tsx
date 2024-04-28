@@ -41,8 +41,8 @@ export function ConnectionDialog() {
           <DialogContentText>
             Connect to a new kvdb server instance.
           </DialogContentText>
-          <TextField required id="host" name="host" label="Host or IP address" fullWidth />
-          <TextField required id="port" name="port" label="Port number" fullWidth />
+          <TextField id="host" name="host" label="Host or IP address" fullWidth />
+          <TextField id="port" name="port" label="Port number" fullWidth />
         </DialogContent>
       </Dialog>
     </>
