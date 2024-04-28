@@ -12,13 +12,16 @@ fn main() {
   tauri::Builder::default()
     .menu(Menu::os_default("kvdb-gui")
       .add_submenu(Submenu::new("Connect", Menu::with_items([
-        CustomMenuItem::new("new-connection", "New kvdb connection").into(),
+        CustomMenuItem::new("new-connection", "New connection").into(),
         CustomMenuItem::new("disconnect", "Disconnect").into(),
       ])))
     )
     .on_menu_event(|event| {
       match event.menu_item_id() {
-        "new-connection" => println!("Menu event -> New kvdb connection"),
+        "new-connection" => {
+          println!("Menu event -> New connection");
+          let _ = event.window().emit("new-connection", ());
+        },
         "disconnect" => println!("Menu event -> Disconnect"),
         _ => {}
       }
