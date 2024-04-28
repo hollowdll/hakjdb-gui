@@ -7,6 +7,14 @@ import { Box, CircularProgress } from "@mui/material";
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
 
+  const handleConnect = () => {
+    setIsConnected(true);
+  }
+
+  const handleDisconnect = () => {
+    setIsConnected(false);
+  }
+
   return (
     <main>
       {!isConnected ? (
@@ -22,7 +30,7 @@ export default function Home() {
       ) : (
         <h1>Connected</h1>
       )}
-      <ConnectionDialog />
+      <ConnectionDialog handleConnect={handleConnect} />
     </main>
   );
 }

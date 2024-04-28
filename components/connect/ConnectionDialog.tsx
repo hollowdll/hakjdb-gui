@@ -7,11 +7,16 @@ import {
   TextField,
   DialogActions,
   DialogContentText,
+  Button,
 } from "@mui/material";
 import { listen } from "@tauri-apps/api/event";
 import { useEffect, useState } from "react";
 
-export function ConnectionDialog() {
+type ConnectionDialogProps = {
+  handleConnect: () => void,
+}
+
+export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleClose = () => {
@@ -20,6 +25,12 @@ export function ConnectionDialog() {
 
   const handleOpen = () => {
     setDialogOpen(true);
+  }
+
+  const handleConnectClick = () => {
+    console.log("trying to connect ...");
+    handleConnect();
+    handleClose();
   }
 
   useEffect(() => {
@@ -44,6 +55,10 @@ export function ConnectionDialog() {
           <TextField id="host" name="host" label="Host or IP address" fullWidth />
           <TextField id="port" name="port" label="Port number" fullWidth />
         </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConnectClick}>Connect</Button>
+          <Button onClick={handleClose} color="error">Cancel</Button>
+        </DialogActions>
       </Dialog>
     </>
   )
