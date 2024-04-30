@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Dialog,
@@ -14,14 +14,14 @@ import { useEffect, useState, ChangeEvent } from "react";
 import { ConnectionInfo } from "@/types/types";
 
 type ConnectionDialogProps = {
-  handleConnect: (connectionInfo: ConnectionInfo) => void,
-}
+  handleConnect: (connectionInfo: ConnectionInfo) => void;
+};
 
 export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>({
-    host: "",
-    port: 0,
+    host: "localhost",
+    port: 12345,
   });
 
   const handleClose = () => {
@@ -30,28 +30,31 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
 
   const handleOpen = () => {
     setDialogOpen(true);
-  }
+  };
 
   const handleConnectClick = () => {
     console.log("trying to connect ...");
     handleConnect(connectionInfo);
     handleClose();
-  }
+  };
 
   const inputChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setConnectionInfo({ ...connectionInfo, [event.target.name]: event.target.value });
-  }
+    setConnectionInfo({
+      ...connectionInfo,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   useEffect(() => {
-    const unlisten = listen("new-connection", event => {
+    const unlisten = listen("new-connection", (event) => {
       console.log("event ->", event.event);
       handleOpen();
-    })
+    });
 
     return () => {
-      unlisten.then(resolve => resolve())
-    }
-  }, [])
+      unlisten.then((resolve) => resolve());
+    };
+  }, []);
 
   return (
     <>
@@ -61,14 +64,33 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           <DialogContentText>
             Connect to a new kvdb server instance.
           </DialogContentText>
-          <TextField id="host" name="host" label="Host or IP address" value={connectionInfo.host} onChange={inputChanged} fullWidth />
-          <TextField id="port" name="port" label="Port number" value={connectionInfo.port} onChange={inputChanged} fullWidth />
+          <TextField
+            id="host"
+            name="host"
+            label="Host or IP address"
+            value={connectionInfo.host}
+            onChange={inputChanged}
+            fullWidth
+          />
+          <TextField
+            id="port"
+            name="port"
+            label="Port number"
+            value={connectionInfo.port}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              const value = Number(event.target.value);
+              if (value >= 0 && value <= 65535) setConnectionInfo({ ...connectionInfo, port: value });
+            }}
+            fullWidth
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleConnectClick}>Connect</Button>
-          <Button onClick={handleClose} color="error">Cancel</Button>
+          <Button onClick={handleClose} color="error">
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
     </>
-  )
+  );
 }
