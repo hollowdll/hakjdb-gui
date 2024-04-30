@@ -10,14 +10,19 @@ import {
   Button,
 } from "@mui/material";
 import { listen } from "@tauri-apps/api/event";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
+import { ConnectionInfo } from "@/types/types";
 
 type ConnectionDialogProps = {
-  handleConnect: () => void,
+  handleConnect: (connectionInfo: ConnectionInfo) => void,
 }
 
 export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>({
+    host: "",
+    port: 0,
+  });
 
   const handleClose = () => {
     setDialogOpen(false);
@@ -29,8 +34,12 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
 
   const handleConnectClick = () => {
     console.log("trying to connect ...");
-    handleConnect();
+    handleConnect(connectionInfo);
     handleClose();
+  }
+
+  const inputChanged = (event: ChangeEvent<HTMLInputElement>) => {
+    setConnectionInfo({ ...connectionInfo, [event.target.name]: event.target.value });
   }
 
   useEffect(() => {
@@ -52,8 +61,8 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           <DialogContentText>
             Connect to a new kvdb server instance.
           </DialogContentText>
-          <TextField id="host" name="host" label="Host or IP address" fullWidth />
-          <TextField id="port" name="port" label="Port number" fullWidth />
+          <TextField id="host" name="host" label="Host or IP address" value={connectionInfo.host} onChange={inputChanged} fullWidth />
+          <TextField id="port" name="port" label="Port number" value={connectionInfo.port} onChange={inputChanged} fullWidth />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleConnectClick}>Connect</Button>

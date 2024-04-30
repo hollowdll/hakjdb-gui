@@ -3,11 +3,12 @@
 import { ConnectionDialog } from "../components/connect/ConnectionDialog";
 import { useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
+import { ConnectionInfo } from "@/types/types";
 
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
 
-  const handleConnect = () => {
+  const handleConnect = (connectionInfo: ConnectionInfo) => {
     setIsConnected(true);
   }
 
