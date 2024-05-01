@@ -5,17 +5,40 @@ import { useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import { ConnectionInfo } from "@/types/types";
 import { invoke } from "@tauri-apps/api";
+import { notifySuccess, notifyError } from "@/utility/notification";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
 
   const handleConnect = (connectionInfo: ConnectionInfo) => {
-    invoke<string>('connect', { host: connectionInfo.host, port: connectionInfo.port })
-      .then(result => {
-        console.log(result);
-        setIsConnected(true);
-      })
-      .catch(error => console.error("Failed to connect:", error))
+    const promise = invoke<string>('connect', { host: connectionInfo.host, port: connectionInfo.port })
+    toast.promise(
+      promise,
+      {
+        loading: "Connecting...",
+        success: (result) => {
+          setIsConnected(true);
+          return result;
+        },
+        error: (error) => {
+          const errorMsg = `Failed to connect: ${error}`;
+          console.error(errorMsg);
+          return errorMsg
+        }
+      },
+      {
+        style: {
+          minWidth: "250px",
+        },
+        success: {
+          duration: 5000,
+        },
+        error: {
+          duration: 5000,
+        }
+      }
+    )
   }
 
   const handleDisconnect = () => {
@@ -35,9 +58,12 @@ export default function Home() {
           </Box>
         </Box>
       ) : (
-        <h1>Connected</h1>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          <h1>Connected</h1>
+        </Box>
       )}
       <ConnectionDialog handleConnect={handleConnect} />
+      <Toaster />
     </main>
   );
 }
