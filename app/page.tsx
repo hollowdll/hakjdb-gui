@@ -1,15 +1,21 @@
 'use client'
 
-import { ConnectionDialog } from "../components/connect/ConnectionDialog";
+import { ConnectionDialog } from "@/components/connect/ConnectionDialog";
 import { useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import { ConnectionInfo } from "@/types/types";
+import { invoke } from "@tauri-apps/api";
 
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
 
   const handleConnect = (connectionInfo: ConnectionInfo) => {
-    setIsConnected(true);
+    invoke<string>('connect', { host: connectionInfo.host, port: connectionInfo.port })
+      .then(result => {
+        console.log(result);
+        setIsConnected(true);
+      })
+      .catch(error => console.error("Failed to connect:", error))
   }
 
   const handleDisconnect = () => {

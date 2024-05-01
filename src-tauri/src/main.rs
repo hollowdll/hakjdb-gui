@@ -23,12 +23,16 @@ fn greet(name: &str) -> String {
   format!("Hello, {}!", name)
 }
 
-/*
 #[tauri::command]
-fn connect(connection: State<GrpcConnection>, host: &str, port: u16) -> Result<String, String> {
-
+async fn connect(connection: State<'_, GrpcConnection>, host: &str, port: u16) -> Result<String, String> {
+  match GrpcClient::new(host, port).await {
+    Ok(client) => {
+      *connection.connection.lock().unwrap() = Some(client);
+      return Ok(format!("Connected to {}:{}", host, port));
+    },
+    Err(e) => return Err(e.to_string()),
+  }
 }
-*/
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -54,7 +58,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
       Ok(())
     })
-    .invoke_handler(tauri::generate_handler![greet])
+    .invoke_handler(tauri::generate_handler![greet, connect])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 
