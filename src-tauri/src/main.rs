@@ -2,21 +2,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::error::Error;
-use app::grpc::GrpcClient;
+use app::grpc::{
+  GrpcClient,
+  GrpcConnection,
+  kvdb::GetServerInfoRequest,
+};
 use tauri::{CustomMenuItem, Menu, Submenu, State, Manager};
-use std::sync::Mutex;
-
-struct GrpcConnection {
-  connection: Mutex<Option<GrpcClient>>,
-}
-
-impl GrpcConnection {
-  pub fn new() -> GrpcConnection {
-    GrpcConnection {
-      connection: None.into(),
-    }
-  }
-}
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -27,11 +18,36 @@ fn greet(name: &str) -> String {
 async fn connect(connection: State<'_, GrpcConnection>, host: &str, port: u16) -> Result<String, String> {
   match GrpcClient::new(host, port).await {
     Ok(client) => {
-      *connection.connection.lock().unwrap() = Some(client);
+      *connection.connection.lock().await = Some(client);
       return Ok(format!("Connected to {}:{}", host, port));
     },
     Err(e) => return Err(e.to_string()),
   }
+}
+
+#[tauri::command]
+async fn get_server_info(connection: State<'_, GrpcConnection>) -> Result<serde_json::Value, String> {
+    let mut guard = connection.connection.lock().await;
+    if let Some(ref mut connection) = *guard {
+        let request = tonic::Request::new(GetServerInfoRequest {});
+        let response = connection.server_client.get_server_info(request).await;
+        match response {
+            Ok(response) => {
+                let data = &response.get_ref().data;
+                if let Some(data) = data {
+                    let json = serde_json::json!({
+                        "kvdbVersion": data.kvdb_version
+                    });
+                    return Ok(json);
+                } else {
+                    return Ok(serde_json::json!({}));
+                }
+            },
+            Err(err) => return Err(format!("{}", err)),
+        }
+    } else {
+        return Err("no connection found".to_string());
+    }
 }
 
 #[tokio::main]
@@ -58,7 +74,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
       Ok(())
     })
-    .invoke_handler(tauri::generate_handler![greet, connect])
+    .invoke_handler(tauri::generate_handler![greet, connect, get_server_info])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 

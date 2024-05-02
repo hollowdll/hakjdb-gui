@@ -3,8 +3,11 @@ use kvdb::{
     database_service_client::DatabaseServiceClient,
     storage_service_client::StorageServiceClient,
 };
-use tonic::transport::Channel;
-use std::error::Error;
+use tonic::transport::{
+    Channel,
+    Error,
+};
+use tokio::sync::Mutex;
 
 pub mod kvdb {
     tonic::include_proto!("kvdbserverapi");
@@ -17,7 +20,7 @@ pub struct GrpcClient {
 }
 
 impl GrpcClient {
-    pub async fn new(host: &str, port: u16) -> Result<GrpcClient, Box<dyn Error>> {
+    pub async fn new(host: &str, port: u16) -> Result<GrpcClient, Error> {
         let api_url = format!("http://{}:{}", host, port);
 
         Ok(GrpcClient {
@@ -25,5 +28,17 @@ impl GrpcClient {
             database_client: DatabaseServiceClient::connect(api_url.clone()).await?,
             storage_client: StorageServiceClient::connect(api_url.clone()).await?,
         })
+    }
+}
+
+pub struct GrpcConnection {
+    pub connection: Mutex<Option<GrpcClient>>,
+}
+  
+impl GrpcConnection {
+    pub fn new() -> GrpcConnection {
+        GrpcConnection {
+            connection: None.into(),
+        }
     }
 }

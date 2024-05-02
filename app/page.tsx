@@ -2,10 +2,9 @@
 
 import { ConnectionDialog } from "@/components/connect/ConnectionDialog";
 import { useState } from "react";
-import { Box, CircularProgress } from "@mui/material";
-import { ConnectionInfo } from "@/types/types";
+import { Box, Button, CircularProgress } from "@mui/material";
+import { ConnectionInfo, ServerInfo } from "@/types/types";
 import { invoke } from "@tauri-apps/api";
-import { notifySuccess, notifyError } from "@/utility/notification";
 import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
@@ -45,6 +44,36 @@ export default function Home() {
     setIsConnected(false);
   }
 
+  const handleGetServerInfo = () => {
+    const promise = invoke<ServerInfo>('get_server_info')
+    toast.promise(
+      promise,
+      {
+        loading: "Pending...",
+        success: (result) => {
+          console.log(result);
+          return "Got server information"
+        },
+        error: (error) => {
+          const errorMsg = `Failed to get server information: ${error}`;
+          console.error(errorMsg);
+          return errorMsg
+        }
+      },
+      {
+        style: {
+          minWidth: "250px",
+        },
+        success: {
+          duration: 5000,
+        },
+        error: {
+          duration: 5000,
+        }
+      }
+    )
+  }
+
   return (
     <main>
       {!isConnected ? (
@@ -60,6 +89,9 @@ export default function Home() {
       ) : (
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
           <h1>Connected</h1>
+          <Button onClick={handleGetServerInfo}>
+            Get server information
+          </Button>
         </Box>
       )}
       <ConnectionDialog handleConnect={handleConnect} />
