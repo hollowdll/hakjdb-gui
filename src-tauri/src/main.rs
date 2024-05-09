@@ -36,7 +36,8 @@ async fn get_server_info(connection: State<'_, GrpcConnection>) -> Result<serde_
                 let data = &response.get_ref().data;
                 if let Some(data) = data {
                     let json = serde_json::json!({
-                        "kvdbVersion": data.kvdb_version
+                        "kvdbVersion": data.general_info.as_ref().unwrap().kvdb_version,
+                        "clientConnections": data.client_info.as_ref().unwrap().client_connections,
                     });
                     return Ok(json);
                 } else {

@@ -5,4 +5,5 @@ export interface ConnectionInfo {
 
 export interface ServerInfo {
   kvdbVersion: string,
+  clientConnections: number,
 }
