@@ -22,11 +22,12 @@ pub struct GrpcClient {
 impl GrpcClient {
     pub async fn new(host: &str, port: u16) -> Result<GrpcClient, Error> {
         let api_url = format!("http://{}:{}", host, port);
+        let channel = Channel::from_shared(api_url.clone()).unwrap().connect().await?;
 
         Ok(GrpcClient {
-            server_client: ServerServiceClient::connect(api_url.clone()).await?,
-            database_client: DatabaseServiceClient::connect(api_url.clone()).await?,
-            storage_client: StorageServiceClient::connect(api_url.clone()).await?,
+            server_client: ServerServiceClient::new(channel.clone()),
+            database_client: DatabaseServiceClient::new(channel.clone()),
+            storage_client: StorageServiceClient::new(channel),
         })
     }
 }

@@ -26,6 +26,12 @@ async fn connect(connection: State<'_, GrpcConnection>, host: &str, port: u16) -
 }
 
 #[tauri::command]
+async fn disconnect(connection: State<'_, GrpcConnection>) -> Result<(), String> {
+  connection.connection.lock().await.take();
+  Ok(())
+}
+
+#[tauri::command]
 async fn get_server_info(connection: State<'_, GrpcConnection>) -> Result<serde_json::Value, String> {
     let mut guard = connection.connection.lock().await;
     if let Some(ref mut connection) = *guard {
@@ -66,7 +72,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
           println!("Menu event -> New connection");
           let _ = event.window().emit("new-connection", ());
         },
-        "disconnect" => println!("Menu event -> Disconnect"),
+        "disconnect" => {
+          println!("Menu event -> Disconnect");
+
+          let app_handle = event.window().app_handle();
+          let mut state = app_handle.state::<GrpcConnection>();
+          state.connection.connection.lock().await.take();
+
+          let _ = event.window().emit("disconnect", ());
+        },
         _ => {}
       }
     })
@@ -75,7 +89,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
       Ok(())
     })
-    .invoke_handler(tauri::generate_handler![greet, connect, get_server_info])
+    .invoke_handler(tauri::generate_handler![greet, connect, disconnect, get_server_info])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 

@@ -1,10 +1,11 @@
 'use client'
 
 import { ConnectionDialog } from "@/components/connect/ConnectionDialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Button, CircularProgress } from "@mui/material";
 import { ConnectionInfo, ServerInfo } from "@/types/types";
 import { invoke } from "@tauri-apps/api";
+import { listen } from "@tauri-apps/api/event";
 import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
@@ -31,10 +32,10 @@ export default function Home() {
           minWidth: "250px",
         },
         success: {
-          duration: 5000,
+          duration: 4000,
         },
         error: {
-          duration: 5000,
+          duration: 4000,
         }
       }
     )
@@ -65,14 +66,25 @@ export default function Home() {
           minWidth: "250px",
         },
         success: {
-          duration: 5000,
+          duration: 4000,
         },
         error: {
-          duration: 5000,
+          duration: 4000,
         }
       }
     )
   }
+
+  useEffect(() => {
+    const disconnect = listen("disconnect", (event) => {
+      console.log("event ->", event.event);
+      // setIsConnected(false);
+    });
+
+    return () => {
+      disconnect.then((resolve) => resolve());
+    };
+  }, []);
 
   return (
     <main>
