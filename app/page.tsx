@@ -78,7 +78,9 @@ export default function Home() {
   useEffect(() => {
     const disconnect = listen("disconnect", (event) => {
       console.log("event ->", event.event);
-      // setIsConnected(false);
+      invoke('disconnect')
+        .then(_ => setIsConnected(false))
+        .catch(console.error)
     });
 
     return () => {

@@ -28,6 +28,8 @@ async fn connect(connection: State<'_, GrpcConnection>, host: &str, port: u16) -
 #[tauri::command]
 async fn disconnect(connection: State<'_, GrpcConnection>) -> Result<(), String> {
   connection.connection.lock().await.take();
+  println!("disconnected");
+
   Ok(())
 }
 
@@ -66,7 +68,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         CustomMenuItem::new("disconnect", "Disconnect").into(),
       ])))
     )
-    .on_menu_event(|event| {
+    .on_menu_event(move |event| {
       match event.menu_item_id() {
         "new-connection" => {
           println!("Menu event -> New connection");
@@ -74,11 +76,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
         },
         "disconnect" => {
           println!("Menu event -> Disconnect");
-
-          let app_handle = event.window().app_handle();
-          let mut state = app_handle.state::<GrpcConnection>();
-          state.connection.connection.lock().await.take();
-
           let _ = event.window().emit("disconnect", ());
         },
         _ => {}
