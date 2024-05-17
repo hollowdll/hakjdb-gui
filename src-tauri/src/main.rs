@@ -68,7 +68,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         CustomMenuItem::new("disconnect", "Disconnect").into(),
       ])))
     )
-    .on_menu_event(move |event| {
+    .on_menu_event(|event| {
       match event.menu_item_id() {
         "new-connection" => {
           println!("Menu event -> New connection");

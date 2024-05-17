@@ -2,11 +2,12 @@
 
 import { ConnectionDialog } from "@/components/connect/ConnectionDialog";
 import { useState, useEffect } from "react";
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress, CssBaseline } from "@mui/material";
 import { ConnectionInfo, ServerInfo } from "@/types/types";
 import { invoke } from "@tauri-apps/api";
 import { listen } from "@tauri-apps/api/event";
 import toast, { Toaster } from 'react-hot-toast';
+import { NavBar } from "@/components/nav/NavBar";
 
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
@@ -94,18 +95,18 @@ export default function Home() {
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
           <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", position: "absolute", top: "50%", bottom: "50%" }}>
             <h1>Not connected to a kvdb server.</h1>
-            <h1>Test</h1>
-            <h1>Test 2</h1>
-            <h1>Test 3</h1>
-            <CircularProgress />
+            <h1>Start by connecting to a kvdb server.</h1>
           </Box>
         </Box>
       ) : (
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <h1>Connected</h1>
-          <Button onClick={handleGetServerInfo}>
-            Get server information
-          </Button>
+        <Box sx={{ display: "flex" }}>
+          <NavBar />
+          <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}>
+            <h1>Connected</h1>
+            <Button onClick={handleGetServerInfo}>
+              Get server information
+            </Button>
+          </Box>
         </Box>
       )}
       <ConnectionDialog handleConnect={handleConnect} />
