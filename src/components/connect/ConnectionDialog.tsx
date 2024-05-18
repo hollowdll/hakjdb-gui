@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { listen } from "@tauri-apps/api/event";
 import { useEffect, useState, ChangeEvent } from "react";
-import { ConnectionInfo } from "@/types/types";
+import { ConnectionInfo } from "../../types/types";
 
 type ConnectionDialogProps = {
   handleConnect: (connectionInfo: ConnectionInfo) => void;

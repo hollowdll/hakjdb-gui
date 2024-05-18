@@ -1,15 +1,14 @@
 "use client";
 
-import { NavLink } from "react-router-dom";
 import {
-  Box,
   Drawer,
+  Link,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
 } from "@mui/material";
-import { NavItem } from "@/types/types";
+import { NavItem } from "../../types/types";
 
 export function NavBar() {
   const drawerWidth = 240;
@@ -28,16 +27,18 @@ export function NavBar() {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: "border-box" },
+        "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
       }}
     >
       <List>
         {navItems.map((item) => (
+          <Link key={item.text} href={item.href}>
             <ListItem key={item.text}>
               <ListItemButton>
                 <ListItemText primary={item.text} />
               </ListItemButton>
             </ListItem>
+          </Link>
         ))}
       </List>
     </Drawer>
