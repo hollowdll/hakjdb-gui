@@ -37,7 +37,6 @@ export default function ServerView() {
   return (
     <>
       <h1>Server</h1>
-      <h1>Connected</h1>
       <Button onClick={handleGetServerInfo}>Get server information</Button>
     </>
   );

@@ -7,6 +7,15 @@ import { invoke } from "@tauri-apps/api";
 import { listen } from "@tauri-apps/api/event";
 import toast, { Toaster } from "react-hot-toast";
 import { NavBar } from './components/nav/NavBar';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import ConnectionView from './components/views/ConnectionView';
+import ServerView from './components/views/ServerView';
+import DatabasesView from './components/views/DatabasesView';
+import KeysView from './components/views/KeysView';
 
 function App() {
   const [isConnected, setIsConnected] = useState(false);
@@ -67,13 +76,17 @@ function App() {
           </Box>
         </Box>
       ) : (
-        <Box sx={{ display: "flex" }}>
-          <NavBar />
-          <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}>
-            <h1>Connected</h1>
-            
+        <Router>
+          <Box sx={{ display: "flex" }}>
+            <NavBar />
+            <Routes>
+              <Route path="/connection" element={<ConnectionView />} />
+              <Route path="/server" element={<ServerView />} />
+              <Route path="/databases" element={<DatabasesView />} />
+              <Route path="/keys" element={<KeysView />} />
+            </Routes>
           </Box>
-        </Box>
+        </Router>
       )}
       <ConnectionDialog handleConnect={handleConnect} />
       <Toaster />

@@ -2,16 +2,17 @@
 
 import {
   Drawer,
-  Link,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
 } from "@mui/material";
 import { NavItem } from "../../types/types";
+import { useNavigate } from "react-router-dom";
 
 export function NavBar() {
   const drawerWidth = 240;
+  const navigate = useNavigate();
 
   const navItems: NavItem[] = [
     { text: "Connection", href: "/connection" },
@@ -32,13 +33,11 @@ export function NavBar() {
     >
       <List>
         {navItems.map((item) => (
-          <Link key={item.text} href={item.href}>
-            <ListItem key={item.text}>
-              <ListItemButton>
-                <ListItemText primary={item.text} />
-              </ListItemButton>
-            </ListItem>
-          </Link>
+          <ListItem key={item.text} disablePadding onClick={() => navigate(item.href)}>
+            <ListItemButton>
+              <ListItemText primary={item.text} />
+            </ListItemButton>
+          </ListItem>
         ))}
       </List>
     </Drawer>
