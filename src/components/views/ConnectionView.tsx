@@ -7,11 +7,13 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, SyntheticEvent } from "react";
+import { useConnectionInfoStore } from "../../state/store";
 
 export default function ConnectionView() {
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
     false
   );
+  const connectionInfo = useConnectionInfoStore((state) => state.connectionInfo);
 
   const handleAccordionChange =
     (panel: string) => (_event: SyntheticEvent, isExpanded: boolean) => {
@@ -32,7 +34,7 @@ export default function ConnectionView() {
             id="panel1bh-header"
           >
             <Typography sx={{ width: "33%", flexShrink: 0 }}>Host</Typography>
-            <Typography sx={{ color: "text.secondary" }}>host or IP</Typography>
+            <Typography sx={{ color: "text.secondary" }}>{connectionInfo.host}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
@@ -50,7 +52,7 @@ export default function ConnectionView() {
             id="panel2bh-header"
           >
             <Typography sx={{ width: "33%", flexShrink: 0 }}>Port</Typography>
-            <Typography sx={{ color: "text.secondary" }}>port number</Typography>
+            <Typography sx={{ color: "text.secondary" }}>{connectionInfo.port}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
