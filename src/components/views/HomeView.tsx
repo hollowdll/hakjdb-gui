@@ -22,7 +22,7 @@ export default function HomeView() {
         }}
       >
         <h1>Not connected to a kvdb server.</h1>
-        <h1>Start by connecting to a kvdb server.</h1>
+        <h1>Go to Connect {'->'} New Connection</h1>
       </Box>
     </Box>
   );
