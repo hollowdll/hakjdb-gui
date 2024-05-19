@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ConnectionView from "./components/views/ConnectionView";
-import ServerView from "./components/views/ServerView";
+import ServerView from "./components/views/server/ServerView";
 import DatabasesView from "./components/views/DatabasesView";
 import KeysView from "./components/views/KeysView";
 import ConnectionManager from "./components/connect/ConnectionManager";
