@@ -19,6 +19,9 @@ export default function HomeView() {
           position: "absolute",
           top: "50%",
           bottom: "50%",
+          textWrap: "nowrap",
+          left: "50%",
+          right: "50%"
         }}
       >
         <h1>Not connected to a kvdb server.</h1>

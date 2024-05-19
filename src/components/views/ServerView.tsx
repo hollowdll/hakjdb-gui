@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { ServerInfo } from "../../types/types";
 import { invoke } from "@tauri-apps/api";
 import toast from "react-hot-toast";
@@ -35,9 +35,9 @@ export default function ServerView() {
   };
 
   return (
-    <>
+    <Box>
       <h1>Server</h1>
       <Button onClick={handleGetServerInfo}>Get server information</Button>
-    </>
+    </Box>
   );
 }

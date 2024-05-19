@@ -21,7 +21,7 @@ export default function ConnectionView() {
     };
 
   return (
-    <Box>
+    <Box sx={{display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start"}}>
       <h1>Connection</h1>
       <Box sx={{ paddingTop: "1em" }}>
         <Accordion
