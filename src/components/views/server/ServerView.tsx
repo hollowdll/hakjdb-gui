@@ -1,5 +1,5 @@
 import { Box, Button, Stack } from "@mui/material";
-import { ServerInfo } from "../../../types/types";
+import { ServerInfo } from "../../../types/server";
 import { invoke } from "@tauri-apps/api";
 import toast from "react-hot-toast";
 import TabMenu from "./TabMenu";
