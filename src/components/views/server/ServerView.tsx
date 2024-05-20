@@ -2,6 +2,7 @@ import { Box, Button, Stack } from "@mui/material";
 import { ServerInfo } from "../../../types/types";
 import { invoke } from "@tauri-apps/api";
 import toast from "react-hot-toast";
+import TabMenu from "./TabMenu";
 
 export default function ServerView() {
   const handleGetServerInfo = () => {
@@ -35,13 +36,14 @@ export default function ServerView() {
   };
 
   return (
-    <Box>
+    <Box sx={{width: "100%"}}>
       <h1>Server</h1>
       <Button onClick={handleGetServerInfo}>Get server information</Button>
       <Stack direction="row" spacing={1}>
         <Button variant="contained">Information</Button>
         <Button variant="contained">Logs</Button>
       </Stack>
+      <TabMenu />
     </Box>
   );
 }
