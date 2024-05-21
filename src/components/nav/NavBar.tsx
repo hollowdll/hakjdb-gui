@@ -10,10 +10,11 @@ import {
 } from "@mui/material";
 import { NavItem, NavItemNames } from "../../types/types";
 import { useNavigate } from "react-router-dom";
-import CableIcon from '@mui/icons-material/Cable';
-import StorageIcon from '@mui/icons-material/Storage';
-import FolderIcon from '@mui/icons-material/Folder';
-import KeyIcon from '@mui/icons-material/Key';
+import CableIcon from "@mui/icons-material/Cable";
+import StorageIcon from "@mui/icons-material/Storage";
+import FolderIcon from "@mui/icons-material/Folder";
+import KeyIcon from "@mui/icons-material/Key";
+import { useState } from "react";
 
 const drawerWidth = 240;
 const navItemNames: NavItemNames = {
@@ -21,7 +22,7 @@ const navItemNames: NavItemNames = {
   server: "Server",
   databases: "Databases",
   keys: "Keys",
-}
+};
 const navItems: NavItem[] = [
   { text: navItemNames.connection, href: "/connection" },
   { text: navItemNames.server, href: "/server" },
@@ -40,10 +41,15 @@ const renderIcon = (item: NavItem) => {
     case navItemNames.keys:
       return <KeyIcon />;
   }
-}
+};
 
 export function NavBar() {
   const navigate = useNavigate();
+  const [selectedIndex, setSelectedIndex] = useState(1);
+
+  const handleListItemClick = (index: number) => {
+    setSelectedIndex(index);
+  };
 
   return (
     <Drawer
@@ -55,13 +61,19 @@ export function NavBar() {
         "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
       }}
     >
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item.text} disablePadding onClick={() => navigate(item.href)}>
-            <ListItemButton>
-              <ListItemIcon>
-                {renderIcon(item)}
-              </ListItemIcon>
+      <List component="nav">
+        {navItems.map((item, index) => (
+          <ListItem
+            key={item.text}
+            disablePadding
+            onClick={() => navigate(item.href)}
+            sx={{backgroundColor: selectedIndex === index ? 'rgb(225,225,225)' : 'white'}}
+          >
+            <ListItemButton
+              selected={selectedIndex === index}
+              onClick={() => handleListItemClick(index)}
+            >
+              <ListItemIcon>{renderIcon(item)}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
