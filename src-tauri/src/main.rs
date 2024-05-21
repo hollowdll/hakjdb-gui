@@ -4,14 +4,14 @@
 use std::error::Error;
 use app::{grpc::{
   kvdb::GetServerInfoRequest, GrpcClient, GrpcConnection
-}, server::MemoryInfo};
-use tauri::{CustomMenuItem, Menu, Submenu, State, Manager};
-use app::server::{
+}, server::{
   ClientInfo,
   ServerInfo,
   StorageInfo,
   GeneralInfo,
-};
+  MemoryInfo
+}};
+use tauri::{CustomMenuItem, Menu, Submenu, State, Manager};
 
 #[tauri::command]
 fn greet(name: &str) -> String {

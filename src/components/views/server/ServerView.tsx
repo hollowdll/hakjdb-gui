@@ -2,9 +2,12 @@ import { Box, Button, Stack } from "@mui/material";
 import { ServerInfo } from "../../../types/server";
 import { invoke } from "@tauri-apps/api";
 import toast from "react-hot-toast";
-import TabMenu from "./TabMenu";
+import TabMenu from "../../server/TabMenu";
+import { useServerInfoStore } from "../../../state/store";
 
 export default function ServerView() {
+  const setServerInfo = useServerInfoStore((state) => state.setServerInfo);
+
   const handleGetServerInfo = () => {
     const promise = invoke<ServerInfo>("get_server_info");
     toast.promise(
@@ -13,6 +16,7 @@ export default function ServerView() {
         loading: "Pending...",
         success: (result) => {
           console.log(result);
+          setServerInfo(result);
           return "Got server information";
         },
         error: (error) => {

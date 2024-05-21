@@ -1,5 +1,6 @@
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { useState, SyntheticEvent } from "react";
+import InfoPanel from "./InfoPanel";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -49,6 +50,7 @@ export default function TabMenu() {
           <Tab label="Logs" {...allyProps(1)} />
         </Tabs>
       </Box>
+      {tabsValue === 0 && <InfoPanel />}
       <CustomTabPanel value={tabsValue} index={0}>
         Item One
       </CustomTabPanel>
