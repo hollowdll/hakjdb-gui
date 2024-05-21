@@ -45,7 +45,7 @@ const renderIcon = (item: NavItem) => {
 
 export function NavBar() {
   const navigate = useNavigate();
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleListItemClick = (index: number) => {
     setSelectedIndex(index);

@@ -30,8 +30,8 @@ export default function ConnectionView() {
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
+            aria-controls="accordion-summary-connection-host-content"
+            id="accordion-summary-connection-host-header"
           >
             <Typography sx={{ width: "33%", flexShrink: 0 }}>Host</Typography>
             <Typography sx={{ color: "text.secondary" }}>{connectionInfo.host}</Typography>
@@ -48,8 +48,8 @@ export default function ConnectionView() {
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2bh-content"
-            id="panel2bh-header"
+            aria-controls="accordion-summary-connection-port-content"
+            id="accordion-summary-connection-port-header"
           >
             <Typography sx={{ width: "33%", flexShrink: 0 }}>Port</Typography>
             <Typography sx={{ color: "text.secondary" }}>{connectionInfo.port}</Typography>
