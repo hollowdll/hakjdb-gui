@@ -51,9 +51,6 @@ export default function TabMenu() {
         </Tabs>
       </Box>
       {tabsValue === 0 && <InfoPanel />}
-      <CustomTabPanel value={tabsValue} index={0}>
-        Item One
-      </CustomTabPanel>
       <CustomTabPanel value={tabsValue} index={1}>
         Item Two
       </CustomTabPanel>
