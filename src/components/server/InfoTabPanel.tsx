@@ -391,7 +391,7 @@ export default function InfoTabPanel() {
 
   return (
     <>
-      <Box sx={{ p: 3, backgroundColor: "rgb(250, 250, 250)", width: "100%" }}>
+      <Box sx={{ p: 3, backgroundColor: "rgb(250, 250, 250)", width: "100%", maxWidth: "720px" }}>
         {serverInfo ? (
           <>
             <GeneralInfoList info={serverInfo.generalInfo} />
