@@ -390,19 +390,17 @@ export default function InfoTabPanel() {
   const serverInfo = useServerInfoStore((state) => state.serverInfo);
 
   return (
-    <>
-      <Box sx={{ p: 3, backgroundColor: "rgb(250, 250, 250)", width: "100%", maxWidth: "720px" }}>
-        {serverInfo ? (
-          <>
-            <GeneralInfoList info={serverInfo.generalInfo} />
-            <StorageInfoList info={serverInfo.storageInfo} />
-            <ClientInfoList info={serverInfo.clientInfo} />
-            <MemoryInfoList info={serverInfo.memoryInfo} />
-          </>
-        ) : (
-          <CircularProgress />
-        )}
-      </Box>
-    </>
+    <Box sx={{ p: 3, backgroundColor: "rgb(250, 250, 250)", width: "100%", maxWidth: "720px" }}>
+      {serverInfo ? (
+        <>
+          <GeneralInfoList info={serverInfo.generalInfo} />
+          <StorageInfoList info={serverInfo.storageInfo} />
+          <ClientInfoList info={serverInfo.clientInfo} />
+          <MemoryInfoList info={serverInfo.memoryInfo} />
+        </>
+      ) : (
+        <CircularProgress />
+      )}
+    </Box>
   );
 }

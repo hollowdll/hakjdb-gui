@@ -1,31 +1,7 @@
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
 import { useState, SyntheticEvent } from "react";
 import InfoTabPanel from "./InfoTabPanel";
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index} = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`server-tabpanel-${index}`}
-      aria-labelledby={`server-tab-${index}`}
-    >
-      {value === index && (
-        <Box sx={{ p: 3, backgroundColor: 'rgb(250, 250, 250)', width: '100%' }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
+import LogsTabPanel from "./LogsTabPanel";
 
 function allyProps(index: number) {
   return {
@@ -51,9 +27,7 @@ export default function TabMenu() {
         </Tabs>
       </Box>
       {tabsValue === 0 && <InfoTabPanel />}
-      <CustomTabPanel value={tabsValue} index={1}>
-        Item Two
-      </CustomTabPanel>
+      {tabsValue === 1 && <LogsTabPanel />}
     </Box>
   )
 }
