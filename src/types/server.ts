@@ -36,3 +36,8 @@ export interface GeneralInfo {
   debugEnabled: boolean,
   defaultDb: string,
 }
+
+export interface ServerLogs {
+  logs: string[],
+  logfileEnabled: boolean,
+}

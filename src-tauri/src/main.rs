@@ -3,14 +3,18 @@
 
 use std::error::Error;
 use app::{grpc::{
-  kvdb::GetServerInfoRequest, GrpcClient, GrpcConnection
+  kvdb::{
+    GetServerInfoRequest,
+    GetLogsRequest
+  }, GrpcClient, GrpcConnection,
 }, server::{
   ClientInfo,
   ServerInfo,
   StorageInfo,
   GeneralInfo,
-  MemoryInfo
-}};
+  MemoryInfo,
+  ServerLogs,
+}, util::bytes_to_mega};
 use tauri::{CustomMenuItem, Menu, Submenu, State, Manager};
 
 #[tauri::command]
@@ -93,8 +97,31 @@ async fn get_server_info(connection: State<'_, GrpcConnection>) -> Result<serde_
     return Err("unexpected error".to_string());
 }
 
-fn bytes_to_mega(bytes: u64) -> f64 {
-  return bytes as f64 / 1024.0 / 1024.0
+#[tauri::command]
+async fn get_server_logs(connection: State<'_, GrpcConnection>) -> Result<serde_json::Value, String> {
+  let mut guard = connection.connection.lock().await;
+  if let Some(ref mut connection) = *guard {
+    let request = tonic::Request::new(GetLogsRequest {});
+    let response = connection.server_client.get_logs(request).await;
+    match response {
+      Ok(response) => {
+        let server_logs = ServerLogs {
+          logs: response.get_ref().logs.clone(),
+          logfile_enabled: response.get_ref().logfile_enabled
+        };
+        
+        match serde_json::to_value(server_logs) {
+          Ok(json) => return Ok(json),
+          Err(e) => return Err(format!("failed to convert data to JSON: {}", e)),
+        }
+      },
+      Err(err) => return Err(format!("{}", err)),
+    }
+  } else {
+    return Err("no connection found".to_string());
+  }
+
+  //return Err("unexpected error".to_string());
 }
 
 #[tokio::main]
@@ -124,7 +151,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
       Ok(())
     })
-    .invoke_handler(tauri::generate_handler![greet, connect, disconnect, get_server_info])
+    .invoke_handler(tauri::generate_handler![
+      greet,
+      connect,
+      disconnect,
+      get_server_info,
+      get_server_logs
+    ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 

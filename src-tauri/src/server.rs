@@ -65,3 +65,10 @@ pub struct GeneralInfo {
     #[serde(rename = "defaultDb")]
     pub default_db: String,
 }
+
+#[derive(Serialize)]
+pub struct ServerLogs {
+    pub logs: Vec<String>,
+    #[serde(rename = "logfileEnabled")]
+    pub logfile_enabled: bool,
+}
