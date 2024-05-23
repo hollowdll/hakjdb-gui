@@ -7,15 +7,17 @@ import {
   AccordionDetails,
   Typography,
 } from "@mui/material";
-import { useServerInfoStore } from "../../state/store";
 import {
   ClientInfo,
   MemoryInfo,
   StorageInfo,
   GeneralInfo,
+  ServerInfo,
 } from "../../types/server";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, SyntheticEvent } from "react";
+import { useState, useEffect, SyntheticEvent } from "react";
+import { invoke } from "@tauri-apps/api";
+import toast from "react-hot-toast";
 
 type AccordionProps = {
   accordionExpanded: string | false;
@@ -406,7 +408,9 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
 }
 
 export default function InfoTabPanel() {
-  const serverInfo = useServerInfoStore((state) => state.serverInfo);
+  const [serverInfo, setServerInfo] = useState<ServerInfo | null>(null);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
     false
   );
@@ -415,6 +419,23 @@ export default function InfoTabPanel() {
     (panel: string) => (_event: SyntheticEvent, isExpanded: boolean) => {
       setAccordionExpanded(isExpanded ? panel : false);
     };
+
+  const handleGetServerInfo = () => {
+    invoke<ServerInfo>("get_server_info")
+    .then(result => {
+      setServerInfo(result);
+    })
+    .catch(err => {
+      setServerInfo(null);
+      setErrorMsg(`Failed to show server logs: ${err}`);
+      toast.error(err, {duration: 5000});
+    })
+    .finally(() => setIsLoading(false));
+  }
+
+  useEffect(() => {
+    handleGetServerInfo();
+  }, [])
 
   return (
     <Box
@@ -425,7 +446,9 @@ export default function InfoTabPanel() {
         maxWidth: "720px",
       }}
     >
-      {serverInfo ? (
+      {isLoading ? (
+        <CircularProgress />
+      ) : serverInfo ? (
         <>
           <GeneralInfoList
             info={serverInfo.generalInfo}
@@ -444,8 +467,10 @@ export default function InfoTabPanel() {
             accordion={{ accordionExpanded, handleAccordionChange }}
           />
         </>
+      ) : errorMsg !== "" ? (
+        <Typography>{errorMsg}</Typography>
       ) : (
-        <CircularProgress />
+        <></>
       )}
     </Box>
   );
