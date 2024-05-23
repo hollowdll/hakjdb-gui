@@ -1,8 +1,6 @@
 import {
   Box,
   CircularProgress,
-  List,
-  ListItem,
   ListItemText,
   Accordion,
   AccordionSummary,
@@ -38,31 +36,66 @@ function allyPropsInfoValue(infoField: string) {
 }
 
 function MemoryInfoList({ info }: MemoryInfoListProps) {
+  const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
+    false
+  );
+
+  const handleAccordionChange =
+    (panel: string) => (_event: SyntheticEvent, isExpanded: boolean) => {
+      setAccordionExpanded(isExpanded ? panel : false);
+    };
+
   return (
-    <List sx={{ width: "100%" }}>
-      <h3>Memory</h3>
-      <ListItem>
+    <Box sx={{ paddingTop: "1em" }}>
+    <h3>Memory</h3>
+    <Accordion
+      expanded={accordionExpanded === "panel1"}
+      onChange={handleAccordionChange("panel1")}
+    >
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <ListItemText primary="memory_alloc" />
         <ListItemText
-          sx={{ textAlign: "end", color: "text.secondary" }}
           primary={`${Number(info.memoryAllocMegaByte).toFixed(1)} MB`}
+          {...allyPropsInfoValue("memory-alloc")}
         />
-      </ListItem>
-      <ListItem>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Typography>Allocated memory in megabytes.</Typography>
+      </AccordionDetails>
+    </Accordion>
+
+    <Accordion
+      expanded={accordionExpanded === "panel2"}
+      onChange={handleAccordionChange("panel2")}
+    >
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <ListItemText primary="memory_total_alloc" />
         <ListItemText
-          sx={{ textAlign: "end", color: "text.secondary" }}
           primary={`${Number(info.memoryTotalAllocMegaByte).toFixed(1)} MB`}
+          {...allyPropsInfoValue("memory-total-alloc")}
         />
-      </ListItem>
-      <ListItem>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Typography>Total allocated memory in megabytes.</Typography>
+      </AccordionDetails>
+    </Accordion>
+
+    <Accordion
+      expanded={accordionExpanded === "panel3"}
+      onChange={handleAccordionChange("panel3")}
+    >
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <ListItemText primary="memory_sys" />
         <ListItemText
-          sx={{ textAlign: "end", color: "text.secondary" }}
           primary={`${Number(info.memorySysMegaByte).toFixed(1)} MB`}
+          {...allyPropsInfoValue("memory-sys")}
         />
-      </ListItem>
-    </List>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Typography>Total memory obtained from the OS in megabytes.</Typography>
+      </AccordionDetails>
+    </Accordion>
+  </Box>
   );
 }
 
@@ -173,7 +206,7 @@ function GeneralInfoList({ info }: GeneralInfoListProps) {
     };
 
   return (
-    <Box sx={{ paddingTop: "1em" }}>
+    <Box>
       <h3>General</h3>
       <Accordion
         expanded={accordionExpanded === "panel1"}
