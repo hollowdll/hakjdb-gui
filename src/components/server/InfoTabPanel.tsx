@@ -46,10 +46,16 @@ type GeneralInfoListProps = {
   accordion: AccordionProps;
 };
 
+function allyPropsInfoField() {
+  return {
+    sx: {wordBreak: "break-word"},
+  }
+}
+
 function allyPropsInfoValue(infoField: string) {
   return {
     id: `server-info-value-${infoField}`,
-    sx: { marginRight: "30px", textAlign: "end", color: "text.secondary" },
+    sx: { marginLeft: "20px", marginRight: "30px", textAlign: "end", color: "text.secondary", wordBreak: "break-word" },
   };
 }
 
@@ -64,7 +70,7 @@ function MemoryInfoList({ info, accordion }: MemoryInfoListProps) {
         onChange={handleAccordionChange("panel1")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="memory_alloc" />
+          <ListItemText primary="memory_alloc" {...allyPropsInfoField()} />
           <ListItemText
             primary={`${Number(info.memoryAllocMegaByte).toFixed(1)} MB`}
             {...allyPropsInfoValue("memory-alloc")}
@@ -80,7 +86,7 @@ function MemoryInfoList({ info, accordion }: MemoryInfoListProps) {
         onChange={handleAccordionChange("panel2")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="memory_total_alloc" />
+          <ListItemText primary="memory_total_alloc" {...allyPropsInfoField()} />
           <ListItemText
             primary={`${Number(info.memoryTotalAllocMegaByte).toFixed(1)} MB`}
             {...allyPropsInfoValue("memory-total-alloc")}
@@ -96,7 +102,7 @@ function MemoryInfoList({ info, accordion }: MemoryInfoListProps) {
         onChange={handleAccordionChange("panel3")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="memory_sys" />
+          <ListItemText primary="memory_sys" {...allyPropsInfoField()} />
           <ListItemText
             primary={`${Number(info.memorySysMegaByte).toFixed(1)} MB`}
             {...allyPropsInfoValue("memory-sys")}
@@ -123,7 +129,7 @@ function StorageInfoList({ info, accordion }: StorageInfoListProps) {
         onChange={handleAccordionChange("panel4")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="total_data_size" />
+          <ListItemText primary="total_data_size" {...allyPropsInfoField()} />
           <ListItemText
             primary={`${info.totalDataSize} B`}
             {...allyPropsInfoValue("total-data-size")}
@@ -139,7 +145,7 @@ function StorageInfoList({ info, accordion }: StorageInfoListProps) {
         onChange={handleAccordionChange("panel5")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="total_keys" />
+          <ListItemText primary="total_keys" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.totalKeys}
             {...allyPropsInfoValue("total-keys")}
@@ -164,7 +170,7 @@ function ClientInfoList({ info, accordion }: ClientInfoListProps) {
         onChange={handleAccordionChange("panel6")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="client_connections" />
+          <ListItemText primary="client_connections" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.clientConnections}
             {...allyPropsInfoValue("client-connections")}
@@ -180,7 +186,7 @@ function ClientInfoList({ info, accordion }: ClientInfoListProps) {
         onChange={handleAccordionChange("panel7")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="max_client_connections" />
+          <ListItemText primary="max_client_connections" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.maxClientConnections}
             {...allyPropsInfoValue("max-client-connections")}
@@ -207,7 +213,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel8")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="kvdb_version" />
+          <ListItemText primary="kvdb_version" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.kvdbVersion}
             {...allyPropsInfoValue("kvdb-version")}
@@ -223,7 +229,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel9")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="go_version" />
+          <ListItemText primary="go_version" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.goVersion}
             {...allyPropsInfoValue("go-version")}
@@ -239,7 +245,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel10")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="db_count" />
+          <ListItemText primary="db_count" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.dbCount}
             {...allyPropsInfoValue("db-count")}
@@ -255,7 +261,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel11")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="os" />
+          <ListItemText primary="os" {...allyPropsInfoField()} />
           <ListItemText primary={info.os} {...allyPropsInfoValue("os")} />
         </AccordionSummary>
         <AccordionDetails>
@@ -268,7 +274,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel12")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="arch" />
+          <ListItemText primary="arch" {...allyPropsInfoField()} />
           <ListItemText primary={info.arch} {...allyPropsInfoValue("arch")} />
         </AccordionSummary>
         <AccordionDetails>
@@ -281,7 +287,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel13")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="process_id" />
+          <ListItemText primary="process_id" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.processId}
             {...allyPropsInfoValue("process-id")}
@@ -297,7 +303,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel14")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="uptime_seconds" />
+          <ListItemText primary="uptime_seconds" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.uptimeSeconds}
             {...allyPropsInfoValue("uptime-seconds")}
@@ -313,7 +319,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel15")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="tcp_port" />
+          <ListItemText primary="tcp_port" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.tcpPort}
             {...allyPropsInfoValue("tcp-port")}
@@ -329,7 +335,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel16")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="default_db" />
+          <ListItemText primary="default_db" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.defaultDb}
             {...allyPropsInfoValue("default-db")}
@@ -345,7 +351,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel17")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="tls_enabled" />
+          <ListItemText primary="tls_enabled" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.tlsEnabled ? "Yes" : "No"}
             {...allyPropsInfoValue("tls-enabled")}
@@ -361,7 +367,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel18")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="password_enabled" />
+          <ListItemText primary="password_enabled" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.passwordEnabled ? "Yes" : "No"}
             {...allyPropsInfoValue("password-enabled")}
@@ -377,7 +383,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel19")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="logfile_enabled" />
+          <ListItemText primary="logfile_enabled" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.logfileEnabled ? "Yes" : "No"}
             {...allyPropsInfoValue("logfile-enabled")}
@@ -393,7 +399,7 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
         onChange={handleAccordionChange("panel20")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="debug_enabled" />
+          <ListItemText primary="debug_enabled" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.debugEnabled ? "Yes" : "No"}
             {...allyPropsInfoValue("debug-enabled")}
