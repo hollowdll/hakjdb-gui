@@ -1,9 +1,9 @@
 import { invoke } from "@tauri-apps/api";
-import { TauriInvokeCommand } from "../types/tauri"
+import { TauriInvokeCommands } from "../types/tauri"
 import { ConnectionInfo } from "../types/types";
 import { ServerInfo, ServerLogs } from "../types/server";
 
-const tauriInvokeCommand: TauriInvokeCommand = {
+const tauriInvokeCommands: TauriInvokeCommands = {
   connect: "connect",
   disconnect: "disconnect",
   getServerInfo: "get_server_info",
@@ -11,20 +11,20 @@ const tauriInvokeCommand: TauriInvokeCommand = {
 }
 
 export const invokeConnect = (connectionInfo: ConnectionInfo): Promise<string> => {
-  return invoke<string>(tauriInvokeCommand.connect, {
+  return invoke<string>(tauriInvokeCommands.connect, {
     host: connectionInfo.host,
     port: connectionInfo.port,
   });
 }
 
 export const invokeDisconnect = (): Promise<void> => {
-  return invoke<void>(tauriInvokeCommand.disconnect);
+  return invoke<void>(tauriInvokeCommands.disconnect);
 }
 
 export const invokeGetServerInfo = (): Promise<ServerInfo> => {
-  return invoke<ServerInfo>(tauriInvokeCommand.getServerInfo);
+  return invoke<ServerInfo>(tauriInvokeCommands.getServerInfo);
 }
 
 export const invokeGetServerLogs = (): Promise<ServerLogs> => {
-  return invoke<ServerLogs>(tauriInvokeCommand.getServerLogs);
+  return invoke<ServerLogs>(tauriInvokeCommands.getServerLogs);
 }

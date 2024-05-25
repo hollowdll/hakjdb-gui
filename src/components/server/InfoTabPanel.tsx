@@ -16,8 +16,8 @@ import {
 } from "../../types/server";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, useEffect, SyntheticEvent } from "react";
-import { invoke } from "@tauri-apps/api";
 import { errorAlert } from "../../utility/alert";
+import { invokeGetServerInfo } from "../../tauri/command";
 
 type AccordionProps = {
   accordionExpanded: string | false;
@@ -427,17 +427,17 @@ export default function InfoTabPanel() {
     };
 
   const handleGetServerInfo = () => {
-    invoke<ServerInfo>("get_server_info")
-    .then(result => {
-      setServerInfo(result);
-    })
-    .catch(err => {
-      setErrorMsg(`Failed to show server info: ${err}`);
-      setServerInfo(null);
-      errorAlert(err);
-    })
-    .finally(() => setIsLoading(false));
-  }
+    invokeGetServerInfo()
+      .then((result) => {
+        setServerInfo(result);
+      })
+      .catch((err) => {
+        setErrorMsg(`Failed to show server info: ${err}`);
+        setServerInfo(null);
+        errorAlert(err);
+      })
+      .finally(() => setIsLoading(false));
+  };
 
   useEffect(() => {
     handleGetServerInfo();

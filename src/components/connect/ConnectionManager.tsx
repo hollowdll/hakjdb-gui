@@ -1,12 +1,13 @@
 import { ConnectionDialog } from "./ConnectionDialog";
 import { useState, useEffect } from "react";
 import { ConnectionInfo } from "../../types/types";
-import { invoke } from "@tauri-apps/api";
 import { listen } from "@tauri-apps/api/event";
 import toast from "react-hot-toast";
 import { NavBar } from "../nav/NavBar";
 import { useNavigate } from "react-router-dom";
 import { useConnectionInfoStore } from "../../state/store";
+import { invokeConnect, invokeDisconnect } from "../../tauri/command";
+import { tauriListenEvents } from "../../tauri/event";
 
 export default function ConnectionManager() {
   const [isConnected, setIsConnected] = useState(false);
@@ -14,10 +15,7 @@ export default function ConnectionManager() {
   const setConnectionInfo = useConnectionInfoStore((state) => state.setConnectionInfo);
 
   const handleConnect = (connectionInfo: ConnectionInfo) => {
-    const promise = invoke<string>("connect", {
-      host: connectionInfo.host,
-      port: connectionInfo.port,
-    });
+    const promise = invokeConnect(connectionInfo);
     toast.promise(
       promise,
       {
@@ -49,9 +47,9 @@ export default function ConnectionManager() {
   };
 
   useEffect(() => {
-    const disconnect = listen("disconnect", (event) => {
+    const disconnect = listen(tauriListenEvents.disconnect, (event) => {
       console.log("event ->", event.event);
-      invoke("disconnect")
+      invokeDisconnect()
         .then(() => {
           setIsConnected(false);
           navigate("/");

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { ServerLogs } from "../../types/server";
-import { invoke } from "@tauri-apps/api";
 import { Box, Button, CircularProgress, List, ListItem, Stack, Typography } from "@mui/material";
 import LogFilterDialog from "./LogFilterDialog";
 import { errorAlert } from "../../utility/alert";
+import { invokeGetServerLogs } from "../../tauri/command";
 
 export default function LogsTabPanel() {
   const [serverLogs, setServerLogs] = useState<string[] | null>(null);
@@ -26,7 +25,7 @@ export default function LogsTabPanel() {
   }
 
   const handleGetServerLogs = () => {
-    invoke<ServerLogs>("get_server_logs")
+    invokeGetServerLogs()
       .then((result) => {
         setServerLogs(result.logs);
       })
@@ -40,7 +39,7 @@ export default function LogsTabPanel() {
 
   const handleFilterLogs = (logCount: number) => {
     setIsLoading(true);
-    invoke<ServerLogs>("get_server_logs")
+    invokeGetServerLogs()
       .then(result => {
         if (selectedFilterType === "head") setServerLogs(result.logs.slice(0, logCount))
           else if (selectedFilterType === "tail") setServerLogs(result.logs.slice(-logCount));

@@ -12,6 +12,7 @@ import {
 import { listen } from "@tauri-apps/api/event";
 import { useEffect, useState, ChangeEvent } from "react";
 import { ConnectionInfo } from "../../types/types";
+import { tauriListenEvents } from "../../tauri/event";
 
 type ConnectionDialogProps = {
   handleConnect: (connectionInfo: ConnectionInfo) => void;
@@ -46,7 +47,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
   };
 
   useEffect(() => {
-    const unlisten = listen("new-connection", (event) => {
+    const unlisten = listen(tauriListenEvents.newConnection, (event) => {
       console.log("event ->", event.event);
       handleOpen();
     });

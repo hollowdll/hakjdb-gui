@@ -1,6 +1,6 @@
-import { TauriListenEvent } from "../types/tauri";
+import { TauriListenEvents } from "../types/tauri";
 
-export const tauriListenEvent: TauriListenEvent = {
+export const tauriListenEvents: TauriListenEvents = {
   newConnection: "new-connection",
   disconnect: "disconnect",
 }
