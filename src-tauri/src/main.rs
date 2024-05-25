@@ -2,20 +2,13 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::error::Error;
-use app::{grpc::{
+use app::{db::DatabaseInfo, grpc::{
   kvdb::{
-    GetServerInfoRequest,
-    GetLogsRequest,
-    GetAllDatabasesRequest,
+    GetAllDatabasesRequest, GetDatabaseInfoRequest, GetLogsRequest, GetServerInfoRequest
   }, GrpcClient, GrpcConnection,
 }, server::{
-  ClientInfo,
-  ServerInfo,
-  StorageInfo,
-  GeneralInfo,
-  MemoryInfo,
-  ServerLogs,
-}, util::bytes_to_mega};
+  ClientInfo, GeneralInfo, MemoryInfo, ServerInfo, ServerLogs, StorageInfo
+}, util::{bytes_to_mega, prost_timestamp_to_iso8601}};
 use tauri::{CustomMenuItem, Menu, Submenu, State, Manager};
 
 #[tauri::command]
@@ -138,6 +131,38 @@ async fn get_all_databases(connection: State<'_, GrpcConnection>) -> Result<Vec<
   }
 }
 
+#[tauri::command]
+async fn get_database_info(connection: State<'_, GrpcConnection>, db_name: &str) -> Result<serde_json::Value, String> {
+  let mut guard = connection.connection.lock().await;
+  if let Some(ref mut connection) = *guard {
+    let request = tonic::Request::new(GetDatabaseInfoRequest {db_name: db_name.to_owned()});
+    let response = connection.database_client.get_database_info(request).await;
+    match response {
+      Ok(response) => {
+        if let Some(data) = &response.get_ref().data {
+          let db_info = DatabaseInfo {
+            name: data.name.to_owned(),
+            created_at: prost_timestamp_to_iso8601(data.created_at.as_ref().unwrap()),
+            updated_at: prost_timestamp_to_iso8601(data.updated_at.as_ref().unwrap()),
+            data_size: data.data_size.to_string(),
+            key_count: data.key_count.to_string(),
+          };
+
+          match serde_json::to_value(db_info) {
+            Ok(json) => return Ok(json),
+            Err(e) => return Err(format!("failed to convert data to JSON: {}", e)),
+          }
+        }
+      },
+      Err(err) => return Err(format!("{}", err)),
+    }
+  } else {
+    return Err("no connection found".to_string());
+  }
+
+  return Err("unexpected error".to_string());
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
   tauri::Builder::default()
@@ -172,6 +197,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
       get_server_info,
       get_server_logs,
       get_all_databases,
+      get_database_info,
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

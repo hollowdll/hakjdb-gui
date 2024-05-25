@@ -38,6 +38,8 @@ export const invokeGetAllDatabases = (): Promise<string[]> => {
   return invoke<string[]>(tauriInvokeCommands.getAllDatabases);
 }
 
-export const invokeGetDatabaseInfo = (): Promise<DatabaseInfo> => {
-  return invoke<DatabaseInfo>(tauriInvokeCommands.getDatabaseInfo);
+export const invokeGetDatabaseInfo = (dbName: string): Promise<DatabaseInfo> => {
+  return invoke<DatabaseInfo>(tauriInvokeCommands.getDatabaseInfo, {
+    dbName
+  });
 }
