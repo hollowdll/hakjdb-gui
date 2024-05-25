@@ -3,6 +3,10 @@ export type TauriInvokeCommands = {
   disconnect: string,
   getServerInfo: string,
   getServerLogs: string,
+  getAllDatabases: string,
+  getDatabaseInfo: string,
+  createDatabase: string,
+  deleteDatabase: string,
 }
 
 export type TauriListenEvents = {

@@ -5,7 +5,8 @@ use std::error::Error;
 use app::{grpc::{
   kvdb::{
     GetServerInfoRequest,
-    GetLogsRequest
+    GetLogsRequest,
+    GetAllDatabasesRequest,
   }, GrpcClient, GrpcConnection,
 }, server::{
   ClientInfo,
@@ -120,8 +121,21 @@ async fn get_server_logs(connection: State<'_, GrpcConnection>) -> Result<serde_
   } else {
     return Err("no connection found".to_string());
   }
+}
 
-  //return Err("unexpected error".to_string());
+#[tauri::command]
+async fn get_all_databases(connection: State<'_, GrpcConnection>) -> Result<Vec<String>, String> {
+  let mut guard = connection.connection.lock().await;
+  if let Some(ref mut connection) = *guard {
+    let request = tonic::Request::new(GetAllDatabasesRequest {});
+    let response = connection.database_client.get_all_databases(request).await;
+    match response {
+      Ok(response) => return Ok(response.get_ref().db_names.clone()),
+      Err(err) => return Err(format!("{}", err)),
+    }
+  } else {
+    return Err("no connection found".to_string());
+  }
 }
 
 #[tokio::main]
@@ -156,7 +170,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
       connect,
       disconnect,
       get_server_info,
-      get_server_logs
+      get_server_logs,
+      get_all_databases,
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
