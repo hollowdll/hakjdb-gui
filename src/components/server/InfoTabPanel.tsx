@@ -17,7 +17,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, useEffect, SyntheticEvent } from "react";
 import { invoke } from "@tauri-apps/api";
-import toast from "react-hot-toast";
+import { errorAlert } from "../../utility/alert";
 
 type AccordionProps = {
   accordionExpanded: string | false;
@@ -434,7 +434,7 @@ export default function InfoTabPanel() {
     .catch(err => {
       setErrorMsg(`Failed to show server info: ${err}`);
       setServerInfo(null);
-      toast.error(err, {duration: 5000});
+      errorAlert(err);
     })
     .finally(() => setIsLoading(false));
   }

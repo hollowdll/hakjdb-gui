@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { ServerLogs } from "../../types/server";
 import { invoke } from "@tauri-apps/api";
-import toast from "react-hot-toast";
 import { Box, Button, CircularProgress, List, ListItem, Stack, Typography } from "@mui/material";
 import LogFilterDialog from "./LogFilterDialog";
+import { errorAlert } from "../../utility/alert";
 
 export default function LogsTabPanel() {
   const [serverLogs, setServerLogs] = useState<string[] | null>(null);
@@ -33,7 +33,7 @@ export default function LogsTabPanel() {
       .catch((err) => {
         setErrorMsg(`Failed to show server logs: ${err}`);
         setServerLogs(null);
-        toast.error(err, { duration: 5000 });
+        errorAlert(err);
       })
       .finally(() => setIsLoading(false));
   };
@@ -49,7 +49,7 @@ export default function LogsTabPanel() {
       .catch(err => {
         setErrorMsg(`Failed to filter server logs: ${err}`);
         setServerLogs(null);
-        toast.error(err, {duration: 5000});
+        errorAlert(err);
       })
       .finally(() => setIsLoading(false));
   }
