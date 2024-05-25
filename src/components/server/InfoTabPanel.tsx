@@ -48,14 +48,14 @@ type GeneralInfoListProps = {
 
 function allyPropsInfoField() {
   return {
-    sx: {wordBreak: "break-word"},
+    sx: { marginRight: "80px" },
   }
 }
 
 function allyPropsInfoValue(infoField: string) {
   return {
     id: `server-info-value-${infoField}`,
-    sx: { marginLeft: "20px", marginRight: "30px", textAlign: "end", color: "text.secondary", wordBreak: "break-word" },
+    sx: { marginRight: "50px", textAlign: "end", color: "text.secondary", wordBreak: "break-word" },
   };
 }
 
@@ -449,7 +449,7 @@ export default function InfoTabPanel() {
         p: 3,
         backgroundColor: "rgb(250, 250, 250)",
         width: "100%",
-        maxWidth: "720px",
+        
       }}
     >
       {isLoading ? (
