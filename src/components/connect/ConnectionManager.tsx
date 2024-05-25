@@ -8,11 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { useConnectionInfoStore } from "../../state/store";
 import { invokeConnect, invokeDisconnect } from "../../tauri/command";
 import { tauriListenEvents } from "../../tauri/event";
+import { useNavigationStore } from "../../state/store";
 
 export default function ConnectionManager() {
   const [isConnected, setIsConnected] = useState(false);
   const navigate = useNavigate();
   const setConnectionInfo = useConnectionInfoStore((state) => state.setConnectionInfo);
+  const setSelectedNavItemIndex = useNavigationStore((state) => state.setSelectedNavItemIndex);
 
   const handleConnect = (connectionInfo: ConnectionInfo) => {
     const promise = invokeConnect(connectionInfo);
@@ -24,6 +26,7 @@ export default function ConnectionManager() {
           setIsConnected(true);
           setConnectionInfo(connectionInfo);
           navigate("/connection");
+          setSelectedNavItemIndex(0);
           return result;
         },
         error: (error) => {

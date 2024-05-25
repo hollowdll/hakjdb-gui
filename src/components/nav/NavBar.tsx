@@ -14,7 +14,7 @@ import CableIcon from "@mui/icons-material/Cable";
 import StorageIcon from "@mui/icons-material/Storage";
 import FolderIcon from "@mui/icons-material/Folder";
 import KeyIcon from "@mui/icons-material/Key";
-import { useState } from "react";
+import { useNavigationStore } from "../../state/store";
 
 const drawerWidth = 240;
 const navItemNames: NavItemNames = {
@@ -45,10 +45,11 @@ const renderIcon = (item: NavItem) => {
 
 export function NavBar() {
   const navigate = useNavigate();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const selectedIndex = useNavigationStore((state) => state.selectedNavItemIndex);
+  const setSelectedNavItemIndex = useNavigationStore((state) => state.setSelectedNavItemIndex);
 
   const handleListItemClick = (index: number) => {
-    setSelectedIndex(index);
+    setSelectedNavItemIndex(index);
   };
 
   return (
