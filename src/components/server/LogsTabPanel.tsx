@@ -6,8 +6,7 @@ import { Box, Button, CircularProgress, List, ListItem, Stack, Typography } from
 import LogFilterDialog from "./LogFilterDialog";
 
 export default function LogsTabPanel() {
-  const [serverLogs, setServerLogs] = useState<ServerLogs | null>(null);
-  const [filteredLogs, setFilteredLogs] = useState<string[]>([]);
+  const [serverLogs, setServerLogs] = useState<string[] | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [filterDialogOpen, setFilterDialogOpen] = useState(false);
@@ -28,42 +27,45 @@ export default function LogsTabPanel() {
 
   const handleGetServerLogs = () => {
     invoke<ServerLogs>("get_server_logs")
-    .then(result => {
-      setServerLogs(result);
-      setFilteredLogs(result.logs);
-    })
-    .catch(err => {
-      setErrorMsg(`Failed to show server logs: ${err}`);
-      toast.error(err, {duration: 5000});
-    })
-    .finally(() => setIsLoading(false));
-  }
-
-  const handleFilterHead = (logCount: number) => {
-    if (serverLogs) setFilteredLogs(serverLogs.logs.slice(0, logCount));
-  }
-
-  const handleFilterTail = (logCount: number) => {
-    if (serverLogs) setFilteredLogs(serverLogs.logs.slice(-logCount));
-  }
+      .then((result) => {
+        setServerLogs(result.logs);
+      })
+      .catch((err) => {
+        setErrorMsg(`Failed to show server logs: ${err}`);
+        setServerLogs(null);
+        toast.error(err, { duration: 5000 });
+      })
+      .finally(() => setIsLoading(false));
+  };
 
   const handleFilterLogs = (logCount: number) => {
-    if (serverLogs) {
-      if (selectedFilterType === "head") setFilteredLogs(serverLogs.logs.slice(0, logCount))
-        else if (selectedFilterType === "tail") setFilteredLogs(serverLogs.logs.slice(-logCount));
-    }
+    setIsLoading(true);
+    invoke<ServerLogs>("get_server_logs")
+      .then(result => {
+        if (selectedFilterType === "head") setServerLogs(result.logs.slice(0, logCount))
+          else if (selectedFilterType === "tail") setServerLogs(result.logs.slice(-logCount));
+          else setServerLogs([]);
+      })
+      .catch(err => {
+        setErrorMsg(`Failed to filter server logs: ${err}`);
+        setServerLogs(null);
+        toast.error(err, {duration: 5000});
+      })
+      .finally(() => setIsLoading(false));
   }
 
   const renderLogs = () => {
-    return (
+    return serverLogs ? (
       <List>
-        {filteredLogs.map((log, index) => (
+        {serverLogs.map((log, index) => (
           <ListItem key={index} disablePadding sx={{display: "flex", justifyContent: "start", alignItems: "start"}}>
             <Typography sx={{color: "text.secondary", marginRight: "20px"}}>{index + 1}</Typography>
             <Typography>{log}</Typography>
           </ListItem>
         ))}
       </List>
+    ) : (
+      <Typography>Something went wrong.</Typography>
     );
   };
 

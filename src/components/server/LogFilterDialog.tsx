@@ -12,8 +12,8 @@ export default function LogFilterDialog({open, handleClose, filterType, filterLo
   const [logCount, setLogCount] = useState(0);
 
   const handleFilter = () => {
-    filterLogs(logCount);
     handleClose();
+    filterLogs(logCount);
   }
 
   return (

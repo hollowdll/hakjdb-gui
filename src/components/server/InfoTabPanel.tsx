@@ -432,8 +432,8 @@ export default function InfoTabPanel() {
       setServerInfo(result);
     })
     .catch(err => {
+      setErrorMsg(`Failed to show server info: ${err}`);
       setServerInfo(null);
-      setErrorMsg(`Failed to show server logs: ${err}`);
       toast.error(err, {duration: 5000});
     })
     .finally(() => setIsLoading(false));
