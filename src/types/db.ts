@@ -3,5 +3,5 @@ export interface DatabaseInfo {
   createdAt: string,
   updatedAt: string,
   dataSize: string,
-  key_count: string,
+  keyCount: string,
 }
