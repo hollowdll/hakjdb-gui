@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct DatabaseInfo {
+pub struct DatabaseInfoPayload {
     pub name: String,
     #[serde(rename = "createdAt")]
     pub created_at: String,

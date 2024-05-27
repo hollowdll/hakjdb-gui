@@ -2,12 +2,17 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::error::Error;
-use app::{db::DatabaseInfo, grpc::{
+use app::{db::DatabaseInfoPayload, grpc::{
   kvdb::{
     GetAllDatabasesRequest, GetDatabaseInfoRequest, GetLogsRequest, GetServerInfoRequest
   }, GrpcClient, GrpcConnection,
 }, server::{
-  ClientInfo, GeneralInfo, MemoryInfo, ServerInfo, ServerLogs, StorageInfo
+  ClientInfoPayload,
+  GeneralInfoPayload,
+  MemoryInfoPayload,
+  ServerInfoPayload,
+  ServerLogsPayload,
+  StorageInfoPayload,
 }, util::{bytes_to_mega, prost_timestamp_to_iso8601}};
 use tauri::{CustomMenuItem, Menu, Submenu, State, Manager};
 
@@ -36,17 +41,16 @@ async fn disconnect(connection: State<'_, GrpcConnection>) -> Result<(), String>
 }
 
 #[tauri::command]
-async fn get_server_info(connection: State<'_, GrpcConnection>) -> Result<serde_json::Value, String> {
+async fn get_server_info(connection: State<'_, GrpcConnection>) -> Result<ServerInfoPayload, String> {
     let mut guard = connection.connection.lock().await;
     if let Some(ref mut connection) = *guard {
         let request = tonic::Request::new(GetServerInfoRequest {});
         let response = connection.server_client.get_server_info(request).await;
         match response {
             Ok(response) => {
-                let data = &response.get_ref().data;
-                if let Some(data) = data {
-                    let server_info = ServerInfo {
-                      general_info: GeneralInfo {
+                if let Some(data) = &response.get_ref().data {
+                    return Ok(ServerInfoPayload {
+                      general_info: GeneralInfoPayload {
                         kvdb_version: data.general_info.as_ref().unwrap().kvdb_version.clone(),
                         go_version: data.general_info.as_ref().unwrap().go_version.clone(),
                         db_count: data.general_info.as_ref().unwrap().db_count.to_string(),
@@ -61,25 +65,20 @@ async fn get_server_info(connection: State<'_, GrpcConnection>) -> Result<serde_
                         debug_enabled: data.general_info.as_ref().unwrap().debug_enabled,
                         default_db: data.general_info.as_ref().unwrap().default_db.clone(),
                       },
-                      memory_info: MemoryInfo {
+                      memory_info: MemoryInfoPayload {
                         memory_alloc_mega_byte: bytes_to_mega(data.memory_info.as_ref().unwrap().memory_alloc).to_string(),
                         memory_total_alloc_mega_byte: bytes_to_mega(data.memory_info.as_ref().unwrap().memory_total_alloc).to_string(),
                         memory_sys_mega_byte: bytes_to_mega(data.memory_info.as_ref().unwrap().memory_sys).to_string(),
                       },
-                      storage_info: StorageInfo {
+                      storage_info: StorageInfoPayload {
                         total_data_size: data.storage_info.as_ref().unwrap().total_data_size.to_string(),
                         total_keys: data.storage_info.as_ref().unwrap().total_keys.to_string(),
                       },
-                      client_info: ClientInfo {
+                      client_info: ClientInfoPayload {
                         client_connections: data.client_info.as_ref().unwrap().client_connections.to_string(),
                         max_client_connections: data.client_info.as_ref().unwrap().max_client_connections.to_string(),
                       }
-                    };
-                    
-                    match serde_json::to_value(server_info) {
-                      Ok(json) => return Ok(json),
-                      Err(e) => return Err(format!("failed to convert data to JSON: {}", e)),
-                    }
+                    });
                 }
             },
             Err(err) => return Err(format!("{}", err)),
@@ -92,22 +91,16 @@ async fn get_server_info(connection: State<'_, GrpcConnection>) -> Result<serde_
 }
 
 #[tauri::command]
-async fn get_server_logs(connection: State<'_, GrpcConnection>) -> Result<serde_json::Value, String> {
+async fn get_server_logs(connection: State<'_, GrpcConnection>) -> Result<ServerLogsPayload, String> {
   let mut guard = connection.connection.lock().await;
   if let Some(ref mut connection) = *guard {
     let request = tonic::Request::new(GetLogsRequest {});
     let response = connection.server_client.get_logs(request).await;
     match response {
       Ok(response) => {
-        let server_logs = ServerLogs {
+        return Ok(ServerLogsPayload {
           logs: response.get_ref().logs.clone(),
-          logfile_enabled: response.get_ref().logfile_enabled
-        };
-        
-        match serde_json::to_value(server_logs) {
-          Ok(json) => return Ok(json),
-          Err(e) => return Err(format!("failed to convert data to JSON: {}", e)),
-        }
+        });
       },
       Err(err) => return Err(format!("{}", err)),
     }
@@ -132,7 +125,7 @@ async fn get_all_databases(connection: State<'_, GrpcConnection>) -> Result<Vec<
 }
 
 #[tauri::command]
-async fn get_database_info(connection: State<'_, GrpcConnection>, db_name: &str) -> Result<serde_json::Value, String> {
+async fn get_database_info(connection: State<'_, GrpcConnection>, db_name: &str) -> Result<DatabaseInfoPayload, String> {
   let mut guard = connection.connection.lock().await;
   if let Some(ref mut connection) = *guard {
     let request = tonic::Request::new(GetDatabaseInfoRequest {db_name: db_name.to_owned()});
@@ -140,18 +133,13 @@ async fn get_database_info(connection: State<'_, GrpcConnection>, db_name: &str)
     match response {
       Ok(response) => {
         if let Some(data) = &response.get_ref().data {
-          let db_info = DatabaseInfo {
+          return Ok(DatabaseInfoPayload {
             name: data.name.to_owned(),
             created_at: prost_timestamp_to_iso8601(data.created_at.as_ref().unwrap()),
             updated_at: prost_timestamp_to_iso8601(data.updated_at.as_ref().unwrap()),
             data_size: data.data_size.to_string(),
             key_count: data.key_count.to_string(),
-          };
-
-          match serde_json::to_value(db_info) {
-            Ok(json) => return Ok(json),
-            Err(e) => return Err(format!("failed to convert data to JSON: {}", e)),
-          }
+          });
         }
       },
       Err(err) => return Err(format!("{}", err)),

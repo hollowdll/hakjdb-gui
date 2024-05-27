@@ -39,5 +39,4 @@ export interface GeneralInfo {
 
 export interface ServerLogs {
   logs: string[],
-  logfileEnabled: boolean,
 }

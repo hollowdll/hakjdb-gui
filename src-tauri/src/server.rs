@@ -1,19 +1,19 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct ServerInfo {
+pub struct ServerInfoPayload {
     #[serde(rename = "generalInfo")]
-    pub general_info: GeneralInfo,
+    pub general_info: GeneralInfoPayload,
     #[serde(rename = "memoryInfo")]
-    pub memory_info: MemoryInfo,
+    pub memory_info: MemoryInfoPayload,
     #[serde(rename = "storageInfo")]
-    pub storage_info: StorageInfo,
+    pub storage_info: StorageInfoPayload,
     #[serde(rename = "clientInfo")]
-    pub client_info: ClientInfo,
+    pub client_info: ClientInfoPayload,
 }
 
 #[derive(Serialize)]
-pub struct MemoryInfo {
+pub struct MemoryInfoPayload {
     #[serde(rename = "memoryAllocMegaByte")]
     pub memory_alloc_mega_byte: String,
     #[serde(rename = "memoryTotalAllocMegaByte")]
@@ -23,7 +23,7 @@ pub struct MemoryInfo {
 }
 
 #[derive(Serialize)]
-pub struct StorageInfo {
+pub struct StorageInfoPayload {
     #[serde(rename = "totalDataSize")]
     pub total_data_size: String,
     #[serde(rename = "totalKeys")]
@@ -31,7 +31,7 @@ pub struct StorageInfo {
 }
 
 #[derive(Serialize)]
-pub struct ClientInfo {
+pub struct ClientInfoPayload {
     #[serde(rename = "clientConnections")]
     pub client_connections: String,
     #[serde(rename = "maxClientConnections")]
@@ -39,7 +39,7 @@ pub struct ClientInfo {
 }
 
 #[derive(Serialize)]
-pub struct GeneralInfo {
+pub struct GeneralInfoPayload {
     #[serde(rename = "kvdbVersion")]
     pub kvdb_version: String,
     #[serde(rename = "goVersion")]
@@ -67,8 +67,6 @@ pub struct GeneralInfo {
 }
 
 #[derive(Serialize)]
-pub struct ServerLogs {
+pub struct ServerLogsPayload {
     pub logs: Vec<String>,
-    #[serde(rename = "logfileEnabled")]
-    pub logfile_enabled: bool,
 }
