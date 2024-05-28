@@ -43,3 +43,15 @@ export const invokeGetDatabaseInfo = (dbName: string): Promise<DatabaseInfo> => 
     dbName
   });
 }
+
+export const invokeCreateDatabase = (dbName: string): Promise<string> => {
+  return invoke<string>(tauriInvokeCommands.createDatabase, {
+    dbName
+  });
+}
+
+export const invokeDeleteDatabase = (dbName: string): Promise<string> => {
+  return invoke<string>(tauriInvokeCommands.deleteDatabase, {
+    dbName
+  });
+}

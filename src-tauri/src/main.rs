@@ -4,7 +4,12 @@
 use std::error::Error;
 use app::{db::{DatabaseInfoPayload, GetDatabasesPayload}, grpc::{
   kvdb::{
-    GetAllDatabasesRequest, GetDatabaseInfoRequest, GetLogsRequest, GetServerInfoRequest
+    GetAllDatabasesRequest,
+    GetDatabaseInfoRequest,
+    GetLogsRequest,
+    GetServerInfoRequest,
+    CreateDatabaseRequest,
+    DeleteDatabaseRequest,
   }, GrpcClient, GrpcConnection,
 }, server::{
   ClientInfoPayload,
@@ -155,6 +160,38 @@ async fn get_database_info(connection: State<'_, GrpcConnection>, db_name: &str)
   return Err("unexpected error".to_string());
 }
 
+/// Creates a new database. Returns the name of the created database.
+#[tauri::command]
+async fn create_database(connection: State<'_, GrpcConnection>, db_name: &str) -> Result<String, String> {
+  let mut guard = connection.connection.lock().await;
+  if let Some(ref mut connection) = *guard {
+    let request = tonic::Request::new(CreateDatabaseRequest {db_name: db_name.to_owned()});
+    let response = connection.database_client.create_database(request).await;
+    match response {
+      Ok(response) => return Ok(response.get_ref().db_name.clone()),
+      Err(err) => return Err(format!("{}", err)),
+    }
+  } else {
+    return Err("no connection found".to_string());
+  }
+}
+
+/// Deletes a database. Returns the name of the deleted database.
+#[tauri::command]
+async fn delete_database(connection: State<'_, GrpcConnection>, db_name: &str) -> Result<String, String> {
+  let mut guard = connection.connection.lock().await;
+  if let Some(ref mut connection) = *guard {
+    let request = tonic::Request::new(DeleteDatabaseRequest {db_name: db_name.to_owned()});
+    let response = connection.database_client.delete_database(request).await;
+    match response {
+      Ok(response) => return Ok(response.get_ref().db_name.clone()),
+      Err(err) => return Err(format!("{}", err)),
+    }
+  } else {
+    return Err("no connection found".to_string());
+  }
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
   tauri::Builder::default()
@@ -190,6 +227,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
       get_server_logs,
       get_all_databases,
       get_database_info,
+      create_database,
+      delete_database
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
