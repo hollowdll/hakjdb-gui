@@ -12,3 +12,9 @@ pub struct DatabaseInfoPayload {
     #[serde(rename = "keyCount")]
     pub key_count: String,
 }
+
+#[derive(Serialize)]
+pub struct GetDatabasesPayload {
+    #[serde(rename = "dbNames")]
+    pub db_names: Vec<String>,
+}

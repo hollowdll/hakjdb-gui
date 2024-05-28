@@ -2,7 +2,7 @@ import { invoke } from "@tauri-apps/api";
 import { TauriInvokeCommands } from "../types/tauri"
 import { ConnectionInfo } from "../types/types";
 import { ServerInfo, ServerLogs } from "../types/server";
-import { DatabaseInfo } from "../types/db";
+import { DatabaseInfo, Databases } from "../types/db";
 
 const tauriInvokeCommands: TauriInvokeCommands = {
   connect: "connect",
@@ -34,8 +34,8 @@ export const invokeGetServerLogs = (): Promise<ServerLogs> => {
   return invoke<ServerLogs>(tauriInvokeCommands.getServerLogs);
 }
 
-export const invokeGetAllDatabases = (): Promise<string[]> => {
-  return invoke<string[]>(tauriInvokeCommands.getAllDatabases);
+export const invokeGetAllDatabases = (): Promise<Databases> => {
+  return invoke<Databases>(tauriInvokeCommands.getAllDatabases);
 }
 
 export const invokeGetDatabaseInfo = (dbName: string): Promise<DatabaseInfo> => {

@@ -5,3 +5,7 @@ export interface DatabaseInfo {
   dataSize: string,
   keyCount: string,
 }
+
+export interface Databases {
+  dbNames: string[],
+}

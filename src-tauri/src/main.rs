@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::error::Error;
-use app::{db::DatabaseInfoPayload, grpc::{
+use app::{db::{DatabaseInfoPayload, GetDatabasesPayload}, grpc::{
   kvdb::{
     GetAllDatabasesRequest, GetDatabaseInfoRequest, GetLogsRequest, GetServerInfoRequest
   }, GrpcClient, GrpcConnection,
@@ -110,13 +110,17 @@ async fn get_server_logs(connection: State<'_, GrpcConnection>) -> Result<Server
 }
 
 #[tauri::command]
-async fn get_all_databases(connection: State<'_, GrpcConnection>) -> Result<Vec<String>, String> {
+async fn get_all_databases(connection: State<'_, GrpcConnection>) -> Result<GetDatabasesPayload, String> {
   let mut guard = connection.connection.lock().await;
   if let Some(ref mut connection) = *guard {
     let request = tonic::Request::new(GetAllDatabasesRequest {});
     let response = connection.database_client.get_all_databases(request).await;
     match response {
-      Ok(response) => return Ok(response.get_ref().db_names.clone()),
+      Ok(response) => {
+        return Ok(GetDatabasesPayload {
+          db_names: response.get_ref().db_names.clone(),
+        });
+      },
       Err(err) => return Err(format!("{}", err)),
     }
   } else {

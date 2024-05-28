@@ -29,7 +29,7 @@ export default function DatabaseList() {
   const handleGetAllDatabases = () => {
     invokeGetAllDatabases()
       .then((result) => {
-        setDatabases(result);
+        setDatabases(result.dbNames);
       })
       .catch((err) => {
         setErrorMsg(`Failed to show databases: ${err}`);
