@@ -5,9 +5,9 @@ import { Box, Accordion, AccordionSummary, AccordionDetails, Typography, Circula
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DatabaseInfo } from "../../types/db";
+import { useDatabaseStore } from "../../state/store";
 
 export default function DatabaseList() {
-  const [databases, setDatabases] = useState<string[] | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isDbInfoLoading, setIsDbInfoLoading] = useState(true);
@@ -15,6 +15,8 @@ export default function DatabaseList() {
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
     false
   );
+  const databases = useDatabaseStore((state) => state.databases);
+  const setDatabases = useDatabaseStore((state) => state.setDatabases);
 
   const handleAccordionChange =
     (panel: string, dbName: string) => (_event: SyntheticEvent, isExpanded: boolean) => {

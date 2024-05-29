@@ -8,17 +8,23 @@ import {
   DialogActions,
   Button,
   Typography,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { useState, ChangeEvent } from "react";
 import { invokeCreateDatabase } from "../../tauri/command";
 import { successAlert } from "../../utility/alert";
+import { useDatabaseStore } from "../../state/store";
+import { invokeGetAllDatabases } from "../../tauri/command";
+import { errorAlert } from "../../utility/alert";
 
 export default function CreateDatabaseDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dbName, setDbName] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const setDatabases = useDatabaseStore((state) => state.setDatabases);
 
   const handleClose = () => {
     setDialogOpen(false);
@@ -33,6 +39,16 @@ export default function CreateDatabaseDialog() {
     setErrorMsg("");
   }
 
+  const handleGetAllDatabases = () => {
+    invokeGetAllDatabases()
+      .then((result) => {
+        setDatabases(result.dbNames);
+      })
+      .catch((err) => {
+        errorAlert(`Failed to show databases: ${err}`);
+      })
+  };
+
   const handleCreateDb = () => {
     setIsLoading(true);
     invokeCreateDatabase(dbName)
@@ -46,7 +62,7 @@ export default function CreateDatabaseDialog() {
       })
       .finally(() => {
         setIsLoading(false);
-
+        handleGetAllDatabases();
       });
   }
 
