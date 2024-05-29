@@ -22,6 +22,11 @@ interface DatabaseState {
   setDatabases: (newDatabases: string[] | null) => void,
 }
 
+interface LoadingState {
+  isLoadingBackdropOpen: boolean,
+  setIsLoadingBackdropOpen: (isOpen: boolean) => void,
+}
+
 export const useConnectionInfoStore = create<ConnectionInfoState>((set) => ({
   connectionInfo: { host: "", port: 0 },
   setConnectionInfo: (newConnectionInfo) => set(() => ({ connectionInfo: newConnectionInfo })),
@@ -40,4 +45,9 @@ export const useNavigationStore = create<NavigationState>((set) => ({
 export const useDatabaseStore = create<DatabaseState>((set) => ({
   databases: null,
   setDatabases: (newDatabases) => set(() => ({ databases: newDatabases })),
+}));
+
+export const useLoadingStore = create<LoadingState>((set) => ({
+  isLoadingBackdropOpen: false,
+  setIsLoadingBackdropOpen: (isOpen) => set(() => ({isLoadingBackdropOpen: isOpen})),
 }));

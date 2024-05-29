@@ -8,8 +8,6 @@ import {
   DialogActions,
   Button,
   Typography,
-  Backdrop,
-  CircularProgress,
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { useState, ChangeEvent } from "react";
@@ -18,13 +16,14 @@ import { successAlert } from "../../utility/alert";
 import { useDatabaseStore } from "../../state/store";
 import { invokeGetAllDatabases } from "../../tauri/command";
 import { errorAlert } from "../../utility/alert";
+import { useLoadingStore } from "../../state/store";
 
 export default function CreateDatabaseDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dbName, setDbName] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const setDatabases = useDatabaseStore((state) => state.setDatabases);
+  const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
 
   const handleClose = () => {
     setDialogOpen(false);
@@ -50,7 +49,8 @@ export default function CreateDatabaseDialog() {
   };
 
   const handleCreateDb = () => {
-    setIsLoading(true);
+    setIsLoadingBackdropOpen(true);
+    setErrorMsg("");
     invokeCreateDatabase(dbName)
       .then((result) => {
         setDialogOpen(false);
@@ -61,7 +61,7 @@ export default function CreateDatabaseDialog() {
         setErrorMsg(`Failed to create database: ${err}`);
       })
       .finally(() => {
-        setIsLoading(false);
+        setIsLoadingBackdropOpen(false);
         handleGetAllDatabases();
       });
   }
