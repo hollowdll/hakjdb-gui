@@ -1,5 +1,3 @@
-'use client'
-
 import { Alert, Snackbar } from "@mui/material";
 import { AlertColor, AlertPropsColorOverrides } from "@mui/material";
 import OverridableStringUnion from "@mui/types"
