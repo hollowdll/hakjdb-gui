@@ -1,5 +1,4 @@
-import { Box, Stack, Button } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import { Box, Stack } from "@mui/material";
 import DatabaseList from "../database/DatabaseList";
 import CreateDatabaseDialog from "../database/CreateDatabaseDialog";
 
@@ -8,10 +7,9 @@ export default function DatabasesView() {
     <Box sx={{width: "100%"}}>
       <h1>Databases</h1>
       <Stack spacing={2} direction="row">
-        <Button variant="contained" startIcon={<AddIcon />}>New</Button>
+        <CreateDatabaseDialog />
       </Stack>
       <DatabaseList />
-      <CreateDatabaseDialog />
     </Box>
   );
 }
