@@ -12,15 +12,13 @@ import { useState, ChangeEvent } from "react";
 import { invokeCreateDatabase } from "../../tauri/command";
 import { successAlert } from "../../utility/alert";
 import { useDatabaseStore } from "../../state/store";
-import { invokeGetAllDatabases } from "../../tauri/command";
-import { errorAlert } from "../../utility/alert";
 import { useLoadingStore } from "../../state/store";
 
 export default function CreateDatabaseDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dbName, setDbName] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const setDatabases = useDatabaseStore((state) => state.setDatabases);
+  const getAllDatabases = useDatabaseStore((state) => state.getAllDatabases);
   const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
 
   const handleClose = () => {
@@ -36,16 +34,6 @@ export default function CreateDatabaseDialog() {
     setErrorMsg("");
   }
 
-  const handleGetAllDatabases = () => {
-    invokeGetAllDatabases()
-      .then((result) => {
-        setDatabases(result.dbNames);
-      })
-      .catch((err) => {
-        errorAlert(`Failed to show databases: ${err}`);
-      })
-  };
-
   const handleCreateDb = () => {
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
@@ -60,7 +48,7 @@ export default function CreateDatabaseDialog() {
       })
       .finally(() => {
         setIsLoadingBackdropOpen(false);
-        handleGetAllDatabases();
+        getAllDatabases();
       });
   }
 

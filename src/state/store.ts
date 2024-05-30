@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { ConnectionInfo } from '../types/types'
 import { ServerInfo } from '../types/server'
+import { invokeGetAllDatabases } from '../tauri/command'
+import { errorAlert } from '../utility/alert'
 
 interface ConnectionInfoState {
   connectionInfo: ConnectionInfo,
@@ -20,6 +22,7 @@ interface NavigationState {
 interface DatabaseState {
   databases: string[] | null,
   setDatabases: (newDatabases: string[] | null) => void,
+  getAllDatabases: () => void,
 }
 
 interface LoadingState {
@@ -45,6 +48,16 @@ export const useNavigationStore = create<NavigationState>((set) => ({
 export const useDatabaseStore = create<DatabaseState>((set) => ({
   databases: null,
   setDatabases: (newDatabases) => set(() => ({ databases: newDatabases })),
+  getAllDatabases: () => {
+    invokeGetAllDatabases()
+      .then((result) => {
+        set(() => ({ databases: result.dbNames }));
+      })
+      .catch((err) => {
+        set(() => ({ databases: null }));
+        errorAlert(`Failed to show databases: ${err}`);
+      });
+  }
 }));
 
 export const useLoadingStore = create<LoadingState>((set) => ({

@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
-import { invokeDeleteDatabase, invokeGetAllDatabases } from "../../tauri/command";
+import { invokeDeleteDatabase } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
 import { successAlert, errorAlert } from "../../utility/alert";
 import { useDatabaseStore } from "../../state/store";
@@ -20,7 +20,7 @@ type DeleteDatabaseDialogProps = {
 
 export default function DeleteDatabaseDialog({ dbName, closeDbListAccordion }: DeleteDatabaseDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const setDatabases = useDatabaseStore((state) => state.setDatabases);
+  const getAllDatabases = useDatabaseStore((state) => state.getAllDatabases);
   const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
 
   const handleClose = () => {
@@ -29,16 +29,6 @@ export default function DeleteDatabaseDialog({ dbName, closeDbListAccordion }: D
 
   const handleOpen = () => {
     setIsOpen(true);
-  };
-
-  const handleGetAllDatabases = () => {
-    invokeGetAllDatabases()
-      .then((result) => {
-        setDatabases(result.dbNames);
-      })
-      .catch((err) => {
-        errorAlert(`Failed to show databases: ${err}`);
-      })
   };
 
   const handleDeleteDb = () => {
@@ -54,7 +44,7 @@ export default function DeleteDatabaseDialog({ dbName, closeDbListAccordion }: D
       })
       .finally(() => {
         setIsLoadingBackdropOpen(false);
-        handleGetAllDatabases();
+        getAllDatabases();
       });
   }
 
