@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Dialog,
   DialogTitle,
@@ -54,7 +52,7 @@ export default function CreateDatabaseDialog() {
     invokeCreateDatabase(dbName)
       .then((result) => {
         setDialogOpen(false);
-        successAlert(`Created database: ${result}`);
+        successAlert(`Created database ${result}`);
         resetForm();
       })
       .catch((err) => {

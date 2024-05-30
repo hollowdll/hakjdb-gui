@@ -1,0 +1,80 @@
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useState } from "react";
+import { invokeDeleteDatabase, invokeGetAllDatabases } from "../../tauri/command";
+import { useLoadingStore } from "../../state/store";
+import { successAlert, errorAlert } from "../../utility/alert";
+import { useDatabaseStore } from "../../state/store";
+
+type DeleteDatabaseDialogProps = {
+  dbName: string,
+  closeDbListAccordion: () => void,
+}
+
+export default function DeleteDatabaseDialog({ dbName, closeDbListAccordion }: DeleteDatabaseDialogProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const setDatabases = useDatabaseStore((state) => state.setDatabases);
+  const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleGetAllDatabases = () => {
+    invokeGetAllDatabases()
+      .then((result) => {
+        setDatabases(result.dbNames);
+      })
+      .catch((err) => {
+        errorAlert(`Failed to show databases: ${err}`);
+      })
+  };
+
+  const handleDeleteDb = () => {
+    setIsLoadingBackdropOpen(true);
+    setIsOpen(false);
+    invokeDeleteDatabase(dbName)
+      .then((result) => {
+        successAlert(`Deleted database ${result}`);
+        closeDbListAccordion();
+      })
+      .catch((err) => {
+        errorAlert(`Failed to delete database: ${err}`);
+      })
+      .finally(() => {
+        setIsLoadingBackdropOpen(false);
+        handleGetAllDatabases();
+      });
+  }
+
+  return (
+    <>
+      <Button variant="contained" endIcon={<DeleteIcon />} color="error" onClick={handleOpen}>Delete</Button>
+      <Dialog open={isOpen} onClose={handleClose}>
+        <DialogTitle>Delete Database {dbName}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Deleted databases cannot be restored. Deleting a database also deletes all the keys stored in it.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ m: "5px" }}>
+          <Button variant="contained" onClick={handleDeleteDb} color="error">Delete</Button>
+          <Button variant="outlined" onClick={handleClose} color="error">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}

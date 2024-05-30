@@ -1,11 +1,11 @@
 import { useState, useEffect, SyntheticEvent } from "react";
 import { invokeGetAllDatabases, invokeGetDatabaseInfo } from "../../tauri/command";
 import { errorAlert } from "../../utility/alert";
-import { Box, Accordion, AccordionSummary, AccordionDetails, Typography, CircularProgress, Stack, Button, ListItemText } from "@mui/material";
+import { Box, Accordion, AccordionSummary, AccordionDetails, Typography, CircularProgress, Stack, ListItemText } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { DatabaseInfo } from "../../types/db";
 import { useDatabaseStore } from "../../state/store";
+import DeleteDatabaseDialog from "./DeleteDatabaseDialog";
 
 export default function DatabaseList() {
   const [errorMsg, setErrorMsg] = useState("");
@@ -17,6 +17,10 @@ export default function DatabaseList() {
   );
   const databases = useDatabaseStore((state) => state.databases);
   const setDatabases = useDatabaseStore((state) => state.setDatabases);
+
+  const closeAccordion = () => {
+    setAccordionExpanded(false);
+  }
 
   const handleAccordionChange =
     (panel: string, dbName: string) => (_event: SyntheticEvent, isExpanded: boolean) => {
@@ -34,9 +38,10 @@ export default function DatabaseList() {
         setDatabases(result.dbNames);
       })
       .catch((err) => {
-        setErrorMsg(`Failed to show databases: ${err}`);
         setDatabases(null);
-        errorAlert(err);
+        const newErrorMsg = `Failed to show databases: ${err}`;
+        setErrorMsg(newErrorMsg);
+        errorAlert(newErrorMsg);
       })
       .finally(() => setIsLoading(false));
   };
@@ -60,7 +65,7 @@ export default function DatabaseList() {
       sx: { marginRight: "80px" },
     }
   }
-  
+
   function allyPropsInfoValue(infoField: string) {
     return {
       id: `db-info-value-${infoField}`,
@@ -76,106 +81,106 @@ export default function DatabaseList() {
     <>
       <Box sx={{ paddingTop: "1em", width: "100%" }}>
         {isLoading ? (
-            <CircularProgress />
-          ) : databases ? (
-            <>
-              {databases.map((dbName, index) => (
-                <Accordion
-                  expanded={accordionExpanded === `panel${index+1}`}
-                  onChange={handleAccordionChange(`panel${index+1}`, dbName)}
-                  key={index+1}
-                >
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography sx={{display: "flex", alignItems: "center"}}>{dbName}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Stack spacing={2} direction="row">
-                      <Button variant="contained" endIcon={<DeleteIcon />} color="error">Delete</Button>
-                    </Stack>
-                    <h3>Database Information</h3>
-                    {isDbInfoLoading ? (
-                      <CircularProgress />
-                    ) : dbInfo ? (
-                      <>
-                        <Accordion>
-                          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <ListItemText primary="Name" {...allyPropsInfoField()} />
-                            <ListItemText
-                              primary={dbInfo.name}
-                              {...allyPropsInfoValue("name")}
-                            />
-                          </AccordionSummary>
-                          <AccordionDetails>
-                            <Typography>Name of the database.</Typography>
-                          </AccordionDetails>
-                        </Accordion>
+          <CircularProgress />
+        ) : databases ? (
+          <>
+            {databases.map((dbName, index) => (
+              <Accordion
+                expanded={accordionExpanded === `panel${index + 1}`}
+                onChange={handleAccordionChange(`panel${index + 1}`, dbName)}
+                key={index + 1}
+              >
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography sx={{ display: "flex", alignItems: "center" }}>{dbName}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Stack spacing={2} direction="row">
+                    <DeleteDatabaseDialog dbName={dbName} closeDbListAccordion={closeAccordion} />
+                  </Stack>
+                  <h3>Database Information</h3>
+                  {isDbInfoLoading ? (
+                    <CircularProgress />
+                  ) : dbInfo ? (
+                    <>
+                      <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                          <ListItemText primary="Name" {...allyPropsInfoField()} />
+                          <ListItemText
+                            primary={dbInfo.name}
+                            {...allyPropsInfoValue("name")}
+                          />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography>Name of the database.</Typography>
+                        </AccordionDetails>
+                      </Accordion>
 
-                        <Accordion>
-                          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <ListItemText primary="Created At" {...allyPropsInfoField()} />
-                            <ListItemText
-                              primary={dbInfo.createdAt}
-                              {...allyPropsInfoValue("created-at")}
-                            />
-                          </AccordionSummary>
-                          <AccordionDetails>
-                            <Typography>UTC timestamp when the database was created.</Typography>
-                          </AccordionDetails>
-                        </Accordion>
+                      <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                          <ListItemText primary="Created At" {...allyPropsInfoField()} />
+                          <ListItemText
+                            primary={dbInfo.createdAt}
+                            {...allyPropsInfoValue("created-at")}
+                          />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography>UTC timestamp when the database was created.</Typography>
+                        </AccordionDetails>
+                      </Accordion>
 
-                        <Accordion>
-                          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <ListItemText primary="Updated At" {...allyPropsInfoField()} />
-                            <ListItemText
-                              primary={dbInfo.updatedAt}
-                              {...allyPropsInfoValue("updated-at")}
-                            />
-                          </AccordionSummary>
-                          <AccordionDetails>
-                            <Typography>UTC timestamp when the database was last updated.</Typography>
-                          </AccordionDetails>
-                        </Accordion>
+                      <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                          <ListItemText primary="Updated At" {...allyPropsInfoField()} />
+                          <ListItemText
+                            primary={dbInfo.updatedAt}
+                            {...allyPropsInfoValue("updated-at")}
+                          />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography>UTC timestamp when the database was last updated.</Typography>
+                        </AccordionDetails>
+                      </Accordion>
 
-                        <Accordion>
-                          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <ListItemText primary="Keys" {...allyPropsInfoField()} />
-                            <ListItemText
-                              primary={dbInfo.keyCount}
-                              {...allyPropsInfoValue("keys")}
-                            />
-                          </AccordionSummary>
-                          <AccordionDetails>
-                            <Typography>Number of keys stored in the database.</Typography>
-                          </AccordionDetails>
-                        </Accordion>
+                      <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                          <ListItemText primary="Keys" {...allyPropsInfoField()} />
+                          <ListItemText
+                            primary={dbInfo.keyCount}
+                            {...allyPropsInfoValue("keys")}
+                          />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography>Number of keys stored in the database.</Typography>
+                        </AccordionDetails>
+                      </Accordion>
 
-                        <Accordion>
-                          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <ListItemText primary="Data Size" {...allyPropsInfoField()} />
-                            <ListItemText
-                              primary={`${dbInfo.dataSize} B`}
-                              {...allyPropsInfoValue("data-size")}
-                            />
-                          </AccordionSummary>
-                          <AccordionDetails>
-                            <Typography>Size of the stored data in bytes.</Typography>
-                          </AccordionDetails>
-                        </Accordion>
-                      </>
-                    ) : errorMsg !== "" ? (
-                      <Typography>{errorMsg}</Typography>
-                    ) : (
-                      <></>
-                    )}
-                  </AccordionDetails>
-                </Accordion>
-              ))}
-            </>
-          ) : errorMsg !== "" ? (
-            <Typography>{errorMsg}</Typography>
-          ) : (
-            <></>
-          )}
+                      <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                          <ListItemText primary="Data Size" {...allyPropsInfoField()} />
+                          <ListItemText
+                            primary={`${dbInfo.dataSize} B`}
+                            {...allyPropsInfoValue("data-size")}
+                          />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography>Size of the stored data in bytes.</Typography>
+                        </AccordionDetails>
+                      </Accordion>
+                    </>
+                  ) : errorMsg !== "" ? (
+                    <Typography>{errorMsg}</Typography>
+                  ) : (
+                    <></>
+                  )}
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </>
+        ) : errorMsg !== "" ? (
+          <Typography>{errorMsg}</Typography>
+        ) : (
+          <></>
+        )}
       </Box>
     </>
   );
