@@ -3,6 +3,7 @@ import { ConnectionInfo } from '../types/types'
 import { ServerInfo } from '../types/server'
 import { invokeGetAllDatabases } from '../tauri/command'
 import { errorAlert } from '../utility/alert'
+import { sortAlphabetically } from '../utility/sorting'
 
 interface ConnectionInfoState {
   connectionInfo: ConnectionInfo,
@@ -47,10 +48,14 @@ export const useNavigationStore = create<NavigationState>((set) => ({
 
 export const useDatabaseStore = create<DatabaseState>((set) => ({
   databases: null,
-  setDatabases: (newDatabases) => set(() => ({ databases: newDatabases })),
+  setDatabases: (newDatabases) => {
+    if (newDatabases) sortAlphabetically(newDatabases);
+    set(() => ({ databases: newDatabases }));
+  },
   getAllDatabases: () => {
     invokeGetAllDatabases()
       .then((result) => {
+        sortAlphabetically(result.dbNames);
         set(() => ({ databases: result.dbNames }));
       })
       .catch((err) => {
