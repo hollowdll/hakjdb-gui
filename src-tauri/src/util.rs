@@ -1,5 +1,5 @@
+use chrono::{TimeZone, Utc};
 use prost_types::Timestamp;
-use chrono::{Utc, TimeZone};
 
 /// Converts bytes to mega bytes.
 pub fn bytes_to_mega(bytes: u64) -> f64 {
