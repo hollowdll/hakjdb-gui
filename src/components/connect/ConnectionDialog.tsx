@@ -11,6 +11,11 @@ import { listen } from "@tauri-apps/api/event";
 import { useEffect, useState, ChangeEvent } from "react";
 import { ConnectionInfo } from "../../types/types";
 import { tauriListenEvents } from "../../tauri/event";
+import {
+  allyPropsDialogTextField,
+  allyPropsDialogContentText,
+  allyPropsDialogActions,
+} from "../../utility/props";
 
 type ConnectionDialogProps = {
   handleConnect: (connectionInfo: ConnectionInfo) => void;
@@ -60,19 +65,17 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
       <Dialog open={dialogOpen} onClose={handleClose}>
         <DialogTitle>New connection</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText {...allyPropsDialogContentText()}>
             Connect to a new kvdb server instance.
           </DialogContentText>
           <TextField
-            id="host"
-            name="host"
+            name= "host"
             label="Host or IP address"
             value={connectionInfo.host}
             onChange={inputChanged}
-            fullWidth
+            {...allyPropsDialogTextField()}
           />
           <TextField
-            id="port"
             name="port"
             label="Port number"
             value={connectionInfo.port}
@@ -80,12 +83,12 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
               const value = Number(event.target.value);
               if (value >= 0 && value <= 65535) setConnectionInfo({ ...connectionInfo, port: value });
             }}
-            fullWidth
+            {...allyPropsDialogTextField()}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleConnectClick}>Connect</Button>
-          <Button onClick={handleClose} color="error">
+        <DialogActions {...allyPropsDialogActions()}>
+          <Button variant="contained" onClick={handleConnectClick}>Connect</Button>
+          <Button variant="outlined" onClick={handleClose} color="error">
             Cancel
           </Button>
         </DialogActions>

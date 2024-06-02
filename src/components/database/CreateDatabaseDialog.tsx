@@ -13,6 +13,7 @@ import { invokeCreateDatabase } from "../../tauri/command";
 import { successAlert } from "../../utility/alert";
 import { useDatabaseStore } from "../../state/store";
 import { useLoadingStore } from "../../state/store";
+import { allyPropsDialogActions } from "../../utility/props";
 
 export default function CreateDatabaseDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -73,7 +74,7 @@ export default function CreateDatabaseDialog() {
             <Typography sx={{marginTop: "15px"}}>{errorMsg}</Typography>
           ) : <></>}
         </DialogContent>
-        <DialogActions sx={{m: "5px"}}>
+        <DialogActions {...allyPropsDialogActions()}>
           <Button variant="contained" onClick={handleCreateDb}>Create</Button>
           <Button variant="outlined" onClick={handleClose} color="error">
             Cancel

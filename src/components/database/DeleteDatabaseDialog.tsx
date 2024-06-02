@@ -12,6 +12,7 @@ import { invokeDeleteDatabase } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
 import { successAlert, errorAlert } from "../../utility/alert";
 import { useDatabaseStore } from "../../state/store";
+import { allyPropsDialogActions } from "../../utility/props";
 
 type DeleteDatabaseDialogProps = {
   dbName: string,
@@ -58,7 +59,7 @@ export default function DeleteDatabaseDialog({ dbName, closeDbListAccordion }: D
             Deleted databases cannot be restored. Deleting a database also deletes all the keys stored in it.
           </DialogContentText>
         </DialogContent>
-        <DialogActions sx={{ m: "5px" }}>
+        <DialogActions {...allyPropsDialogActions()}>
           <Button variant="contained" onClick={handleDeleteDb} color="error">Delete</Button>
           <Button variant="outlined" onClick={handleClose} color="error">
             Cancel
