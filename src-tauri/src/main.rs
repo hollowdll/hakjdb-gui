@@ -8,41 +8,14 @@ use app::{
             CreateDatabaseRequest, DeleteDatabaseRequest, GetAllDatabasesRequest,
             GetDatabaseInfoRequest,
         },
-        GrpcClient, GrpcConnection,
+        GrpcConnection,
     },
     server::{__cmd__get_server_info, __cmd__get_server_logs, get_server_info, get_server_logs},
+    connection::{__cmd__connect, __cmd__disconnect, connect, disconnect},
     util::prost_timestamp_to_iso8601,
 };
 use std::error::Error;
 use tauri::{CustomMenuItem, Manager, Menu, State, Submenu};
-
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}!", name)
-}
-
-#[tauri::command]
-async fn connect(
-    connection: State<'_, GrpcConnection>,
-    host: &str,
-    port: u16,
-) -> Result<String, String> {
-    match GrpcClient::new(host, port).await {
-        Ok(client) => {
-            *connection.connection.lock().await = Some(client);
-            return Ok(format!("Connected to {}:{}", host, port));
-        }
-        Err(e) => return Err(e.to_string()),
-    }
-}
-
-#[tauri::command]
-async fn disconnect(connection: State<'_, GrpcConnection>) -> Result<(), String> {
-    connection.connection.lock().await.take();
-    println!("disconnected");
-
-    Ok(())
-}
 
 #[tauri::command]
 async fn get_all_databases(
@@ -166,7 +139,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            greet,
             connect,
             disconnect,
             get_server_info,
