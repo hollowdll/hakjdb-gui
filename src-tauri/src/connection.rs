@@ -1,7 +1,4 @@
-use crate::grpc::{
-    GrpcConnection,
-    GrpcClient,
-};
+use crate::grpc::{GrpcClient, GrpcConnection};
 use tauri::State;
 
 #[tauri::command]
