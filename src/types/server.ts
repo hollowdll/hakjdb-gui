@@ -40,3 +40,5 @@ export interface GeneralInfo {
 export interface ServerLogs {
   logs: string[],
 }
+
+export type LogFilterType = "head" | "tail"

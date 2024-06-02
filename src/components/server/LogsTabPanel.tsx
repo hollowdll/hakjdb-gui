@@ -1,28 +1,14 @@
 import { useEffect, useState } from "react";
-import { Box, Button, CircularProgress, List, ListItem, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, List, ListItem, Stack, Typography } from "@mui/material";
 import LogFilterDialog from "./LogFilterDialog";
 import { errorAlert } from "../../utility/alert";
 import { invokeGetServerLogs } from "../../tauri/command";
+import { LogFilterType } from "../../types/server";
 
 export default function LogsTabPanel() {
   const [serverLogs, setServerLogs] = useState<string[] | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [filterDialogOpen, setFilterDialogOpen] = useState(false);
-  const [selectedFilterType, setSelectedFilterType] = useState<"" | "head" | "tail">("");
-
-  const handleCloseFilterDialog = () => {
-    setFilterDialogOpen(false);
-  }
-
-  const handleOpenFilterDialog = () => {
-    setFilterDialogOpen(true);
-  }
-
-  const handleOpenFilter = (filterType: "head" | "tail") => {
-    setSelectedFilterType(filterType);
-    handleOpenFilterDialog();
-  }
 
   const handleGetServerLogs = () => {
     invokeGetServerLogs()
@@ -37,12 +23,12 @@ export default function LogsTabPanel() {
       .finally(() => setIsLoading(false));
   };
 
-  const handleFilterLogs = (logCount: number) => {
+  const handleFilterLogs = (logCount: number, filterType: LogFilterType) => {
     setIsLoading(true);
     invokeGetServerLogs()
       .then(result => {
-        if (selectedFilterType === "head") setServerLogs(result.logs.slice(0, logCount))
-          else if (selectedFilterType === "tail") setServerLogs(result.logs.slice(-logCount));
+        if (filterType === "head") setServerLogs(result.logs.slice(0, logCount))
+          else if (filterType === "tail") setServerLogs(result.logs.slice(-logCount))
           else setServerLogs([]);
       })
       .catch(err => {
@@ -77,10 +63,9 @@ export default function LogsTabPanel() {
       {serverLogs ? (
         <>
           <Stack spacing={2} direction="row" sx={{marginTop: "10px", marginBottom: "10px"}}>
-            <Button variant="contained" onClick={() => handleOpenFilter("head")}>Filter Head</Button>
-            <Button variant="contained" onClick={() => handleOpenFilter("tail")}>Filter Tail</Button>
+            <LogFilterDialog filterType={"head"} filterLogs={handleFilterLogs} />
+            <LogFilterDialog filterType={"tail"} filterLogs={handleFilterLogs} />
           </Stack>
-          <LogFilterDialog open={filterDialogOpen} handleClose={handleCloseFilterDialog} filterType={selectedFilterType} filterLogs={handleFilterLogs} />
         </>
       ) : (<></>)}
       <Box
