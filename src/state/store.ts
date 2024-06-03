@@ -32,7 +32,7 @@ interface LoadingState {
 }
 
 export const useConnectionInfoStore = create<ConnectionInfoState>((set) => ({
-  connectionInfo: { host: "", port: 0 },
+  connectionInfo: { host: "", port: 0, defaultDb: "default" },
   setConnectionInfo: (newConnectionInfo) => set(() => ({ connectionInfo: newConnectionInfo })),
 }));
 

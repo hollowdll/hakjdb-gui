@@ -1,6 +1,7 @@
 export interface ConnectionInfo {
   host: string,
   port: number,
+  defaultDb: string,
 }
 
 export interface NavItem {

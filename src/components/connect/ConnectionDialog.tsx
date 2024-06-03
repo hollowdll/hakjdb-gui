@@ -26,6 +26,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
   const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>({
     host: "localhost",
     port: 12345,
+    defaultDb: "default"
   });
 
   const handleClose = () => {
@@ -83,6 +84,13 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
               const value = Number(event.target.value);
               if (value >= 0 && value <= 65535) setConnectionInfo({ ...connectionInfo, port: value });
             }}
+            {...allyPropsDialogTextField()}
+          />
+          <TextField
+            name= "defaultDb"
+            label="Database To Use"
+            value={connectionInfo.defaultDb}
+            onChange={inputChanged}
             {...allyPropsDialogTextField()}
           />
         </DialogContent>

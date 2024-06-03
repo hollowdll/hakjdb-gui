@@ -4,10 +4,23 @@ import {
   AccordionDetails,
   Typography,
   Box,
+  ListItemText,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, SyntheticEvent } from "react";
 import { useConnectionInfoStore } from "../../state/store";
+
+function allyPropsField() {
+  return {
+    sx: { marginRight: "80px" },
+  }
+}
+  
+function allyPropsValue() {
+  return {
+    sx: { marginRight: "50px", textAlign: "end", color: "text.secondary", wordBreak: "break-word" },
+  };
+}
 
 export default function ConnectionView() {
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
@@ -20,12 +33,6 @@ export default function ConnectionView() {
       setAccordionExpanded(isExpanded ? panel : false);
     };
 
-  function allyPropsConnectionValue(field: string) {
-    return {
-      id: `connection-value-${field}`,
-      sx: { marginLeft: "50px", marginRight: "30px", color: "text.secondary", wordBreak: "break-word" },
-    };
-  }
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -36,8 +43,11 @@ export default function ConnectionView() {
           onChange={handleAccordionChange("panel1")}
         >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography sx={{}}>Host</Typography>
-            <Typography {...allyPropsConnectionValue("host")}>{connectionInfo.host}</Typography>
+            <ListItemText primary="Host" {...allyPropsField()} />
+            <ListItemText
+              primary={connectionInfo.host}
+              {...allyPropsValue()}
+            />
           </AccordionSummary>
           <AccordionDetails>
             <Typography>Server's address to connect to. Can be hostname or IP address.</Typography>
@@ -49,11 +59,30 @@ export default function ConnectionView() {
           onChange={handleAccordionChange("panel2")}
         >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography >Port</Typography>
-            <Typography {...allyPropsConnectionValue("port")}>{connectionInfo.port}</Typography>
+            <ListItemText primary="Port" {...allyPropsField()} />
+            <ListItemText
+              primary={connectionInfo.port}
+              {...allyPropsValue()}
+            />
           </AccordionSummary>
           <AccordionDetails>
             <Typography>Server's TCP/IP port. Ranges from 1 to 65535.</Typography>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion
+          expanded={accordionExpanded === "panel3"}
+          onChange={handleAccordionChange("panel3")}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <ListItemText primary="Database To Use" {...allyPropsField()} />
+            <ListItemText
+              primary={connectionInfo.defaultDb}
+              {...allyPropsValue()}
+            />
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>Commands in Keys view use this database by default.</Typography>
           </AccordionDetails>
         </Accordion>
       </Box>
