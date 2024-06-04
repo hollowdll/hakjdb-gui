@@ -1,6 +1,7 @@
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { useState, SyntheticEvent } from "react";
 import GeneralTabPanel from "./GeneralTabPanel";
+import StringTabPanel from "./StringTabPanel";
 
 function allyProps() {
   return {
@@ -25,7 +26,7 @@ export default function TabMenu() {
         </Tabs>
       </Box>
       {tabValue === 0 && <GeneralTabPanel />}
-      {tabValue === 1 && <Typography>String</Typography>}
+      {tabValue === 1 && <StringTabPanel />}
       {tabValue === 2 && <Typography>HashMap</Typography>}
     </Box>
   )

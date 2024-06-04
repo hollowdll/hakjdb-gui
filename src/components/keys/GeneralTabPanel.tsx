@@ -2,11 +2,54 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEve
 import { useState } from "react";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
+type GeneralTabMenuItems = {
+  getKeys: string,
+  deleteAllKeys: string,
+  deleteKey: string,
+  getTypeOfKey: string,
+}
+
+const menuItems: GeneralTabMenuItems = {
+  getKeys: "GetKeys",
+  deleteAllKeys: "DeleteAllKeys",
+  deleteKey: "DeleteKey",
+  getTypeOfKey: "GetTypeOfKey",
+}
+
 export default function GeneralTabPanel() {
-  const [selectedCommand, setSelectedCommand] = useState("");
+  const [selectedItem, setSelectedItem] = useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSelectedCommand(event.target.value as string);
+    setSelectedItem(event.target.value as string);
+  }
+
+  const handleRunCommand = () => {
+    switch (selectedItem) {
+      case menuItems.getKeys:
+        return handleGetKeys();
+      case menuItems.deleteAllKeys:
+        return handleDeleteAllKeys();
+      case menuItems.deleteKey:
+        return handleDeleteKey();
+      case menuItems.getTypeOfKey:
+        return handleGetTypeOfKey();
+    }
+  }
+
+  const handleGetKeys = () => {
+
+  }
+
+  const handleDeleteAllKeys = () => {
+
+  }
+
+  const handleDeleteKey = () => {
+
+  }
+
+  const handleGetTypeOfKey = () => {
+
   }
 
   return (
@@ -16,16 +59,16 @@ export default function GeneralTabPanel() {
           <InputLabel>Command</InputLabel>
           <Select
             label="Command"
-            value={selectedCommand}
+            value={selectedItem}
             onChange={handleChange}
           >
-            <MenuItem value={"GetKeys"}>GetKeys</MenuItem>
-            <MenuItem value={"DeleteAllKeys"}>DeleteAllKeys</MenuItem>
-            <MenuItem value={"DeleteKey"}>DeleteKey</MenuItem>
-            <MenuItem value={"GetTypeOfKey"}>GetTypeOfKey</MenuItem>
+            <MenuItem value={menuItems.getKeys}>{menuItems.getKeys}</MenuItem>
+            <MenuItem value={menuItems.deleteAllKeys}>{menuItems.deleteAllKeys}</MenuItem>
+            <MenuItem value={menuItems.deleteKey}>{menuItems.deleteKey}</MenuItem>
+            <MenuItem value={menuItems.getTypeOfKey}>menuItems.getTypeOfKey</MenuItem>
           </Select>
         </FormControl>
-        <Button variant="contained" endIcon={<PlayArrowIcon />}>Run</Button>
+        <Button variant="contained" onClick={handleRunCommand} endIcon={<PlayArrowIcon />}>Run</Button>
       </Stack>
       <Box
         sx={{
