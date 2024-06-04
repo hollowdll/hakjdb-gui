@@ -7,6 +7,7 @@ use crate::{
         GrpcConnection,
     },
     util::prost_timestamp_to_iso8601,
+    error::{NO_CONNECTION_FOUND_MSG, UNEXPECTED_ERROR_MSG},
 };
 use serde::Serialize;
 use tauri::State;
@@ -47,7 +48,7 @@ pub async fn get_all_databases(
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
-        return Err("no connection found".to_string());
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
     }
 }
 
@@ -77,10 +78,10 @@ pub async fn get_database_info(
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
-        return Err("no connection found".to_string());
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
     }
 
-    return Err("unexpected error".to_string());
+    return Err(UNEXPECTED_ERROR_MSG.to_string());
 }
 
 /// Creates a new database. Returns the name of the created database.
@@ -100,7 +101,7 @@ pub async fn create_database(
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
-        return Err("no connection found".to_string());
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
     }
 }
 
@@ -121,6 +122,6 @@ pub async fn delete_database(
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
-        return Err("no connection found".to_string());
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
     }
 }

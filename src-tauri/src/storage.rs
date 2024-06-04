@@ -1,6 +1,9 @@
-use crate::grpc::{
-    kvdb::{GetKeysRequest, GetStringRequest, SetStringRequest},
-    GrpcConnection,
+use crate::{
+    grpc::{
+        kvdb::{GetKeysRequest, GetStringRequest, SetStringRequest},
+        GrpcConnection,
+    },
+    error::NO_CONNECTION_FOUND_MSG,
 };
 use serde::Serialize;
 use tauri::State;
@@ -24,7 +27,7 @@ pub async fn get_keys(connection: State<'_, GrpcConnection>) -> Result<Vec<Strin
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
-        return Err("no connection found".to_string());
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
     }
 }
 
@@ -49,7 +52,7 @@ pub async fn get_string(
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
-        return Err("no connection found".to_string());
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
     }
 }
 
@@ -71,6 +74,6 @@ pub async fn set_string(
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
-        return Err("no connection found".to_string());
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
     }
 }

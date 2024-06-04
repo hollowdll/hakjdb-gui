@@ -4,3 +4,4 @@ pub mod grpc;
 pub mod server;
 pub mod storage;
 pub mod util;
+pub mod error;

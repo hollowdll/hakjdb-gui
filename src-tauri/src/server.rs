@@ -1,6 +1,9 @@
-use crate::grpc::{
-    kvdb::{GetLogsRequest, GetServerInfoRequest},
-    GrpcConnection,
+use crate::{
+    grpc::{
+        kvdb::{GetLogsRequest, GetServerInfoRequest},
+        GrpcConnection,
+    },
+    error::{NO_CONNECTION_FOUND_MSG, UNEXPECTED_ERROR_MSG},
 };
 use crate::util::bytes_to_mega;
 use serde::Serialize;
@@ -152,10 +155,10 @@ pub async fn get_server_info(
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
-        return Err("no connection found".to_string());
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
     }
 
-    return Err("unexpected error".to_string());
+    return Err(UNEXPECTED_ERROR_MSG.to_string());
 }
 
 #[tauri::command]
@@ -175,6 +178,6 @@ pub async fn get_server_logs(
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
-        return Err("no connection found".to_string());
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
     }
 }
