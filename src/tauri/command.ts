@@ -3,6 +3,7 @@ import { TauriInvokeCommands } from "../types/tauri"
 import { ConnectionInfo } from "../types/types";
 import { ServerInfo, ServerLogs } from "../types/server";
 import { DatabaseInfo, Databases } from "../types/db";
+import { GetStringPayload } from "../types/storage";
 
 const tauriInvokeCommands: TauriInvokeCommands = {
   connect: "connect",
@@ -13,6 +14,9 @@ const tauriInvokeCommands: TauriInvokeCommands = {
   getDatabaseInfo: "get_database_info",
   createDatabase: "create_database",
   deleteDatabase: "delete_database",
+  getKeys: "get_keys",
+  getString: "get_string",
+  setString: "set_string",
 }
 
 export const invokeConnect = (connectionInfo: ConnectionInfo): Promise<string> => {
@@ -53,5 +57,21 @@ export const invokeCreateDatabase = (dbName: string): Promise<string> => {
 export const invokeDeleteDatabase = (dbName: string): Promise<string> => {
   return invoke<string>(tauriInvokeCommands.deleteDatabase, {
     dbName
+  });
+}
+
+export const invokeGetKeys = (): Promise<string[]> => {
+  return invoke<string[]>(tauriInvokeCommands.getKeys);
+}
+
+export const invokeGetString = (key: string): Promise<GetStringPayload> => {
+  return invoke<GetStringPayload>(tauriInvokeCommands.getString, {
+    key
+  });
+}
+
+export const invokeSetString = (key: string, value: string): Promise<void> => {
+  return invoke<void>(tauriInvokeCommands.setString, {
+    key, value
   });
 }

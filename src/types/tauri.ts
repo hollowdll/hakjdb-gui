@@ -7,6 +7,9 @@ export type TauriInvokeCommands = {
   getDatabaseInfo: string,
   createDatabase: string,
   deleteDatabase: string,
+  getKeys: string,
+  getString: string,
+  setString: string,
 }
 
 export type TauriListenEvents = {
