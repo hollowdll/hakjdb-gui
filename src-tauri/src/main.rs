@@ -2,15 +2,17 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use app::{
-    grpc::GrpcConnection,
     connection::{__cmd__connect, __cmd__disconnect, connect, disconnect},
     db::{
         __cmd__create_database, __cmd__delete_database, __cmd__get_all_databases,
         __cmd__get_database_info, create_database, delete_database, get_all_databases,
         get_database_info,
     },
+    grpc::GrpcConnection,
     server::{__cmd__get_server_info, __cmd__get_server_logs, get_server_info, get_server_logs},
-    storage::{__cmd__get_keys, get_keys},
+    storage::{
+        __cmd__get_keys, __cmd__get_string, __cmd__set_string, get_keys, get_string, set_string,
+    },
 };
 use std::error::Error;
 use tauri::{CustomMenuItem, Manager, Menu, Submenu};
@@ -51,6 +53,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
             create_database,
             delete_database,
             get_keys,
+            get_string,
+            set_string
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
