@@ -121,7 +121,7 @@ export default function GeneralTabPanel() {
                   sx={{display: "flex", justifyContent: "start", alignItems: "start"}}
                 >
                   <Typography sx={{color: "text.secondary", marginRight: "20px"}}>{index + 1})</Typography>
-                  <Typography>{item}</Typography>
+                  <Typography sx={{wordBreak: "break-word"}}>{item}</Typography>
                 </ListItem>
               ))}
             </List>

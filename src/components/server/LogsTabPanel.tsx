@@ -45,7 +45,7 @@ export default function LogsTabPanel() {
         {serverLogs.map((log, index) => (
           <ListItem key={index} disablePadding sx={{display: "flex", justifyContent: "start", alignItems: "start"}}>
             <Typography sx={{color: "text.secondary", marginRight: "20px"}}>{index + 1}</Typography>
-            <Typography>{log}</Typography>
+            <Typography sx={{wordBreak: "break-word"}}>{log}</Typography>
           </ListItem>
         ))}
       </List>
