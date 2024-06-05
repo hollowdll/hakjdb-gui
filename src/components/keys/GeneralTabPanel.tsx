@@ -11,8 +11,8 @@ import {
   List,
   ListItem,
 } from "@mui/material";
-import { useState } from "react";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { useState } from "react";
 import { useLoadingStore } from "../../state/store";
 import { invokeGetKeys } from "../../tauri/command";
 import { errorAlert } from "../../utility/alert";

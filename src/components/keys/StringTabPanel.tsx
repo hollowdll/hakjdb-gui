@@ -6,42 +6,85 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Stack
+  Stack,
+  Typography,
 } from "@mui/material";
-import { useState } from "react";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { useState } from "react";
+import { useLoadingStore } from "../../state/store";
+import { invokeSetString } from "../../tauri/command";
+import { errorAlert } from "../../utility/alert";
+
+type StringTabMenuItems = {
+  setString: string,
+  getString: string,
+}
+
+const menuItems: StringTabMenuItems = {
+  setString: "SetString",
+  getString: "GetString",
+}
 
 export default function StringTabPanel() {
-  const [selectedCommand, setSelectedCommand] = useState("");
+  const [selectedItem, setSelectedItem] = useState("");
+  const [isContentDisplayed, setIsContentDisplayed] = useState(false);
+  const [displayedMsg, setDisplayedMsg] = useState("");
+  const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSelectedCommand(event.target.value as string);
+    setSelectedItem(event.target.value as string);
+  }
+
+  const handleRunCommand = () => {
+    switch (selectedItem) {
+      case menuItems.setString:
+        return handleSetString();
+      case menuItems.getString:
+        return handleGetString();
+    }
+  }
+
+  const handleSetString = () => {
+    
+  }
+
+  const handleGetString = () => {
+
   }
 
   return (
     <Box>
       <Stack direction="row" spacing={2} sx={{ marginTop: "20px", marginBottom: "10px" }}>
-        <FormControl variant="outlined" sx={{ m: 1, minWidth: 150, backgroundColor: "rgb(250, 250, 250)" }}>
-          <InputLabel>Command</InputLabel>
+        <FormControl variant="outlined" sx={{ m: 1, minWidth: 200, backgroundColor: "rgb(250, 250, 250)" }}>
+          <InputLabel>Select Command</InputLabel>
           <Select
-            label="Command"
-            value={selectedCommand}
+            label="Select Command"
+            value={selectedItem}
             onChange={handleChange}
           >
-            <MenuItem value={"Set"}>Set</MenuItem>
-            <MenuItem value={"Get"}>Get</MenuItem>
+            <MenuItem value={menuItems.setString}>{menuItems.setString}</MenuItem>
+            <MenuItem value={menuItems.getString}>{menuItems.getString}</MenuItem>
           </Select>
         </FormControl>
-        <Button variant="contained" endIcon={<PlayArrowIcon />}>Run</Button>
+        <Button variant="contained" onClick={handleRunCommand} endIcon={<PlayArrowIcon />}>Run</Button>
       </Stack>
-      <Box
-        sx={{
-          p: 3,
-          backgroundColor: "rgb(250, 250, 250)",
-          width: "100%",
-        }}
-      >
-      </Box>
+      {isContentDisplayed ? (
+        <Box
+          sx={{
+            p: 3,
+            backgroundColor: "rgb(250, 250, 250)",
+            width: "100%",
+          }}
+        >
+          {displayedMsg !== "" ? (
+            <Typography>{displayedMsg}</Typography>
+          ) : (
+            <></>
+          )}
+        </Box>
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }
