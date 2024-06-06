@@ -8,49 +8,50 @@ import {
   Typography,
 } from "@mui/material";
 import { useState, ChangeEvent } from "react";
-import { invokeSetString } from "../../tauri/command";
+import { invokeGetString } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
 import { allyPropsDialogActions, allyPropsDialogTextField } from "../../utility/props";
 
-type SetStringParams = {
+type GetStringParams = {
   key: string,
-  value: string,
 }
 
-type SetStringDialogProps = {
+type GetStringDialogProps = {
   isOpen: boolean,
   handleClose: () => void,
   handleDisplayContent: (msg: string) => void,
   handleHideContent: () => void,
 }
 
-export default function SetStringDialog(props: SetStringDialogProps) {
+export default function GetStringDialog(props: GetStringDialogProps) {
   const [errorMsg, setErrorMsg] = useState("");
-  const [params, setParams] = useState<SetStringParams>({
+  const [params, setParams] = useState<GetStringParams>({
     key: "",
-    value: "",
   });
   const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
 
   const resetForm = () => {
     setParams({
-      key: "",
-      value: "",
+      key: ""
     });
     setErrorMsg("");
   }
 
-  const handleSetString = () => {
+  const handleGetString = () => {
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
-    invokeSetString(params.key, params.value)
-      .then((_result) => {
+    invokeGetString(params.key)
+      .then((result) => {
         props.handleClose();
-        props.handleDisplayContent("OK");
+        if (result.ok) {
+          props.handleDisplayContent(`"${result.value}"`);
+        } else {
+          props.handleDisplayContent("Key does not exist");
+        }
         resetForm();
       })
       .catch((err) => {
-        setErrorMsg(`SetString failed: ${err}`);
+        setErrorMsg(`GetString failed: ${err}`);
         props.handleHideContent();
       })
       .finally(() => {
@@ -64,7 +65,7 @@ export default function SetStringDialog(props: SetStringDialogProps) {
 
   return (
     <Dialog open={props.isOpen} onClose={props.handleClose}>
-      <DialogTitle>SetString</DialogTitle>
+      <DialogTitle>GetString</DialogTitle>
       <DialogContent>
         <TextField
           label="Key"
@@ -73,19 +74,12 @@ export default function SetStringDialog(props: SetStringDialogProps) {
           onChange={inputChanged}
           {...allyPropsDialogTextField()}
         />
-        <TextField
-          label="Value"
-          name="value"
-          value={params.value}
-          onChange={inputChanged}
-          {...allyPropsDialogTextField()}
-        />
         {errorMsg !== "" ? (
-          <Typography sx={{marginTop: "15px"}}>{errorMsg}</Typography>
+          <Typography sx={{ marginTop: "15px" }}>{errorMsg}</Typography>
         ) : <></>}
       </DialogContent>
       <DialogActions {...allyPropsDialogActions()}>
-        <Button variant="contained" onClick={handleSetString}>Ok</Button>
+        <Button variant="contained" onClick={handleGetString}>Ok</Button>
         <Button variant="outlined" onClick={props.handleClose} color="error">
           Cancel
         </Button>

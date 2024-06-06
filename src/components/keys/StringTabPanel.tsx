@@ -12,6 +12,7 @@ import {
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useState } from "react";
 import SetStringDialog from "./SetStringDialog";
+import GetStringDialog from "./GetStringDialog";
 
 type StringTabMenuItems = {
   setString: string,
@@ -66,9 +67,30 @@ export default function StringTabPanel() {
     }
   }
 
+  const handleDisplayContent = (msg: string) => {
+    setDisplayedMsg(msg);
+    setIsContentDisplayed(true);
+  }
+
+  const handleHideContent = () => {
+    setDisplayedMsg("");
+    setIsContentDisplayed(false);
+  }
+
   return (
     <Box>
-      <SetStringDialog isOpen={dialogsOpen.isSetStringDialogOpen} handleClose={handleCloseSetStringDialog} />
+      <SetStringDialog
+        isOpen={dialogsOpen.isSetStringDialogOpen}
+        handleClose={handleCloseSetStringDialog}
+        handleDisplayContent={handleDisplayContent}
+        handleHideContent={handleHideContent}
+      />
+      <GetStringDialog
+        isOpen={dialogsOpen.isGetStringDialogOpen}
+        handleClose={handleCloseGetStringDialog}
+        handleDisplayContent={handleDisplayContent}
+        handleHideContent={handleHideContent}
+      />
       <Stack direction="row" spacing={2} sx={{ marginTop: "20px", marginBottom: "10px" }}>
         <FormControl variant="outlined" sx={{ m: 1, minWidth: 200, backgroundColor: "rgb(250, 250, 250)" }}>
           <InputLabel>Select Command</InputLabel>
