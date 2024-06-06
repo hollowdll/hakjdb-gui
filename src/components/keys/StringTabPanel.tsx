@@ -11,13 +11,16 @@ import {
 } from "@mui/material";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useState } from "react";
-import { useLoadingStore } from "../../state/store";
-import { invokeSetString } from "../../tauri/command";
-import { errorAlert } from "../../utility/alert";
+import SetStringDialog from "./SetStringDialog";
 
 type StringTabMenuItems = {
   setString: string,
   getString: string,
+}
+
+type DialogsOpen = {
+  isSetStringDialogOpen: boolean,
+  isGetStringDialogOpen: boolean,
 }
 
 const menuItems: StringTabMenuItems = {
@@ -29,31 +32,43 @@ export default function StringTabPanel() {
   const [selectedItem, setSelectedItem] = useState("");
   const [isContentDisplayed, setIsContentDisplayed] = useState(false);
   const [displayedMsg, setDisplayedMsg] = useState("");
-  const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
+  const [dialogsOpen, setDialogsOpen] = useState<DialogsOpen>({
+    isSetStringDialogOpen: false,
+    isGetStringDialogOpen: false,
+  });
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedItem(event.target.value as string);
   }
 
+  const handleOpenSetStringDialog = () => {
+    setDialogsOpen({ ...dialogsOpen, isSetStringDialogOpen: true });
+  }
+
+  const handleCloseSetStringDialog = () => {
+    setDialogsOpen({ ...dialogsOpen, isSetStringDialogOpen: false });
+  }
+
+  const handleOpenGetStringDialog = () => {
+    setDialogsOpen({ ...dialogsOpen, isGetStringDialogOpen: true });
+  }
+
+  const handleCloseGetStringDialog = () => {
+    setDialogsOpen({ ...dialogsOpen, isGetStringDialogOpen: false });
+  }
+
   const handleRunCommand = () => {
     switch (selectedItem) {
       case menuItems.setString:
-        return handleSetString();
+        return handleOpenSetStringDialog();
       case menuItems.getString:
-        return handleGetString();
+        return handleOpenGetStringDialog();
     }
-  }
-
-  const handleSetString = () => {
-    
-  }
-
-  const handleGetString = () => {
-
   }
 
   return (
     <Box>
+      <SetStringDialog isOpen={dialogsOpen.isSetStringDialogOpen} handleClose={handleCloseSetStringDialog} />
       <Stack direction="row" spacing={2} sx={{ marginTop: "20px", marginBottom: "10px" }}>
         <FormControl variant="outlined" sx={{ m: 1, minWidth: 200, backgroundColor: "rgb(250, 250, 250)" }}>
           <InputLabel>Select Command</InputLabel>
