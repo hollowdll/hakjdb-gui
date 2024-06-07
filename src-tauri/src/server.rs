@@ -1,11 +1,11 @@
+use crate::util::bytes_to_mega;
 use crate::{
+    error::{NO_CONNECTION_FOUND_MSG, UNEXPECTED_ERROR_MSG},
     grpc::{
         kvdb::{GetLogsRequest, GetServerInfoRequest},
         GrpcConnection,
     },
-    error::{NO_CONNECTION_FOUND_MSG, UNEXPECTED_ERROR_MSG},
 };
-use crate::util::bytes_to_mega;
 use serde::Serialize;
 use tauri::State;
 

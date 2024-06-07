@@ -1,4 +1,5 @@
 use crate::{
+    error::{NO_CONNECTION_FOUND_MSG, UNEXPECTED_ERROR_MSG},
     grpc::{
         kvdb::{
             CreateDatabaseRequest, DeleteDatabaseRequest, GetAllDatabasesRequest,
@@ -7,7 +8,6 @@ use crate::{
         GrpcConnection,
     },
     util::prost_timestamp_to_iso8601,
-    error::{NO_CONNECTION_FOUND_MSG, UNEXPECTED_ERROR_MSG},
 };
 use serde::Serialize;
 use tauri::State;

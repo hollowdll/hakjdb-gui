@@ -1,9 +1,10 @@
 use crate::{
+    error::NO_CONNECTION_FOUND_MSG,
     grpc::{
         kvdb::{GetKeysRequest, GetStringRequest, SetStringRequest},
         GrpcConnection,
     },
-    error::NO_CONNECTION_FOUND_MSG,
+    md::MD_KEY_DATABASE,
 };
 use serde::Serialize;
 use tauri::State;
@@ -15,10 +16,16 @@ pub struct GetStringPayload {
 }
 
 #[tauri::command]
-pub async fn get_keys(connection: State<'_, GrpcConnection>) -> Result<Vec<String>, String> {
+pub async fn get_keys(
+    connection: State<'_, GrpcConnection>,
+    db_name: &str,
+) -> Result<Vec<String>, String> {
     let mut guard = connection.connection.lock().await;
     if let Some(ref mut connection) = *guard {
-        let request = tonic::Request::new(GetKeysRequest {});
+        let mut request = tonic::Request::new(GetKeysRequest {});
+        request
+            .metadata_mut()
+            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
         let response = connection.storage_client.get_keys(request).await;
         match response {
             Ok(response) => {
@@ -34,13 +41,17 @@ pub async fn get_keys(connection: State<'_, GrpcConnection>) -> Result<Vec<Strin
 #[tauri::command]
 pub async fn get_string(
     connection: State<'_, GrpcConnection>,
+    db_name: &str,
     key: &str,
 ) -> Result<GetStringPayload, String> {
     let mut guard = connection.connection.lock().await;
     if let Some(ref mut connection) = *guard {
-        let request = tonic::Request::new(GetStringRequest {
+        let mut request = tonic::Request::new(GetStringRequest {
             key: key.to_owned(),
         });
+        request
+            .metadata_mut()
+            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
         let response = connection.storage_client.get_string(request).await;
         match response {
             Ok(response) => {
@@ -59,15 +70,19 @@ pub async fn get_string(
 #[tauri::command]
 pub async fn set_string(
     connection: State<'_, GrpcConnection>,
+    db_name: &str,
     key: &str,
     value: &str,
 ) -> Result<(), String> {
     let mut guard = connection.connection.lock().await;
     if let Some(ref mut connection) = *guard {
-        let request = tonic::Request::new(SetStringRequest {
+        let mut request = tonic::Request::new(SetStringRequest {
             key: key.to_owned(),
             value: value.to_owned(),
         });
+        request
+            .metadata_mut()
+            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
         let response = connection.storage_client.set_string(request).await;
         match response {
             Ok(_response) => return Ok(()),
