@@ -11,6 +11,7 @@ import { useState, ChangeEvent } from "react";
 import { invokeSetString } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
 import { allyPropsDialogActions, allyPropsDialogTextField } from "../../utility/props";
+import { useConnectionInfoStore } from "../../state/store";
 
 type SetStringParams = {
   key: string,
@@ -31,6 +32,7 @@ export default function SetStringDialog(props: SetStringDialogProps) {
     value: "",
   });
   const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
+  const dbToUse = useConnectionInfoStore((state) => state.connectionInfo.defaultDb);
 
   const resetForm = () => {
     setParams({
@@ -43,7 +45,7 @@ export default function SetStringDialog(props: SetStringDialogProps) {
   const handleSetString = () => {
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
-    invokeSetString(params.key, params.value)
+    invokeSetString(dbToUse, params.key, params.value)
       .then((_result) => {
         props.handleClose();
         props.handleDisplayContent("OK");

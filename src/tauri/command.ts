@@ -60,18 +60,20 @@ export const invokeDeleteDatabase = (dbName: string): Promise<string> => {
   });
 }
 
-export const invokeGetKeys = (): Promise<string[]> => {
-  return invoke<string[]>(tauriInvokeCommands.getKeys);
-}
-
-export const invokeGetString = (key: string): Promise<GetStringPayload> => {
-  return invoke<GetStringPayload>(tauriInvokeCommands.getString, {
-    key
+export const invokeGetKeys = (dbName: string): Promise<string[]> => {
+  return invoke<string[]>(tauriInvokeCommands.getKeys, {
+    dbName
   });
 }
 
-export const invokeSetString = (key: string, value: string): Promise<void> => {
+export const invokeGetString = (dbName: string, key: string): Promise<GetStringPayload> => {
+  return invoke<GetStringPayload>(tauriInvokeCommands.getString, {
+    dbName, key
+  });
+}
+
+export const invokeSetString = (dbName: string, key: string, value: string): Promise<void> => {
   return invoke<void>(tauriInvokeCommands.setString, {
-    key, value
+    dbName, key, value
   });
 }

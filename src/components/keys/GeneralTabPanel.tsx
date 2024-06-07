@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useLoadingStore } from "../../state/store";
 import { invokeGetKeys } from "../../tauri/command";
 import { errorAlert } from "../../utility/alert";
+import { useConnectionInfoStore } from "../../state/store";
 
 type GeneralTabMenuItems = {
   getKeys: string,
@@ -37,6 +38,7 @@ export default function GeneralTabPanel() {
   const [displayedKeys, setDisplayedKeys] = useState<string[] | null>(null);
   const [displayedMsg, setDisplayedMsg] = useState("");
   const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
+  const dbToUse = useConnectionInfoStore((state) => state.connectionInfo.defaultDb);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedItem(event.target.value as string);
@@ -57,7 +59,7 @@ export default function GeneralTabPanel() {
 
   const handleGetKeys = () => {
     setIsLoadingBackdropOpen(true);
-    invokeGetKeys()
+    invokeGetKeys(dbToUse)
       .then((result) => {
         if (result.length < 1) {
           setDisplayedMsg("No keys in the database");
