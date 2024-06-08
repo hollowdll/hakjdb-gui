@@ -8,8 +8,11 @@ import {
   Typography,
   DialogContentText,
   Box,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
 import { invokeDeleteKey } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
@@ -67,7 +70,7 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
   const handleAddNewKey = () => {
     setKeysToDelete(prevKeys => [...prevKeys, ""]);
   }
-
+  
   return (
     <Dialog open={props.isOpen} onClose={props.handleClose}>
       <DialogTitle>DeleteKey</DialogTitle>
@@ -83,6 +86,14 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
             value={item}
             onChange={(event) => inputChanged(index, event.target.value)}
             {...allyPropsDialogTextField()}
+            InputProps={{
+              endAdornment:
+                <InputAdornment position="end">
+                  <IconButton edge="end" sx={{'&:focus': {outline: 'none'}}}>
+                    <CloseIcon />
+                  </IconButton>
+                </InputAdornment>
+            }}
           />
         ))}
         <Button
