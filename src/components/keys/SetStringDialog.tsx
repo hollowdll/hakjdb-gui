@@ -21,7 +21,7 @@ type SetStringParams = {
 type SetStringDialogProps = {
   isOpen: boolean,
   handleClose: () => void,
-  handleDisplayContent: (msg: string) => void,
+  handleDisplayMsg: (msg: string) => void,
   handleHideContent: () => void,
 }
 
@@ -48,7 +48,7 @@ export default function SetStringDialog(props: SetStringDialogProps) {
     invokeSetString(dbToUse, params.key, params.value)
       .then((_result) => {
         props.handleClose();
-        props.handleDisplayContent("OK");
+        props.handleDisplayMsg("OK");
         resetForm();
       })
       .catch((err) => {
@@ -84,7 +84,9 @@ export default function SetStringDialog(props: SetStringDialogProps) {
         />
         {errorMsg !== "" ? (
           <Typography sx={{marginTop: "15px"}}>{errorMsg}</Typography>
-        ) : <></>}
+        ) : (
+          <></>
+        )}
       </DialogContent>
       <DialogActions {...allyPropsDialogActions()}>
         <Button variant="contained" onClick={handleSetString}>Ok</Button>

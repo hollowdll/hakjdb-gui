@@ -20,7 +20,7 @@ type GetStringParams = {
 type GetStringDialogProps = {
   isOpen: boolean,
   handleClose: () => void,
-  handleDisplayContent: (msg: string) => void,
+  handleDisplayMsg: (msg: string) => void,
   handleHideContent: () => void,
 }
 
@@ -46,9 +46,9 @@ export default function GetStringDialog(props: GetStringDialogProps) {
       .then((result) => {
         props.handleClose();
         if (result.ok) {
-          props.handleDisplayContent(`"${result.value}"`);
+          props.handleDisplayMsg(`"${result.value}"`);
         } else {
-          props.handleDisplayContent("Key does not exist");
+          props.handleDisplayMsg("Key does not exist");
         }
         resetForm();
       })
@@ -78,7 +78,9 @@ export default function GetStringDialog(props: GetStringDialogProps) {
         />
         {errorMsg !== "" ? (
           <Typography sx={{ marginTop: "15px" }}>{errorMsg}</Typography>
-        ) : <></>}
+        ) : (
+          <></>
+        )}
       </DialogContent>
       <DialogActions {...allyPropsDialogActions()}>
         <Button variant="contained" onClick={handleGetString}>Ok</Button>

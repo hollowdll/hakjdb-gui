@@ -11,7 +11,8 @@ use app::{
     grpc::GrpcConnection,
     server::{__cmd__get_server_info, __cmd__get_server_logs, get_server_info, get_server_logs},
     storage::{
-        __cmd__get_keys, __cmd__get_string, __cmd__set_string, get_keys, get_string, set_string,
+        __cmd__delete_key, __cmd__get_keys, __cmd__get_string, __cmd__set_string, delete_key,
+        get_keys, get_string, set_string,
     },
 };
 use std::error::Error;
@@ -54,7 +55,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
             delete_database,
             get_keys,
             get_string,
-            set_string
+            set_string,
+            delete_key
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

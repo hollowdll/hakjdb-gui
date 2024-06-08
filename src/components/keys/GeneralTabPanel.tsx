@@ -17,12 +17,17 @@ import { useLoadingStore } from "../../state/store";
 import { invokeGetKeys } from "../../tauri/command";
 import { errorAlert } from "../../utility/alert";
 import { useConnectionInfoStore } from "../../state/store";
+import DeleteKeyDialog from "./DeleteKeyDialog";
 
 type GeneralTabMenuItems = {
   getKeys: string,
   deleteAllKeys: string,
   deleteKey: string,
   getTypeOfKey: string,
+}
+
+type DialogsOpen = {
+  isDeleteKeyDialogOpen: boolean,
 }
 
 const menuItems: GeneralTabMenuItems = {
@@ -37,11 +42,22 @@ export default function GeneralTabPanel() {
   const [isContentDisplayed, setIsContentDisplayed] = useState(false);
   const [displayedKeys, setDisplayedKeys] = useState<string[] | null>(null);
   const [displayedMsg, setDisplayedMsg] = useState("");
+  const [dialogsOpen, setDialogsOpen] = useState<DialogsOpen>({
+    isDeleteKeyDialogOpen: false,
+  });
   const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
   const dbToUse = useConnectionInfoStore((state) => state.connectionInfo.defaultDb);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedItem(event.target.value as string);
+  }
+
+  const handleOpenDeleteKeyDialog = () => {
+    setDialogsOpen({ ...dialogsOpen, isDeleteKeyDialogOpen: true });
+  }
+
+  const handleCloseDeleteKeyDialog = () => {
+    setDialogsOpen({ ...dialogsOpen, isDeleteKeyDialogOpen: false });
   }
 
   const handleRunCommand = () => {
@@ -81,15 +97,33 @@ export default function GeneralTabPanel() {
   }
 
   const handleDeleteKey = () => {
-
+    handleOpenDeleteKeyDialog();
   }
 
   const handleGetTypeOfKey = () => {
 
   }
 
+  const handleDisplayMsg = (msg: string) => {
+    setDisplayedMsg(msg);
+    setDisplayedKeys(null);
+    setIsContentDisplayed(true);
+  }
+
+  const handleHideContent = () => {
+    setDisplayedMsg("");
+    setDisplayedKeys(null);
+    setIsContentDisplayed(false);
+  }
+
   return (
     <Box>
+      <DeleteKeyDialog
+        isOpen={dialogsOpen.isDeleteKeyDialogOpen}
+        handleClose={handleCloseDeleteKeyDialog}
+        handleDisplayMsg={handleDisplayMsg}
+        handleHideContent={handleHideContent}
+      />
       <Stack direction="row" spacing={2} sx={{marginTop: "20px", marginBottom: "10px"}}>
         <FormControl variant="outlined" sx={{ m: 1, minWidth: 200, backgroundColor: "rgb(250, 250, 250)" }}>
           <InputLabel>Select Command</InputLabel>

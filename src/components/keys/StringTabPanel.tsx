@@ -67,7 +67,7 @@ export default function StringTabPanel() {
     }
   }
 
-  const handleDisplayContent = (msg: string) => {
+  const handleDisplayMsg = (msg: string) => {
     setDisplayedMsg(msg);
     setIsContentDisplayed(true);
   }
@@ -82,13 +82,13 @@ export default function StringTabPanel() {
       <SetStringDialog
         isOpen={dialogsOpen.isSetStringDialogOpen}
         handleClose={handleCloseSetStringDialog}
-        handleDisplayContent={handleDisplayContent}
+        handleDisplayMsg={handleDisplayMsg}
         handleHideContent={handleHideContent}
       />
       <GetStringDialog
         isOpen={dialogsOpen.isGetStringDialogOpen}
         handleClose={handleCloseGetStringDialog}
-        handleDisplayContent={handleDisplayContent}
+        handleDisplayMsg={handleDisplayMsg}
         handleHideContent={handleHideContent}
       />
       <Stack direction="row" spacing={2} sx={{ marginTop: "20px", marginBottom: "10px" }}>
