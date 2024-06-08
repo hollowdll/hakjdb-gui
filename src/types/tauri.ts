@@ -8,6 +8,7 @@ export type TauriInvokeCommands = {
   createDatabase: string,
   deleteDatabase: string,
   getKeys: string,
+  deleteKey: string,
   getString: string,
   setString: string,
 }
