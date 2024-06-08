@@ -84,7 +84,7 @@ pub async fn get_database_info(
     return Err(UNEXPECTED_ERROR_MSG.to_string());
 }
 
-/// Creates a new database. Returns the name of the created database.
+/// Returns the name of the created database.
 #[tauri::command]
 pub async fn create_database(
     connection: State<'_, GrpcConnection>,
@@ -105,7 +105,7 @@ pub async fn create_database(
     }
 }
 
-/// Deletes a database. Returns the name of the deleted database.
+/// Returns the name of the deleted database.
 #[tauri::command]
 pub async fn delete_database(
     connection: State<'_, GrpcConnection>,

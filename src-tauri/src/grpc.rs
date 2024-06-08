@@ -9,6 +9,9 @@ pub mod kvdb {
     tonic::include_proto!("kvdbserverapi");
 }
 
+/// gRPC request metadata key. The value for this key specifies the database to use.
+pub const MD_KEY_DATABASE: &str = "database";
+
 pub struct GrpcClient {
     pub server_client: ServerServiceClient<Channel>,
     pub database_client: DatabaseServiceClient<Channel>,
