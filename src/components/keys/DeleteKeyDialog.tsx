@@ -47,7 +47,7 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
     invokeDeleteKey(dbToUse, keysToDelete)
       .then((result) => {
         props.handleClose();
-        props.handleDisplayMsg(result.toString());
+        props.handleDisplayMsg(`Number of keys deleted: ${result}`);
         resetForm();
       })
       .catch((err) => {
@@ -64,13 +64,21 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
       const updatedKeys = [...prevKeys];
       updatedKeys[index] = newValue;
       return updatedKeys;
-    })
+    });
   };
 
-  const handleAddNewKey = () => {
+  const handleAddNewField = () => {
     setKeysToDelete(prevKeys => [...prevKeys, ""]);
   }
-  
+
+  const handleRemoveField = (index: number) => {
+    setKeysToDelete(prevKeys => {
+      const updatedKeys = [...prevKeys];
+      updatedKeys.splice(index, 1);
+      return updatedKeys;
+    });
+  }
+
   return (
     <Dialog open={props.isOpen} onClose={props.handleClose}>
       <DialogTitle>DeleteKey</DialogTitle>
@@ -89,7 +97,11 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
             InputProps={{
               endAdornment:
                 <InputAdornment position="end">
-                  <IconButton edge="end" sx={{'&:focus': {outline: 'none'}}}>
+                  <IconButton
+                    edge="end"
+                    onClick={() => handleRemoveField(index)}
+                    sx={{'&:focus': {outline: 'none'}}}
+                  >
                     <CloseIcon />
                   </IconButton>
                 </InputAdornment>
@@ -99,7 +111,7 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={handleAddNewKey}
+          onClick={handleAddNewField}
           sx={{ marginTop: "15px" }}
         >
           New Key
