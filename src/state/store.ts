@@ -31,6 +31,11 @@ interface LoadingState {
   setIsLoadingBackdropOpen: (isOpen: boolean) => void,
 }
 
+interface DialogState {
+  isDeleteKeyDialogOpen: boolean,
+  setIsDeleteKeyDialogOpen: (isOpen: boolean) => void,
+}
+
 export const useConnectionInfoStore = create<ConnectionInfoState>((set) => ({
   connectionInfo: { host: "", port: 0, defaultDb: "default" },
   setConnectionInfo: (newConnectionInfo) => set(() => ({ connectionInfo: newConnectionInfo })),
@@ -68,4 +73,9 @@ export const useDatabaseStore = create<DatabaseState>((set) => ({
 export const useLoadingStore = create<LoadingState>((set) => ({
   isLoadingBackdropOpen: false,
   setIsLoadingBackdropOpen: (isOpen) => set(() => ({isLoadingBackdropOpen: isOpen})),
+}));
+
+export const useDialogStore = create<DialogState>((set) => ({
+  isDeleteKeyDialogOpen: false,
+  setIsDeleteKeyDialogOpen: (isOpen) => set(() => ({isDeleteKeyDialogOpen: isOpen})),
 }));

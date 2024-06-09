@@ -16,6 +16,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
 import { invokeDeleteKey } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
+import { useDialogStore } from "../../state/store";
 import { useConnectionInfoStore } from "../../state/store";
 import {
   allyPropsDialogActions,
@@ -24,8 +25,6 @@ import {
 } from "../../utility/props";
 
 type DeleteKeyDialogProps = {
-  isOpen: boolean,
-  handleClose: () => void,
   handleDisplayMsg: (msg: string) => void,
   handleHideContent: () => void,
 }
@@ -35,6 +34,12 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
   const [keysToDelete, setKeysToDelete] = useState<string[]>([""]);
   const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
   const dbToUse = useConnectionInfoStore((state) => state.connectionInfo.defaultDb);
+  const setIsOpen = useDialogStore((state) => state.setIsDeleteKeyDialogOpen);
+  const isOpen = useDialogStore((state) => state.isDeleteKeyDialogOpen);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  }
 
   const resetForm = () => {
     setKeysToDelete([""]);
@@ -46,7 +51,7 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
     setErrorMsg("");
     invokeDeleteKey(dbToUse, keysToDelete)
       .then((result) => {
-        props.handleClose();
+        handleClose();
         props.handleDisplayMsg(`Number of keys deleted: ${result}`);
         resetForm();
       })
@@ -80,7 +85,7 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
   }
 
   return (
-    <Dialog open={props.isOpen} onClose={props.handleClose}>
+    <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>DeleteKey</DialogTitle>
       <DialogContent>
         <DialogContentText {...allyPropsDialogContentText()}>
@@ -126,7 +131,7 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
       </Box>
       <DialogActions {...allyPropsDialogActions()}>
         <Button variant="contained" onClick={handleDeleteKey}>Ok</Button>
-        <Button variant="outlined" onClick={props.handleClose} color="error">
+        <Button variant="outlined" onClick={handleClose} color="error">
           Cancel
         </Button>
       </DialogActions>

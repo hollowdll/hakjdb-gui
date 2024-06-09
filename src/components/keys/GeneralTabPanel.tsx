@@ -17,6 +17,7 @@ import { useLoadingStore } from "../../state/store";
 import { invokeGetKeys } from "../../tauri/command";
 import { errorAlert } from "../../utility/alert";
 import { useConnectionInfoStore } from "../../state/store";
+import { useDialogStore } from "../../state/store";
 import DeleteKeyDialog from "./DeleteKeyDialog";
 
 type GeneralTabMenuItems = {
@@ -24,10 +25,6 @@ type GeneralTabMenuItems = {
   deleteAllKeys: string,
   deleteKey: string,
   getTypeOfKey: string,
-}
-
-type DialogsOpen = {
-  isDeleteKeyDialogOpen: boolean,
 }
 
 const menuItems: GeneralTabMenuItems = {
@@ -42,22 +39,12 @@ export default function GeneralTabPanel() {
   const [isContentDisplayed, setIsContentDisplayed] = useState(false);
   const [displayedKeys, setDisplayedKeys] = useState<string[] | null>(null);
   const [displayedMsg, setDisplayedMsg] = useState("");
-  const [dialogsOpen, setDialogsOpen] = useState<DialogsOpen>({
-    isDeleteKeyDialogOpen: false,
-  });
   const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
+  const setIsDeleteKeyDialogOpen = useDialogStore((state) => state.setIsDeleteKeyDialogOpen);
   const dbToUse = useConnectionInfoStore((state) => state.connectionInfo.defaultDb);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedItem(event.target.value as string);
-  }
-
-  const handleOpenDeleteKeyDialog = () => {
-    setDialogsOpen({ ...dialogsOpen, isDeleteKeyDialogOpen: true });
-  }
-
-  const handleCloseDeleteKeyDialog = () => {
-    setDialogsOpen({ ...dialogsOpen, isDeleteKeyDialogOpen: false });
   }
 
   const handleRunCommand = () => {
@@ -97,7 +84,7 @@ export default function GeneralTabPanel() {
   }
 
   const handleDeleteKey = () => {
-    handleOpenDeleteKeyDialog();
+    setIsDeleteKeyDialogOpen(true);
   }
 
   const handleGetTypeOfKey = () => {
@@ -119,8 +106,6 @@ export default function GeneralTabPanel() {
   return (
     <Box>
       <DeleteKeyDialog
-        isOpen={dialogsOpen.isDeleteKeyDialogOpen}
-        handleClose={handleCloseDeleteKeyDialog}
         handleDisplayMsg={handleDisplayMsg}
         handleHideContent={handleHideContent}
       />
