@@ -1,7 +1,10 @@
 use crate::{
     error::NO_CONNECTION_FOUND_MSG,
     grpc::{
-        kvdb::{DeleteKeyRequest, GetKeysRequest, GetStringRequest, SetStringRequest},
+        kvdb::{
+            DeleteAllKeysRequest, DeleteKeyRequest, GetKeysRequest, GetStringRequest,
+            SetStringRequest,
+        },
         GrpcConnection, MD_KEY_DATABASE,
     },
 };
@@ -109,6 +112,27 @@ pub async fn delete_key(
             Ok(response) => {
                 return Ok(response.get_ref().keys_deleted);
             }
+            Err(err) => return Err(format!("{}", err)),
+        }
+    } else {
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
+    }
+}
+
+#[tauri::command]
+pub async fn delete_all_keys(
+    connection: State<'_, GrpcConnection>,
+    db_name: &str,
+) -> Result<(), String> {
+    let mut guard = connection.connection.lock().await;
+    if let Some(ref mut connection) = *guard {
+        let mut request = tonic::Request::new(DeleteAllKeysRequest {});
+        request
+            .metadata_mut()
+            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        let response = connection.storage_client.delete_all_keys(request).await;
+        match response {
+            Ok(_response) => return Ok(()),
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
