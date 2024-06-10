@@ -10,6 +10,7 @@ import {
 import { useState, ChangeEvent } from "react";
 import { invokeGetString } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
+import { useDialogStore } from "../../state/store";
 import { allyPropsDialogActions, allyPropsDialogTextField } from "../../utility/props";
 import { useConnectionInfoStore } from "../../state/store";
 
@@ -18,8 +19,6 @@ type GetStringParams = {
 }
 
 type GetStringDialogProps = {
-  isOpen: boolean,
-  handleClose: () => void,
   handleDisplayMsg: (msg: string) => void,
   handleHideContent: () => void,
 }
@@ -31,6 +30,12 @@ export default function GetStringDialog(props: GetStringDialogProps) {
   });
   const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
   const dbToUse = useConnectionInfoStore((state) => state.connectionInfo.defaultDb);
+  const setIsOpen = useDialogStore((state) => state.setIsGetStringDialogOpen);
+  const isOpen = useDialogStore((state) => state.isGetStringDialogOpen);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  }
 
   const resetForm = () => {
     setParams({
@@ -44,7 +49,7 @@ export default function GetStringDialog(props: GetStringDialogProps) {
     setErrorMsg("");
     invokeGetString(dbToUse, params.key)
       .then((result) => {
-        props.handleClose();
+        handleClose();
         if (result.ok) {
           props.handleDisplayMsg(`"${result.value}"`);
         } else {
@@ -66,7 +71,7 @@ export default function GetStringDialog(props: GetStringDialogProps) {
   };
 
   return (
-    <Dialog open={props.isOpen} onClose={props.handleClose}>
+    <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>GetString</DialogTitle>
       <DialogContent>
         <TextField
@@ -84,7 +89,7 @@ export default function GetStringDialog(props: GetStringDialogProps) {
       </DialogContent>
       <DialogActions {...allyPropsDialogActions()}>
         <Button variant="contained" onClick={handleGetString}>Ok</Button>
-        <Button variant="outlined" onClick={props.handleClose} color="error">
+        <Button variant="outlined" onClick={handleClose} color="error">
           Cancel
         </Button>
       </DialogActions>

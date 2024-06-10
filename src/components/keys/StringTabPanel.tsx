@@ -11,17 +11,13 @@ import {
 } from "@mui/material";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useState } from "react";
+import { useDialogStore } from "../../state/store";
 import SetStringDialog from "./SetStringDialog";
 import GetStringDialog from "./GetStringDialog";
 
 type StringTabMenuItems = {
   setString: string,
   getString: string,
-}
-
-type DialogsOpen = {
-  isSetStringDialogOpen: boolean,
-  isGetStringDialogOpen: boolean,
 }
 
 const menuItems: StringTabMenuItems = {
@@ -33,37 +29,27 @@ export default function StringTabPanel() {
   const [selectedItem, setSelectedItem] = useState("");
   const [isContentDisplayed, setIsContentDisplayed] = useState(false);
   const [displayedMsg, setDisplayedMsg] = useState("");
-  const [dialogsOpen, setDialogsOpen] = useState<DialogsOpen>({
-    isSetStringDialogOpen: false,
-    isGetStringDialogOpen: false,
-  });
+  const setIsSetStringDialogOpen = useDialogStore((state) => state.setIsSetStringDialogOpen);
+  const setIsGetStringDialogOpen = useDialogStore((state) => state.setIsGetStringDialogOpen);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedItem(event.target.value as string);
   }
 
-  const handleOpenSetStringDialog = () => {
-    setDialogsOpen({ ...dialogsOpen, isSetStringDialogOpen: true });
+  const handleSetString = () => {
+    setIsSetStringDialogOpen(true);
   }
 
-  const handleCloseSetStringDialog = () => {
-    setDialogsOpen({ ...dialogsOpen, isSetStringDialogOpen: false });
-  }
-
-  const handleOpenGetStringDialog = () => {
-    setDialogsOpen({ ...dialogsOpen, isGetStringDialogOpen: true });
-  }
-
-  const handleCloseGetStringDialog = () => {
-    setDialogsOpen({ ...dialogsOpen, isGetStringDialogOpen: false });
+  const handleGetString = () => {
+    setIsGetStringDialogOpen(true);
   }
 
   const handleRunCommand = () => {
     switch (selectedItem) {
       case menuItems.setString:
-        return handleOpenSetStringDialog();
+        return handleSetString();
       case menuItems.getString:
-        return handleOpenGetStringDialog();
+        return handleGetString();
     }
   }
 
@@ -80,14 +66,10 @@ export default function StringTabPanel() {
   return (
     <Box>
       <SetStringDialog
-        isOpen={dialogsOpen.isSetStringDialogOpen}
-        handleClose={handleCloseSetStringDialog}
         handleDisplayMsg={handleDisplayMsg}
         handleHideContent={handleHideContent}
       />
       <GetStringDialog
-        isOpen={dialogsOpen.isGetStringDialogOpen}
-        handleClose={handleCloseGetStringDialog}
         handleDisplayMsg={handleDisplayMsg}
         handleHideContent={handleHideContent}
       />

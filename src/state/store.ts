@@ -33,7 +33,11 @@ interface LoadingState {
 
 interface DialogState {
   isDeleteKeyDialogOpen: boolean,
+  isSetStringDialogOpen: boolean,
+  isGetStringDialogOpen: boolean,
   setIsDeleteKeyDialogOpen: (isOpen: boolean) => void,
+  setIsSetStringDialogOpen: (isOpen: boolean) => void,
+  setIsGetStringDialogOpen: (isOpen: boolean) => void,
 }
 
 export const useConnectionInfoStore = create<ConnectionInfoState>((set) => ({
@@ -77,5 +81,9 @@ export const useLoadingStore = create<LoadingState>((set) => ({
 
 export const useDialogStore = create<DialogState>((set) => ({
   isDeleteKeyDialogOpen: false,
+  isSetStringDialogOpen: false,
+  isGetStringDialogOpen: false,
   setIsDeleteKeyDialogOpen: (isOpen) => set(() => ({isDeleteKeyDialogOpen: isOpen})),
+  setIsSetStringDialogOpen: (isOpen) => set(() => ({isSetStringDialogOpen: isOpen})),
+  setIsGetStringDialogOpen: (isOpen) => set(() => ({isGetStringDialogOpen: isOpen})),
 }));
