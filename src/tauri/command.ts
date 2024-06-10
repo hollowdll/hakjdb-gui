@@ -16,6 +16,7 @@ const tauriInvokeCommands: TauriInvokeCommands = {
   deleteDatabase: "delete_database",
   getKeys: "get_keys",
   deleteKey: "delete_key",
+  deleteAllKeys: "delete_all_keys",
   getString: "get_string",
   setString: "set_string",
 }
@@ -70,6 +71,12 @@ export const invokeGetKeys = (dbName: string): Promise<string[]> => {
 export const invokeDeleteKey = (dbName: string, keys: string[]): Promise<number> => {
   return invoke<number>(tauriInvokeCommands.deleteKey, {
     dbName, keys
+  });
+}
+
+export const invokeDeleteAllKeys = (dbName: string): Promise<void> => {
+  return invoke<void>(tauriInvokeCommands.deleteAllKeys, {
+    dbName
   });
 }
 
