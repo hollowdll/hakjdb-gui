@@ -15,11 +15,11 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useState } from "react";
 import { useLoadingStore } from "../../state/store";
 import { invokeGetKeys } from "../../tauri/command";
-import { invokeDeleteAllKeys } from "../../tauri/command";
 import { errorAlert } from "../../utility/alert";
 import { useConnectionInfoStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
 import DeleteKeyDialog from "./DeleteKeyDialog";
+import DeleteAllKeysDialog from "./DeleteAllKeysDialog";
 
 type GeneralTabMenuItems = {
   getKeys: string,
@@ -42,6 +42,7 @@ export default function GeneralTabPanel() {
   const [displayedMsg, setDisplayedMsg] = useState("");
   const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
   const setIsDeleteKeyDialogOpen = useDialogStore((state) => state.setIsDeleteKeyDialogOpen);
+  const setIsDeleteAllKeysDialogOpen = useDialogStore((state) => state.setIsDeleteAllKeysDialogOpen);
   const dbToUse = useConnectionInfoStore((state) => state.connectionInfo.defaultDb);
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -81,20 +82,7 @@ export default function GeneralTabPanel() {
   }
 
   const handleDeleteAllKeys = () => {
-    setIsLoadingBackdropOpen(true);
-    invokeDeleteAllKeys(dbToUse)
-      .then((_result) => {
-	setDisplayedMsg("OK");
-        setDisplayedKeys(null);
-        setIsContentDisplayed(true);
-      })
-      .catch((err) => {
-        errorAlert(`Failed to delete all keys: ${err}`);
-        setIsContentDisplayed(false);
-      })
-      .finally(() => {
-        setIsLoadingBackdropOpen(false);
-      })
+    setIsDeleteAllKeysDialogOpen(true);
   }
 
   const handleDeleteKey = () => {
@@ -122,6 +110,10 @@ export default function GeneralTabPanel() {
       <DeleteKeyDialog
         handleDisplayMsg={handleDisplayMsg}
         handleHideContent={handleHideContent}
+      />
+      <DeleteAllKeysDialog
+        handleDisplayMsg={handleDisplayMsg}
+	handleHideContent={handleHideContent}
       />
       <Stack direction="row" spacing={2} sx={{marginTop: "20px", marginBottom: "10px"}}>
         <FormControl variant="outlined" sx={{ m: 1, minWidth: 200, backgroundColor: "rgb(250, 250, 250)" }}>
