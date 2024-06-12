@@ -15,6 +15,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useState } from "react";
 import { useLoadingStore } from "../../state/store";
 import { invokeGetKeys } from "../../tauri/command";
+import { invokeDeleteAllKeys } from "../../tauri/command";
 import { errorAlert } from "../../utility/alert";
 import { useConnectionInfoStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
@@ -80,7 +81,20 @@ export default function GeneralTabPanel() {
   }
 
   const handleDeleteAllKeys = () => {
-
+    setIsLoadingBackdropOpen(true);
+    invokeDeleteAllKeys(dbToUse)
+      .then((_result) => {
+	setDisplayedMsg("OK");
+        setDisplayedKeys(null);
+        setIsContentDisplayed(true);
+      })
+      .catch((err) => {
+        errorAlert(`Failed to delete all keys: ${err}`);
+        setIsContentDisplayed(false);
+      })
+      .finally(() => {
+        setIsLoadingBackdropOpen(false);
+      })
   }
 
   const handleDeleteKey = () => {
