@@ -4,7 +4,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Button,
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
@@ -36,12 +35,12 @@ export default function DeleteAllKeysDialog(props: DeleteAllKeysDialogProps) {
     invokeDeleteAllKeys(dbToUse)
       .then((result) => {
         props.handleHideContent();
-	handleClose();
+        handleClose();
         props.handleDisplayMsg("OK");
       })
       .catch((err) => {
         errorAlert(`Failed to delete all keys: ${err}`);
-	props.handleHideContent();
+        props.handleHideContent();
       })
       .finally(() => {
         setIsLoadingBackdropOpen(false);
@@ -54,7 +53,7 @@ export default function DeleteAllKeysDialog(props: DeleteAllKeysDialogProps) {
       <DialogContent>
         <DialogContentText>
           Delete all the keys of the database that is currently in use?
-	  Deleted keys cannot be restored
+          Deleted keys cannot be restored.
         </DialogContentText>
       </DialogContent>
       <DialogActions {...allyPropsDialogActions()}>
