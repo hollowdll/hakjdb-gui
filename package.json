@@ -8,7 +8,11 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "prepare": "husky",
+    "format": "npx @biomejs/biome format --write ./src",
+    "format-rs": "cd src-tauri && cargo fmt",
+    "precommit": "npm run format && npm run format-rs"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -23,6 +27,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.1",
     "@tauri-apps/cli": "^1.5.11",
     "@types/node": "^20.12.12",
     "@types/react": "^18.2.66",
@@ -33,6 +38,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "husky": "^9.0.11",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
   }
