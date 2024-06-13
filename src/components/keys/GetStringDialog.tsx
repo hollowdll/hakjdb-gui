@@ -11,38 +11,45 @@ import { useState, ChangeEvent } from "react";
 import { invokeGetString } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
-import { allyPropsDialogActions, allyPropsDialogTextField } from "../../utility/props";
+import {
+  allyPropsDialogActions,
+  allyPropsDialogTextField,
+} from "../../utility/props";
 import { useConnectionInfoStore } from "../../state/store";
 
 type GetStringParams = {
-  key: string,
-}
+  key: string;
+};
 
 type GetStringDialogProps = {
-  handleDisplayMsg: (msg: string) => void,
-  handleHideContent: () => void,
-}
+  handleDisplayMsg: (msg: string) => void;
+  handleHideContent: () => void;
+};
 
 export default function GetStringDialog(props: GetStringDialogProps) {
   const [errorMsg, setErrorMsg] = useState("");
   const [params, setParams] = useState<GetStringParams>({
     key: "",
   });
-  const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
-  const dbToUse = useConnectionInfoStore((state) => state.connectionInfo.defaultDb);
+  const setIsLoadingBackdropOpen = useLoadingStore(
+    (state) => state.setIsLoadingBackdropOpen,
+  );
+  const dbToUse = useConnectionInfoStore(
+    (state) => state.connectionInfo.defaultDb,
+  );
   const setIsOpen = useDialogStore((state) => state.setIsGetStringDialogOpen);
   const isOpen = useDialogStore((state) => state.isGetStringDialogOpen);
 
   const handleClose = () => {
     setIsOpen(false);
-  }
+  };
 
   const resetForm = () => {
     setParams({
-      key: ""
+      key: "",
     });
     setErrorMsg("");
-  }
+  };
 
   const handleGetString = () => {
     setIsLoadingBackdropOpen(true);
@@ -64,7 +71,7 @@ export default function GetStringDialog(props: GetStringDialogProps) {
       .finally(() => {
         setIsLoadingBackdropOpen(false);
       });
-  }
+  };
 
   const inputChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setParams({ ...params, [event.target.name]: event.target.value });
@@ -88,7 +95,9 @@ export default function GetStringDialog(props: GetStringDialogProps) {
         )}
       </DialogContent>
       <DialogActions {...allyPropsDialogActions()}>
-        <Button variant="contained" onClick={handleGetString}>Ok</Button>
+        <Button variant="contained" onClick={handleGetString}>
+          Ok
+        </Button>
         <Button variant="outlined" onClick={handleClose} color="error">
           Cancel
         </Button>

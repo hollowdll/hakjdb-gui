@@ -11,7 +11,7 @@ import {
   List,
   ListItem,
 } from "@mui/material";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
 import { useLoadingStore } from "../../state/store";
 import { invokeGetKeys } from "../../tauri/command";
@@ -22,32 +22,40 @@ import DeleteKeyDialog from "./DeleteKeyDialog";
 import DeleteAllKeysDialog from "./DeleteAllKeysDialog";
 
 type GeneralTabMenuItems = {
-  getKeys: string,
-  deleteAllKeys: string,
-  deleteKey: string,
-  getTypeOfKey: string,
-}
+  getKeys: string;
+  deleteAllKeys: string;
+  deleteKey: string;
+  getTypeOfKey: string;
+};
 
 const menuItems: GeneralTabMenuItems = {
   getKeys: "GetKeys",
   deleteAllKeys: "DeleteAllKeys",
   deleteKey: "DeleteKey",
   getTypeOfKey: "GetTypeOfKey",
-}
+};
 
 export default function GeneralTabPanel() {
   const [selectedItem, setSelectedItem] = useState("");
   const [isContentDisplayed, setIsContentDisplayed] = useState(false);
   const [displayedKeys, setDisplayedKeys] = useState<string[] | null>(null);
   const [displayedMsg, setDisplayedMsg] = useState("");
-  const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
-  const setIsDeleteKeyDialogOpen = useDialogStore((state) => state.setIsDeleteKeyDialogOpen);
-  const setIsDeleteAllKeysDialogOpen = useDialogStore((state) => state.setIsDeleteAllKeysDialogOpen);
-  const dbToUse = useConnectionInfoStore((state) => state.connectionInfo.defaultDb);
+  const setIsLoadingBackdropOpen = useLoadingStore(
+    (state) => state.setIsLoadingBackdropOpen,
+  );
+  const setIsDeleteKeyDialogOpen = useDialogStore(
+    (state) => state.setIsDeleteKeyDialogOpen,
+  );
+  const setIsDeleteAllKeysDialogOpen = useDialogStore(
+    (state) => state.setIsDeleteAllKeysDialogOpen,
+  );
+  const dbToUse = useConnectionInfoStore(
+    (state) => state.connectionInfo.defaultDb,
+  );
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedItem(event.target.value as string);
-  }
+  };
 
   const handleRunCommand = () => {
     switch (selectedItem) {
@@ -60,7 +68,7 @@ export default function GeneralTabPanel() {
       case menuItems.getTypeOfKey:
         return handleGetTypeOfKey();
     }
-  }
+  };
 
   const handleGetKeys = () => {
     setIsLoadingBackdropOpen(true);
@@ -78,32 +86,30 @@ export default function GeneralTabPanel() {
       })
       .finally(() => {
         setIsLoadingBackdropOpen(false);
-      })
-  }
+      });
+  };
 
   const handleDeleteAllKeys = () => {
     setIsDeleteAllKeysDialogOpen(true);
-  }
+  };
 
   const handleDeleteKey = () => {
     setIsDeleteKeyDialogOpen(true);
-  }
+  };
 
-  const handleGetTypeOfKey = () => {
-
-  }
+  const handleGetTypeOfKey = () => {};
 
   const handleDisplayMsg = (msg: string) => {
     setDisplayedMsg(msg);
     setDisplayedKeys(null);
     setIsContentDisplayed(true);
-  }
+  };
 
   const handleHideContent = () => {
     setDisplayedMsg("");
     setDisplayedKeys(null);
     setIsContentDisplayed(false);
-  }
+  };
 
   return (
     <Box>
@@ -113,10 +119,17 @@ export default function GeneralTabPanel() {
       />
       <DeleteAllKeysDialog
         handleDisplayMsg={handleDisplayMsg}
-	handleHideContent={handleHideContent}
+        handleHideContent={handleHideContent}
       />
-      <Stack direction="row" spacing={2} sx={{marginTop: "20px", marginBottom: "10px"}}>
-        <FormControl variant="outlined" sx={{ m: 1, minWidth: 200, backgroundColor: "rgb(250, 250, 250)" }}>
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{ marginTop: "20px", marginBottom: "10px" }}
+      >
+        <FormControl
+          variant="outlined"
+          sx={{ m: 1, minWidth: 200, backgroundColor: "rgb(250, 250, 250)" }}
+        >
           <InputLabel>Select Command</InputLabel>
           <Select
             label="Select Command"
@@ -124,12 +137,24 @@ export default function GeneralTabPanel() {
             onChange={handleChange}
           >
             <MenuItem value={menuItems.getKeys}>{menuItems.getKeys}</MenuItem>
-            <MenuItem value={menuItems.deleteAllKeys}>{menuItems.deleteAllKeys}</MenuItem>
-            <MenuItem value={menuItems.deleteKey}>{menuItems.deleteKey}</MenuItem>
-            <MenuItem value={menuItems.getTypeOfKey}>{menuItems.getTypeOfKey}</MenuItem>
+            <MenuItem value={menuItems.deleteAllKeys}>
+              {menuItems.deleteAllKeys}
+            </MenuItem>
+            <MenuItem value={menuItems.deleteKey}>
+              {menuItems.deleteKey}
+            </MenuItem>
+            <MenuItem value={menuItems.getTypeOfKey}>
+              {menuItems.getTypeOfKey}
+            </MenuItem>
           </Select>
         </FormControl>
-        <Button variant="contained" onClick={handleRunCommand} endIcon={<PlayArrowIcon />}>Run</Button>
+        <Button
+          variant="contained"
+          onClick={handleRunCommand}
+          endIcon={<PlayArrowIcon />}
+        >
+          Run
+        </Button>
       </Stack>
       {isContentDisplayed ? (
         <Box
@@ -145,10 +170,20 @@ export default function GeneralTabPanel() {
                 <ListItem
                   key={index}
                   disablePadding
-                  sx={{display: "flex", justifyContent: "start", alignItems: "start"}}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "start",
+                    alignItems: "start",
+                  }}
                 >
-                  <Typography sx={{color: "text.secondary", marginRight: "20px"}}>{index + 1})</Typography>
-                  <Typography sx={{wordBreak: "break-word"}}>{item}</Typography>
+                  <Typography
+                    sx={{ color: "text.secondary", marginRight: "20px" }}
+                  >
+                    {index + 1})
+                  </Typography>
+                  <Typography sx={{ wordBreak: "break-word" }}>
+                    {item}
+                  </Typography>
                 </ListItem>
               ))}
             </List>

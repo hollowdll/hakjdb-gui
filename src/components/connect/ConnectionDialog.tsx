@@ -26,7 +26,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
   const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>({
     host: "localhost",
     port: 12345,
-    defaultDb: "default"
+    defaultDb: "default",
   });
 
   const handleClose = () => {
@@ -70,7 +70,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
             Connect to a new kvdb server instance.
           </DialogContentText>
           <TextField
-            name= "host"
+            name="host"
             label="Host or IP address"
             value={connectionInfo.host}
             onChange={inputChanged}
@@ -82,12 +82,13 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
             value={connectionInfo.port}
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
               const value = Number(event.target.value);
-              if (value >= 0 && value <= 65535) setConnectionInfo({ ...connectionInfo, port: value });
+              if (value >= 0 && value <= 65535)
+                setConnectionInfo({ ...connectionInfo, port: value });
             }}
             {...allyPropsDialogTextField()}
           />
           <TextField
-            name= "defaultDb"
+            name="defaultDb"
             label="Database To Use"
             value={connectionInfo.defaultDb}
             onChange={inputChanged}
@@ -95,7 +96,9 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           />
         </DialogContent>
         <DialogActions {...allyPropsDialogActions()}>
-          <Button variant="contained" onClick={handleConnectClick}>Connect</Button>
+          <Button variant="contained" onClick={handleConnectClick}>
+            Connect
+          </Button>
           <Button variant="outlined" onClick={handleClose} color="error">
             Cancel
           </Button>

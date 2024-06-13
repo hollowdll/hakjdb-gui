@@ -6,8 +6,8 @@ import LogsTabPanel from "./LogsTabPanel";
 function allyProps(index: number) {
   return {
     id: `server-tab-${index}`,
-    'aria-controls': `server-tabpanel-${index}`,
-    sx: {'&:focus': {outline: 'none'}},
+    "aria-controls": `server-tabpanel-${index}`,
+    sx: { "&:focus": { outline: "none" } },
   };
 }
 
@@ -19,9 +19,13 @@ export default function TabMenu() {
   };
 
   return (
-    <Box sx={{width: "100%"}}>
+    <Box sx={{ width: "100%" }}>
       <Box>
-        <Tabs value={tabsValue} onChange={handleTabChange} aria-label="server view tab menu">
+        <Tabs
+          value={tabsValue}
+          onChange={handleTabChange}
+          aria-label="server view tab menu"
+        >
           <Tab label="Info" {...allyProps(0)} />
           <Tab label="Logs" {...allyProps(1)} />
         </Tabs>
@@ -29,5 +33,5 @@ export default function TabMenu() {
       {tabsValue === 0 && <InfoTabPanel />}
       {tabsValue === 1 && <LogsTabPanel />}
     </Box>
-  )
+  );
 }

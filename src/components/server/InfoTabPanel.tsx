@@ -22,7 +22,7 @@ import { invokeGetServerInfo } from "../../tauri/command";
 type AccordionProps = {
   accordionExpanded: string | false;
   handleAccordionChange: (
-    panel: string
+    panel: string,
   ) => (_event: SyntheticEvent, isExpanded: boolean) => void;
 };
 
@@ -49,13 +49,18 @@ type GeneralInfoListProps = {
 function allyPropsInfoField() {
   return {
     sx: { marginRight: "80px" },
-  }
+  };
 }
 
 function allyPropsInfoValue(infoField: string) {
   return {
     id: `server-info-value-${infoField}`,
-    sx: { marginRight: "50px", textAlign: "end", color: "text.secondary", wordBreak: "break-word" },
+    sx: {
+      marginRight: "50px",
+      textAlign: "end",
+      color: "text.secondary",
+      wordBreak: "break-word",
+    },
   };
 }
 
@@ -86,7 +91,10 @@ function MemoryInfoList({ info, accordion }: MemoryInfoListProps) {
         onChange={handleAccordionChange("panel2")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="Total Allocated Memory" {...allyPropsInfoField()} />
+          <ListItemText
+            primary="Total Allocated Memory"
+            {...allyPropsInfoField()}
+          />
           <ListItemText
             primary={`${Number(info.memoryTotalAllocMegaByte).toFixed(1)} MB`}
             {...allyPropsInfoValue("memory-total-alloc")}
@@ -170,7 +178,10 @@ function ClientInfoList({ info, accordion }: ClientInfoListProps) {
         onChange={handleAccordionChange("panel6")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="Client Connections" {...allyPropsInfoField()} />
+          <ListItemText
+            primary="Client Connections"
+            {...allyPropsInfoField()}
+          />
           <ListItemText
             primary={info.clientConnections}
             {...allyPropsInfoValue("client-connections")}
@@ -186,7 +197,10 @@ function ClientInfoList({ info, accordion }: ClientInfoListProps) {
         onChange={handleAccordionChange("panel7")}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <ListItemText primary="Max Client Connections" {...allyPropsInfoField()} />
+          <ListItemText
+            primary="Max Client Connections"
+            {...allyPropsInfoField()}
+          />
           <ListItemText
             primary={info.maxClientConnections}
             {...allyPropsInfoValue("max-client-connections")}
@@ -418,7 +432,7 @@ export default function InfoTabPanel() {
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
-    false
+    false,
   );
 
   const handleAccordionChange =
@@ -441,7 +455,7 @@ export default function InfoTabPanel() {
 
   useEffect(() => {
     handleGetServerInfo();
-  }, [])
+  }, []);
 
   return (
     <Box
@@ -449,7 +463,6 @@ export default function InfoTabPanel() {
         p: 3,
         backgroundColor: "rgb(250, 250, 250)",
         width: "100%",
-        
       }}
     >
       {isLoading ? (

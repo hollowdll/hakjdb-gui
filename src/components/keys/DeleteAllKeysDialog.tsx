@@ -5,7 +5,7 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
 import { invokeDeleteAllKeys } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
@@ -15,14 +15,20 @@ import { errorAlert } from "../../utility/alert";
 import { allyPropsDialogActions } from "../../utility/props";
 
 type DeleteAllKeysDialogProps = {
-  handleDisplayMsg: (msg: string) => void,
-  handleHideContent: () => void,
-}
+  handleDisplayMsg: (msg: string) => void;
+  handleHideContent: () => void;
+};
 
 export default function DeleteAllKeysDialog(props: DeleteAllKeysDialogProps) {
-  const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
-  const dbToUse = useConnectionInfoStore((state) => state.connectionInfo.defaultDb);
-  const setIsOpen = useDialogStore((state) => state.setIsDeleteAllKeysDialogOpen);
+  const setIsLoadingBackdropOpen = useLoadingStore(
+    (state) => state.setIsLoadingBackdropOpen,
+  );
+  const dbToUse = useConnectionInfoStore(
+    (state) => state.connectionInfo.defaultDb,
+  );
+  const setIsOpen = useDialogStore(
+    (state) => state.setIsDeleteAllKeysDialogOpen,
+  );
   const isOpen = useDialogStore((state) => state.isDeleteAllKeysDialogOpen);
 
   const handleClose = () => {
@@ -45,19 +51,21 @@ export default function DeleteAllKeysDialog(props: DeleteAllKeysDialogProps) {
       .finally(() => {
         setIsLoadingBackdropOpen(false);
       });
-  }
+  };
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>Delete All Keys</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Delete all the keys of the database that is currently in use?
-          Deleted keys cannot be restored.
+          Delete all the keys of the database that is currently in use? Deleted
+          keys cannot be restored.
         </DialogContentText>
       </DialogContent>
       <DialogActions {...allyPropsDialogActions()}>
-        <Button variant="contained" onClick={handleDeleteAllKeys} color="error">Delete</Button>
+        <Button variant="contained" onClick={handleDeleteAllKeys} color="error">
+          Delete
+        </Button>
         <Button variant="outlined" onClick={handleClose} color="error">
           Cancel
         </Button>

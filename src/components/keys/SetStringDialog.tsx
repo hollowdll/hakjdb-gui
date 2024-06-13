@@ -11,18 +11,21 @@ import { useState, ChangeEvent } from "react";
 import { invokeSetString } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
-import { allyPropsDialogActions, allyPropsDialogTextField } from "../../utility/props";
+import {
+  allyPropsDialogActions,
+  allyPropsDialogTextField,
+} from "../../utility/props";
 import { useConnectionInfoStore } from "../../state/store";
 
 type SetStringParams = {
-  key: string,
-  value: string,
-}
+  key: string;
+  value: string;
+};
 
 type SetStringDialogProps = {
-  handleDisplayMsg: (msg: string) => void,
-  handleHideContent: () => void,
-}
+  handleDisplayMsg: (msg: string) => void;
+  handleHideContent: () => void;
+};
 
 export default function SetStringDialog(props: SetStringDialogProps) {
   const [errorMsg, setErrorMsg] = useState("");
@@ -30,14 +33,18 @@ export default function SetStringDialog(props: SetStringDialogProps) {
     key: "",
     value: "",
   });
-  const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
-  const dbToUse = useConnectionInfoStore((state) => state.connectionInfo.defaultDb);
+  const setIsLoadingBackdropOpen = useLoadingStore(
+    (state) => state.setIsLoadingBackdropOpen,
+  );
+  const dbToUse = useConnectionInfoStore(
+    (state) => state.connectionInfo.defaultDb,
+  );
   const setIsOpen = useDialogStore((state) => state.setIsSetStringDialogOpen);
   const isOpen = useDialogStore((state) => state.isSetStringDialogOpen);
 
   const handleClose = () => {
     setIsOpen(false);
-  }
+  };
 
   const resetForm = () => {
     setParams({
@@ -45,7 +52,7 @@ export default function SetStringDialog(props: SetStringDialogProps) {
       value: "",
     });
     setErrorMsg("");
-  }
+  };
 
   const handleSetString = () => {
     setIsLoadingBackdropOpen(true);
@@ -63,7 +70,7 @@ export default function SetStringDialog(props: SetStringDialogProps) {
       .finally(() => {
         setIsLoadingBackdropOpen(false);
       });
-  }
+  };
 
   const inputChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setParams({ ...params, [event.target.name]: event.target.value });
@@ -88,13 +95,15 @@ export default function SetStringDialog(props: SetStringDialogProps) {
           {...allyPropsDialogTextField()}
         />
         {errorMsg !== "" ? (
-          <Typography sx={{marginTop: "15px"}}>{errorMsg}</Typography>
+          <Typography sx={{ marginTop: "15px" }}>{errorMsg}</Typography>
         ) : (
           <></>
         )}
       </DialogContent>
       <DialogActions {...allyPropsDialogActions()}>
-        <Button variant="contained" onClick={handleSetString}>Ok</Button>
+        <Button variant="contained" onClick={handleSetString}>
+          Ok
+        </Button>
         <Button variant="outlined" onClick={handleClose} color="error">
           Cancel
         </Button>

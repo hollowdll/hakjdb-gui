@@ -4,7 +4,7 @@ import CreateDatabaseDialog from "../database/CreateDatabaseDialog";
 
 export default function DatabasesView() {
   return (
-    <Box sx={{width: "100%"}}>
+    <Box sx={{ width: "100%" }}>
       <h1>Databases</h1>
       <Stack spacing={2} direction="row">
         <CreateDatabaseDialog />

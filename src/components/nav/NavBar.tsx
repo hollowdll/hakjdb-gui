@@ -43,8 +43,12 @@ const renderIcon = (item: NavItem) => {
 
 export function NavBar() {
   const navigate = useNavigate();
-  const selectedIndex = useNavigationStore((state) => state.selectedNavItemIndex);
-  const setSelectedNavItemIndex = useNavigationStore((state) => state.setSelectedNavItemIndex);
+  const selectedIndex = useNavigationStore(
+    (state) => state.selectedNavItemIndex,
+  );
+  const setSelectedNavItemIndex = useNavigationStore(
+    (state) => state.setSelectedNavItemIndex,
+  );
 
   const handleListItemClick = (index: number) => {
     setSelectedNavItemIndex(index);
@@ -66,7 +70,10 @@ export function NavBar() {
             key={item.text}
             disablePadding
             onClick={() => navigate(item.href)}
-            sx={{backgroundColor: selectedIndex === index ? 'rgb(225,225,225)' : 'white'}}
+            sx={{
+              backgroundColor:
+                selectedIndex === index ? "rgb(225,225,225)" : "white",
+            }}
           >
             <ListItemButton
               selected={selectedIndex === index}

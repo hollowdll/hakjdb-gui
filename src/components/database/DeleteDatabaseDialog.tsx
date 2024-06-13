@@ -6,7 +6,7 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
 import { invokeDeleteDatabase } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
@@ -15,14 +15,19 @@ import { useDatabaseStore } from "../../state/store";
 import { allyPropsDialogActions } from "../../utility/props";
 
 type DeleteDatabaseDialogProps = {
-  dbName: string,
-  closeDbListAccordion: () => void,
-}
+  dbName: string;
+  closeDbListAccordion: () => void;
+};
 
-export default function DeleteDatabaseDialog({ dbName, closeDbListAccordion }: DeleteDatabaseDialogProps) {
+export default function DeleteDatabaseDialog({
+  dbName,
+  closeDbListAccordion,
+}: DeleteDatabaseDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const getAllDatabases = useDatabaseStore((state) => state.getAllDatabases);
-  const setIsLoadingBackdropOpen = useLoadingStore((state) => state.setIsLoadingBackdropOpen);
+  const setIsLoadingBackdropOpen = useLoadingStore(
+    (state) => state.setIsLoadingBackdropOpen,
+  );
 
   const handleClose = () => {
     setIsOpen(false);
@@ -47,20 +52,30 @@ export default function DeleteDatabaseDialog({ dbName, closeDbListAccordion }: D
         setIsLoadingBackdropOpen(false);
         getAllDatabases();
       });
-  }
+  };
 
   return (
     <>
-      <Button variant="contained" endIcon={<DeleteIcon />} color="error" onClick={handleOpen}>Delete</Button>
+      <Button
+        variant="contained"
+        endIcon={<DeleteIcon />}
+        color="error"
+        onClick={handleOpen}
+      >
+        Delete
+      </Button>
       <Dialog open={isOpen} onClose={handleClose}>
         <DialogTitle>Delete Database {dbName}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Deleted databases cannot be restored. Deleting a database also deletes all the keys stored in it.
+            Deleted databases cannot be restored. Deleting a database also
+            deletes all the keys stored in it.
           </DialogContentText>
         </DialogContent>
         <DialogActions {...allyPropsDialogActions()}>
-          <Button variant="contained" onClick={handleDeleteDb} color="error">Delete</Button>
+          <Button variant="contained" onClick={handleDeleteDb} color="error">
+            Delete
+          </Button>
           <Button variant="outlined" onClick={handleClose} color="error">
             Cancel
           </Button>

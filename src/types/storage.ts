@@ -1,4 +1,4 @@
 export interface GetStringPayload {
-  value: string,
-  ok: boolean,
+  value: string;
+  ok: boolean;
 }

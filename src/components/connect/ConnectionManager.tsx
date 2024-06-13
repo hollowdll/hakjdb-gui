@@ -13,8 +13,12 @@ import { useNavigationStore } from "../../state/store";
 export default function ConnectionManager() {
   const [isConnected, setIsConnected] = useState(false);
   const navigate = useNavigate();
-  const setConnectionInfo = useConnectionInfoStore((state) => state.setConnectionInfo);
-  const setSelectedNavItemIndex = useNavigationStore((state) => state.setSelectedNavItemIndex);
+  const setConnectionInfo = useConnectionInfoStore(
+    (state) => state.setConnectionInfo,
+  );
+  const setSelectedNavItemIndex = useNavigationStore(
+    (state) => state.setSelectedNavItemIndex,
+  );
 
   const handleConnect = (connectionInfo: ConnectionInfo) => {
     const promise = invokeConnect(connectionInfo);
@@ -45,7 +49,7 @@ export default function ConnectionManager() {
         error: {
           duration: 4000,
         },
-      }
+      },
     );
   };
 

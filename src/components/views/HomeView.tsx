@@ -21,11 +21,11 @@ export default function HomeView() {
           bottom: "50%",
           textWrap: "nowrap",
           left: "50%",
-          right: "50%"
+          right: "50%",
         }}
       >
         <h1>Not connected to a kvdb server.</h1>
-        <h1>Go to Connect {'->'} New Connection</h1>
+        <h1>Go to Connect {"->"} New Connection</h1>
       </Box>
     </Box>
   );

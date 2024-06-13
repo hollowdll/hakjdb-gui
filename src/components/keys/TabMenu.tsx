@@ -5,7 +5,7 @@ import StringTabPanel from "./StringTabPanel";
 
 function allyProps() {
   return {
-    sx: {'&:focus': {outline: 'none'}},
+    sx: { "&:focus": { outline: "none" } },
   };
 }
 
@@ -17,7 +17,7 @@ export default function TabMenu() {
   };
 
   return (
-    <Box sx={{width: "100%"}}>
+    <Box sx={{ width: "100%" }}>
       <Box>
         <Tabs value={tabValue} onChange={handleTabChange}>
           <Tab label="General" {...allyProps()} />
@@ -29,5 +29,5 @@ export default function TabMenu() {
       {tabValue === 1 && <StringTabPanel />}
       {tabValue === 2 && <Typography>HashMap</Typography>}
     </Box>
-  )
+  );
 }
