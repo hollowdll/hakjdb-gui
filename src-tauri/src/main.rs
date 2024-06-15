@@ -11,8 +11,9 @@ use app::{
     grpc::GrpcConnection,
     server::{__cmd__get_server_info, __cmd__get_server_logs, get_server_info, get_server_logs},
     storage::{
-        __cmd__delete_all_keys, __cmd__delete_key, __cmd__get_keys, __cmd__get_type_of_key, __cmd__get_string,
-        __cmd__set_string, delete_all_keys, delete_key, get_keys, get_type_of_key, get_string, set_string,
+        __cmd__delete_all_keys, __cmd__delete_key, __cmd__get_keys, __cmd__get_string,
+        __cmd__get_type_of_key, __cmd__set_string, delete_all_keys, delete_key, get_keys,
+        get_string, get_type_of_key, set_string,
     },
 };
 use std::error::Error;
