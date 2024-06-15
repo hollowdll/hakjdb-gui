@@ -2,8 +2,8 @@ use crate::{
     error::NO_CONNECTION_FOUND_MSG,
     grpc::{
         kvdb::{
-            DeleteAllKeysRequest, DeleteKeyRequest, GetKeysRequest, GetStringRequest, GetTypeOfKeyRequest,
-            SetStringRequest,
+            DeleteAllKeysRequest, DeleteKeyRequest, GetKeysRequest, GetStringRequest,
+            GetTypeOfKeyRequest, SetStringRequest,
         },
         GrpcConnection, MD_KEY_DATABASE,
     },
@@ -155,7 +155,9 @@ pub async fn get_type_of_key(
 ) -> Result<GetTypeOfKeyPayload, String> {
     let mut guard = connection.connection.lock().await;
     if let Some(ref mut connection) = *guard {
-        let mut request = tonic::Request::new(GetTypeOfKeyRequest { key: key.to_owned() });
+        let mut request = tonic::Request::new(GetTypeOfKeyRequest {
+            key: key.to_owned(),
+        });
         request
             .metadata_mut()
             .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
@@ -166,7 +168,7 @@ pub async fn get_type_of_key(
                     key_type: response.get_ref().key_type.to_owned(),
                     ok: response.get_ref().ok,
                 });
-            },
+            }
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
