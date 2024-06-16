@@ -4,9 +4,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Button,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useState } from "react";
 import { invokeDeleteAllKeys } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
@@ -39,7 +38,7 @@ export default function DeleteAllKeysDialog(props: DeleteAllKeysDialogProps) {
     setIsLoadingBackdropOpen(true);
     setIsOpen(false);
     invokeDeleteAllKeys(dbToUse)
-      .then((result) => {
+      .then((_result) => {
         props.handleHideContent();
         handleClose();
         props.handleDisplayMsg("OK");
