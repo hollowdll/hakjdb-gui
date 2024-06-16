@@ -137,9 +137,9 @@ export default function GeneralTabPanel() {
         sx={{ marginTop: "20px", marginBottom: "10px" }}
       >
         <FormControl variant="outlined" sx={{ m: 1, minWidth: 200 }}>
-          <InputLabel>Select Command</InputLabel>
+          <InputLabel>Select RPC</InputLabel>
           <Select
-            label="Select Command"
+            label="Select RPC"
             value={selectedItem}
             onChange={handleChange}
             sx={{ backgroundColor: "rgb(250, 250, 250)" }}

@@ -84,13 +84,14 @@ export default function StringTabPanel() {
       >
         <FormControl
           variant="outlined"
-          sx={{ m: 1, minWidth: 200, backgroundColor: "rgb(250, 250, 250)" }}
+          sx={{ m: 1, minWidth: 200 }}
         >
-          <InputLabel>Select Command</InputLabel>
+          <InputLabel>Select RPC</InputLabel>
           <Select
-            label="Select Command"
+            label="Select RPC"
             value={selectedItem}
             onChange={handleChange}
+            sx={{ backgroundColor: "rgb(250, 250, 250)" }}
           >
             <MenuItem value={menuItems.setString}>
               {menuItems.setString}
