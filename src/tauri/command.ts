@@ -3,7 +3,7 @@ import { TauriInvokeCommands } from "../types/tauri";
 import { ConnectionInfo } from "../types/types";
 import { ServerInfo, ServerLogs } from "../types/server";
 import { DatabaseInfo, Databases } from "../types/db";
-import { GetStringPayload } from "../types/storage";
+import { GetStringPayload, GetTypeOfKeyPayload } from "../types/storage";
 
 const tauriInvokeCommands: TauriInvokeCommands = {
   connect: "connect",
@@ -15,6 +15,7 @@ const tauriInvokeCommands: TauriInvokeCommands = {
   createDatabase: "create_database",
   deleteDatabase: "delete_database",
   getKeys: "get_keys",
+  getTypeOfKey: "get_type_of_key",
   deleteKey: "delete_key",
   deleteAllKeys: "delete_all_keys",
   getString: "get_string",
@@ -107,5 +108,15 @@ export const invokeSetString = (
     dbName,
     key,
     value,
+  });
+};
+
+export const invokeGetTypeOfKey = (
+  dbName: string,
+  key: string,
+): Promise<GetTypeOfKeyPayload> => {
+  return invoke<GetTypeOfKeyPayload>(tauriInvokeCommands.getTypeOfKey, {
+    dbName,
+    key,
   });
 };
