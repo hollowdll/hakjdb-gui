@@ -20,6 +20,7 @@ import { useConnectionInfoStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
 import DeleteKeyDialog from "./DeleteKeyDialog";
 import DeleteAllKeysDialog from "./DeleteAllKeysDialog";
+import GetTypeOfKeyDialog from "./GetTypeOfKeyDialog";
 
 type GeneralTabMenuItems = {
   getKeys: string;
@@ -42,6 +43,9 @@ export default function GeneralTabPanel() {
   const [displayedMsg, setDisplayedMsg] = useState("");
   const setIsLoadingBackdropOpen = useLoadingStore(
     (state) => state.setIsLoadingBackdropOpen,
+  );
+  const setIsGetTypeOfKeyDialogOpen = useDialogStore(
+    (state) => state.setIsGetTypeOfKeyDialogOpen,
   );
   const setIsDeleteKeyDialogOpen = useDialogStore(
     (state) => state.setIsDeleteKeyDialogOpen,
@@ -97,7 +101,9 @@ export default function GeneralTabPanel() {
     setIsDeleteKeyDialogOpen(true);
   };
 
-  const handleGetTypeOfKey = () => {};
+  const handleGetTypeOfKey = () => {
+    setIsGetTypeOfKeyDialogOpen(true);
+  };
 
   const handleDisplayMsg = (msg: string) => {
     setDisplayedMsg(msg);
@@ -113,6 +119,10 @@ export default function GeneralTabPanel() {
 
   return (
     <Box>
+      <GetTypeOfKeyDialog
+        handleDisplayMsg={handleDisplayMsg}
+        handleHideContent={handleHideContent}
+      />
       <DeleteKeyDialog
         handleDisplayMsg={handleDisplayMsg}
         handleHideContent={handleHideContent}
@@ -126,15 +136,13 @@ export default function GeneralTabPanel() {
         spacing={2}
         sx={{ marginTop: "20px", marginBottom: "10px" }}
       >
-        <FormControl
-          variant="outlined"
-          sx={{ m: 1, minWidth: 200, backgroundColor: "rgb(250, 250, 250)" }}
-        >
+        <FormControl variant="outlined" sx={{ m: 1, minWidth: 200 }}>
           <InputLabel>Select Command</InputLabel>
           <Select
             label="Select Command"
             value={selectedItem}
             onChange={handleChange}
+            sx={{ backgroundColor: "rgb(250, 250, 250)" }}
           >
             <MenuItem value={menuItems.getKeys}>{menuItems.getKeys}</MenuItem>
             <MenuItem value={menuItems.deleteAllKeys}>
