@@ -16,6 +16,8 @@ This section explains how to build the app from source and run it in development
 
 This app uses Tauri framework and therefore requires you to have a few things. Read Tauri's prerequisites [here](https://tauri.app/v1/guides/getting-started/prerequisites).
 
+You will also need Protobuf compiler. Instructions [here](https://github.com/protocolbuffers/protobuf#protobuf-compiler-installation).
+
 ## Linux
 
 Running the app may vary between Linux distributions.
