@@ -38,7 +38,7 @@ export default function DeleteAllKeysDialog(props: DeleteAllKeysDialogProps) {
     setIsLoadingBackdropOpen(true);
     setIsOpen(false);
     invokeDeleteAllKeys(dbToUse)
-      .then((_result) => {
+      .then(() => {
         props.handleHideContent();
         handleClose();
         props.handleDisplayMsg("OK");

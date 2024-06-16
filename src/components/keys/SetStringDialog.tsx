@@ -58,7 +58,7 @@ export default function SetStringDialog(props: SetStringDialogProps) {
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
     invokeSetString(dbToUse, params.key, params.value)
-      .then((_result) => {
+      .then(() => {
         handleClose();
         props.handleDisplayMsg("OK");
         resetForm();

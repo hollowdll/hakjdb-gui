@@ -36,28 +36,14 @@ export default function DatabaseList() {
 
   const handleAccordionChange =
     (panel: string, dbName: string) =>
-    (_event: SyntheticEvent, isExpanded: boolean) => {
-      if (isExpanded) {
-        setAccordionExpanded(panel);
-        handleGetDatabaseInfo(dbName);
-      } else {
-        setAccordionExpanded(false);
-      }
-    };
-
-  const handleGetAllDatabases = () => {
-    invokeGetAllDatabases()
-      .then((result) => {
-        setDatabases(result.dbNames);
-      })
-      .catch((err) => {
-        setDatabases(null);
-        const newErrorMsg = `Failed to show databases: ${err}`;
-        setErrorMsg(newErrorMsg);
-        errorAlert(newErrorMsg);
-      })
-      .finally(() => setIsLoading(false));
-  };
+      (_event: SyntheticEvent, isExpanded: boolean) => {
+        if (isExpanded) {
+          setAccordionExpanded(panel);
+          handleGetDatabaseInfo(dbName);
+        } else {
+          setAccordionExpanded(false);
+        }
+      };
 
   const handleGetDatabaseInfo = (dbName: string) => {
     console.log("getting db info");
@@ -92,8 +78,21 @@ export default function DatabaseList() {
   }
 
   useEffect(() => {
+    const handleGetAllDatabases = () => {
+      invokeGetAllDatabases()
+        .then((result) => {
+          setDatabases(result.dbNames);
+        })
+        .catch((err) => {
+          setDatabases(null);
+          const newErrorMsg = `Failed to show databases: ${err}`;
+          setErrorMsg(newErrorMsg);
+          errorAlert(newErrorMsg);
+        })
+        .finally(() => setIsLoading(false));
+    };
     handleGetAllDatabases();
-  }, []);
+  }, [setDatabases]);
 
   return (
     <>

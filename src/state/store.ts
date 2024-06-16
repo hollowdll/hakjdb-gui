@@ -86,7 +86,7 @@ export const useLoadingStore = create<LoadingState>((set) => ({
 
 export const useDialogStore = create<DialogState>((set) => ({
   isDeleteKeyDialogOpen: false,
-  isDeleteAllKeysOpen: false,
+  isDeleteAllKeysDialogOpen: false,
   isSetStringDialogOpen: false,
   isGetStringDialogOpen: false,
   setIsDeleteKeyDialogOpen: (isOpen) =>
