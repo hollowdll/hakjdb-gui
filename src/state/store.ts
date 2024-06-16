@@ -37,11 +37,19 @@ interface DialogState {
   isDeleteAllKeysDialogOpen: boolean;
   isSetStringDialogOpen: boolean;
   isGetStringDialogOpen: boolean;
+  isSetHashMapDialogOpen: boolean;
+  isGetHashMapFieldValueDialogOpen: boolean;
+  isGetAllHashMapFieldsAndValuesDialogOpen: boolean;
+  isDeleteHashMapFieldsDialogOpen: boolean;
   setIsGetTypeOfKeyDialogOpen: (isOpen: boolean) => void;
   setIsDeleteKeyDialogOpen: (isOpen: boolean) => void;
   setIsDeleteAllKeysDialogOpen: (isOpen: boolean) => void;
   setIsSetStringDialogOpen: (isOpen: boolean) => void;
   setIsGetStringDialogOpen: (isOpen: boolean) => void;
+  setIsSetHashMapDialogOpen: (isOpen: boolean) => void;
+  setIsGetHashMapFieldValueDialogOpen: (isOpen: boolean) => void;
+  setIsGetAllHashMapFieldsAndValuesDialogOpen: (isOpen: boolean) => void;
+  setIsDeleteHashMapFieldsDialogOpen: (isOpen: boolean) => void;
 }
 
 export const useConnectionInfoStore = create<ConnectionInfoState>((set) => ({
@@ -92,6 +100,10 @@ export const useDialogStore = create<DialogState>((set) => ({
   isDeleteAllKeysDialogOpen: false,
   isSetStringDialogOpen: false,
   isGetStringDialogOpen: false,
+  isSetHashMapDialogOpen: false,
+  isGetHashMapFieldValueDialogOpen: false,
+  isGetAllHashMapFieldsAndValuesDialogOpen: false,
+  isDeleteHashMapFieldsDialogOpen: false,
   setIsGetTypeOfKeyDialogOpen: (isOpen) =>
     set(() => ({ isGetTypeOfKeyDialogOpen: isOpen })),
   setIsDeleteKeyDialogOpen: (isOpen) =>
@@ -102,4 +114,12 @@ export const useDialogStore = create<DialogState>((set) => ({
     set(() => ({ isSetStringDialogOpen: isOpen })),
   setIsGetStringDialogOpen: (isOpen) =>
     set(() => ({ isGetStringDialogOpen: isOpen })),
+  setIsSetHashMapDialogOpen: (isOpen) =>
+    set(() => ({ isSetHashMapDialogOpen: isOpen })),
+  setIsGetHashMapFieldValueDialogOpen: (isOpen) =>
+    set(() => ({ isGetHashMapFieldValueDialogOpen: isOpen })),
+  setIsGetAllHashMapFieldsAndValuesDialogOpen: (isOpen) =>
+    set(() => ({ isGetAllHashMapFieldsAndValuesDialogOpen: isOpen })),
+  setIsDeleteHashMapFieldsDialogOpen: (isOpen) =>
+    set(() => ({ isDeleteHashMapFieldsDialogOpen: isOpen })),
 }));
