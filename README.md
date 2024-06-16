@@ -1,30 +1,49 @@
-# React + TypeScript + Vite
+# Overview
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+kvdb-gui is a cross-platform GUI desktop application for [kvdb](https://github.com/hollowdll/kvdb) in-memory key-value store project.
 
-Currently, two official plugins are available:
+It allows you to manage kvdb servers visually with a graphical user interface. It is an alternative tool for the kvdb CLI tool.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+kvdb-cli is a CLI tool for kvdb that allows you to manage kvdb servers from the command line. kvdb-gui is more user friendly for people who are not familiar with the command line, allowing you to manage kvdb servers by clicking buttons and filling forms.
 
-## Expanding the ESLint configuration
+NOTE: This project is in early development.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+# Build
 
-- Configure the top-level `parserOptions` property like this:
+This section explains how to build the app from source and run it in development mode. Only Windows and Linux are tested.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## Prerequisites
+
+Coming soon.
+
+## Linux
+
+Running the app may vary between Linux distributions.
+
+In some cases you might need to set the following environment variable
+```sh
+export WEBKIT_DISABLE_COMPOSITING_MODE=1
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Install
+
+Clone with git
+```sh
+git clone https://github.com/hollowdll/kvdb-gui.git
+```
+
+Go to the directory depending on where you cloned it
+```sh
+cd kvdb-gui
+```
+
+Install node dependencies
+```sh
+npm i
+```
+
+Run the app. This will compile the Rust crates and therefore may take some time.
+```sh
+npm run tauri dev
+```
+
