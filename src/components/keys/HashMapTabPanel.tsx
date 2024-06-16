@@ -15,45 +15,60 @@ import { useDialogStore } from "../../state/store";
 import SetStringDialog from "./SetStringDialog";
 import GetStringDialog from "./GetStringDialog";
 
-type StringTabMenuItems = {
-  setString: string;
-  getString: string;
+type HashMapTabMenuItems = {
+  setHashMap: string;
+  getHashMapFieldValue: string;
+  getAllHashMapFieldsAndValues: string;
+  deleteHashMapFields: string;
 };
 
-const menuItems: StringTabMenuItems = {
-  setString: "SetString",
-  getString: "GetString",
+const menuItems: HashMapTabMenuItems = {
+  setHashMap: "SetHashMap",
+  getHashMapFieldValue: "GetHashMapFieldValue",
+  getAllHashMapFieldsAndValues: "GetAllHashMapFieldsAndValues",
+  deleteHashMapFields: "DeleteHashMapFields",
 };
 
-export default function StringTabPanel() {
+export default function HashMapTabPanel() {
   const [selectedItem, setSelectedItem] = useState("");
   const [isContentDisplayed, setIsContentDisplayed] = useState(false);
   const [displayedMsg, setDisplayedMsg] = useState("");
-  const setIsSetStringDialogOpen = useDialogStore(
-    (state) => state.setIsSetStringDialogOpen,
+  /*
+  const setIsSetHashMapDialogOpen = useDialogStore(
+    (state) => state.setIsSetHashMapDialogOpen,
   );
-  const setIsGetStringDialogOpen = useDialogStore(
-    (state) => state.setIsGetStringDialogOpen,
-  );
+  */
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedItem(event.target.value as string);
   };
 
-  const handleSetString = () => {
-    setIsSetStringDialogOpen(true);
+  const handleSetHashMap = () => {
+    // setIsSetHashMapDialogOpen(true);
   };
 
-  const handleGetString = () => {
-    setIsGetStringDialogOpen(true);
+  const handleGetHashMapFieldValue = () => {
+    // setIsGetHashMapFieldValueDialogOpen(true);
+  };
+
+  const handleGetAllHashMapFieldsAndValues = () => {
+    // setIsGetAllHashMapFieldsAndValuesDialogOpen(true);
+  };
+
+  const handleDeleteHashMapFields = () => {
+    // setIsDeleteHashMapFieldsDialogOpen(true);
   };
 
   const handleRunCommand = () => {
     switch (selectedItem) {
-      case menuItems.setString:
-        return handleSetString();
-      case menuItems.getString:
-        return handleGetString();
+      case menuItems.setHashMap:
+        return handleSetHashMap();
+      case menuItems.getHashMapFieldValue:
+        return handleGetHashMapFieldValue();
+      case menuItems.getAllHashMapFieldsAndValues:
+        return handleGetAllHashMapFieldsAndValues();
+      case menuItems.deleteHashMapFields:
+        return handleDeleteHashMapFields();
     }
   };
 
@@ -69,14 +84,6 @@ export default function StringTabPanel() {
 
   return (
     <Box>
-      <SetStringDialog
-        handleDisplayMsg={handleDisplayMsg}
-        handleHideContent={handleHideContent}
-      />
-      <GetStringDialog
-        handleDisplayMsg={handleDisplayMsg}
-        handleHideContent={handleHideContent}
-      />
       <Stack
         direction="row"
         spacing={2}
@@ -90,11 +97,17 @@ export default function StringTabPanel() {
             onChange={handleChange}
             sx={{ backgroundColor: "rgb(250, 250, 250)" }}
           >
-            <MenuItem value={menuItems.setString}>
-              {menuItems.setString}
+            <MenuItem value={menuItems.setHashMap}>
+              {menuItems.setHashMap}
             </MenuItem>
-            <MenuItem value={menuItems.getString}>
-              {menuItems.getString}
+            <MenuItem value={menuItems.getHashMapFieldValue}>
+              {menuItems.getHashMapFieldValue}
+            </MenuItem>
+            <MenuItem value={menuItems.getAllHashMapFieldsAndValues}>
+              {menuItems.getAllHashMapFieldsAndValues}
+            </MenuItem>
+            <MenuItem value={menuItems.deleteHashMapFields}>
+              {menuItems.deleteHashMapFields}
             </MenuItem>
           </Select>
         </FormControl>
