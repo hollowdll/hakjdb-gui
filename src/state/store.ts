@@ -32,10 +32,12 @@ interface LoadingState {
 }
 
 interface DialogState {
+  isGetTypeOfKeyDialogOpen: boolean;
   isDeleteKeyDialogOpen: boolean;
   isDeleteAllKeysDialogOpen: boolean;
   isSetStringDialogOpen: boolean;
   isGetStringDialogOpen: boolean;
+  setIsGetTypeOfKeyDialogOpen: (isOpen: boolean) => void;
   setIsDeleteKeyDialogOpen: (isOpen: boolean) => void;
   setIsDeleteAllKeysDialogOpen: (isOpen: boolean) => void;
   setIsSetStringDialogOpen: (isOpen: boolean) => void;
@@ -85,10 +87,13 @@ export const useLoadingStore = create<LoadingState>((set) => ({
 }));
 
 export const useDialogStore = create<DialogState>((set) => ({
+  isGetTypeOfKeyDialogOpen: false,
   isDeleteKeyDialogOpen: false,
   isDeleteAllKeysDialogOpen: false,
   isSetStringDialogOpen: false,
   isGetStringDialogOpen: false,
+  setIsGetTypeOfKeyDialogOpen: (isOpen) =>
+    set(() => ({ isGetTypeOfKeyDialogOpen: isOpen })),
   setIsDeleteKeyDialogOpen: (isOpen) =>
     set(() => ({ isDeleteKeyDialogOpen: isOpen })),
   setIsDeleteAllKeysDialogOpen: (isOpen) =>
