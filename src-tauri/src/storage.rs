@@ -3,12 +3,13 @@ use crate::{
     grpc::{
         kvdb::{
             DeleteAllKeysRequest, DeleteKeyRequest, GetKeysRequest, GetStringRequest,
-            GetTypeOfKeyRequest, SetStringRequest,
+            GetTypeOfKeyRequest, SetHashMapRequest, SetStringRequest,
         },
         GrpcConnection, MD_KEY_DATABASE,
     },
 };
 use serde::Serialize;
+use std::collections::HashMap;
 use tauri::State;
 
 #[derive(Serialize)]
@@ -168,6 +169,34 @@ pub async fn get_type_of_key(
                     key_type: response.get_ref().key_type.to_owned(),
                     ok: response.get_ref().ok,
                 });
+            }
+            Err(err) => return Err(format!("{}", err)),
+        }
+    } else {
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
+    }
+}
+
+#[tauri::command]
+pub async fn set_hashmap(
+    connection: State<'_, GrpcConnection>,
+    db_name: &str,
+    key: &str,
+    field_value_map: HashMap<String, String>,
+) -> Result<u32, String> {
+    let mut guard = connection.connection.lock().await;
+    if let Some(ref mut connection) = *guard {
+        let mut request = tonic::Request::new(SetHashMapRequest {
+            key: key.to_owned(),
+            fields: field_value_map,
+        });
+        request
+            .metadata_mut()
+            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        let response = connection.storage_client.set_hash_map(request).await;
+        match response {
+            Ok(response) => {
+                return Ok(response.get_ref().fields_added);
             }
             Err(err) => return Err(format!("{}", err)),
         }
