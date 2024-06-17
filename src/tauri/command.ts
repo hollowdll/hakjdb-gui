@@ -124,10 +124,12 @@ export const invokeGetTypeOfKey = (
 
 export const invokeSetHashMap = (
   dbName: string,
+  key: string,
   fieldValueMap: Record<string, string>,
 ): Promise<number> => {
   return invoke<number>(tauriInvokeCommands.setHashMap, {
     dbName,
+    key,
     fieldValueMap,
   });
 };

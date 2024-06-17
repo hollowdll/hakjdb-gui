@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
 import { useState, SyntheticEvent } from "react";
 import GeneralTabPanel from "./GeneralTabPanel";
 import StringTabPanel from "./StringTabPanel";

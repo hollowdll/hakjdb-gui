@@ -12,8 +12,7 @@ import {
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
 import { useDialogStore } from "../../state/store";
-import SetStringDialog from "./SetStringDialog";
-import GetStringDialog from "./GetStringDialog";
+import SetHashMapDialog from "./SetHashMapDialog";
 
 type HashMapTabMenuItems = {
   setHashMap: string;
@@ -33,18 +32,16 @@ export default function HashMapTabPanel() {
   const [selectedItem, setSelectedItem] = useState("");
   const [isContentDisplayed, setIsContentDisplayed] = useState(false);
   const [displayedMsg, setDisplayedMsg] = useState("");
-  /*
   const setIsSetHashMapDialogOpen = useDialogStore(
     (state) => state.setIsSetHashMapDialogOpen,
   );
-  */
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedItem(event.target.value as string);
   };
 
   const handleSetHashMap = () => {
-    // setIsSetHashMapDialogOpen(true);
+    setIsSetHashMapDialogOpen(true);
   };
 
   const handleGetHashMapFieldValue = () => {
@@ -84,6 +81,10 @@ export default function HashMapTabPanel() {
 
   return (
     <Box>
+      <SetHashMapDialog
+        handleDisplayMsg={handleDisplayMsg}
+        handleHideContent={handleHideContent}
+      />
       <Stack
         direction="row"
         spacing={2}
