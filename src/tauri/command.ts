@@ -20,6 +20,7 @@ const tauriInvokeCommands: TauriInvokeCommands = {
   deleteAllKeys: "delete_all_keys",
   getString: "get_string",
   setString: "set_string",
+  setHashMap: "set_hashmap",
 };
 
 export const invokeConnect = (
@@ -118,5 +119,15 @@ export const invokeGetTypeOfKey = (
   return invoke<GetTypeOfKeyPayload>(tauriInvokeCommands.getTypeOfKey, {
     dbName,
     key,
+  });
+};
+
+export const invokeSetHashMap = (
+  dbName: string,
+  fieldValueMap: Record<string, string>,
+): Promise<number> => {
+  return invoke<number>(tauriInvokeCommands.setHashMap, {
+    dbName,
+    fieldValueMap,
   });
 };

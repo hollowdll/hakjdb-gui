@@ -13,6 +13,7 @@ export type TauriInvokeCommands = {
   deleteAllKeys: string;
   getString: string;
   setString: string;
+  setHashMap: string;
 };
 
 export type TauriListenEvents = {
