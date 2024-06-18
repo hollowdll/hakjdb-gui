@@ -37,7 +37,9 @@ type FieldValuePair = {
 export default function SetHashMapDialog(props: SetHashMapDialogProps) {
   const [errorMsg, setErrorMsg] = useState("");
   const [keyToUse, setKeyToUse] = useState("");
-  const [fieldsToSet, setFieldsToSet] = useState<FieldValuePair[]>([{ field: "", value: "" }]);
+  const [fieldsToSet, setFieldsToSet] = useState<FieldValuePair[]>([
+    { field: "", value: "" },
+  ]);
   const setIsLoadingBackdropOpen = useLoadingStore(
     (state) => state.setIsLoadingBackdropOpen,
   );
@@ -83,7 +85,7 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
   const fieldChanged = (index: number, newField: string) => {
     setFieldsToSet((prevItems) => {
       const updatedItems = [...prevItems];
-      updatedItems[index].field = newField
+      updatedItems[index].field = newField;
       return updatedItems;
     });
   };
@@ -95,7 +97,6 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
       return updatedItems;
     });
   };
-
 
   const handleAddNewFieldValuePair = () => {
     setFieldsToSet((prevItems) => [...prevItems, { field: "", value: "" }]);
@@ -113,9 +114,9 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>SetHashMap</DialogTitle>
       <DialogContent>
-        <DialogContentText {...allyPropsDialogContentText()}>
-
-        </DialogContentText>
+        <DialogContentText
+          {...allyPropsDialogContentText()}
+        ></DialogContentText>
         <TextField
           label="Key"
           name="key"
@@ -124,27 +125,16 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
           {...allyPropsDialogTextField()}
         />
         {fieldsToSet.map((item, index) => (
-          <>
+          <Box
+            sx={{ marginTop: "15px", display: "flex", alignItems: "center" }}
+          >
             <TextField
               key={index}
               label="Field"
               name="field"
               value={item.field}
               onChange={(event) => fieldChanged(index, event.target.value)}
-              {...allyPropsDialogTextField()}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleRemoveFieldValuePair(index)}
-                      sx={{ "&:focus": { outline: "none" } }}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
+              sx={{ marginRight: "10px" }}
             />
             <TextField
               key={index}
@@ -152,9 +142,14 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
               name="value"
               value={item.value}
               onChange={(event) => valueChanged(index, event.target.value)}
-              {...allyPropsDialogTextField()}
             />
-          </>
+            <IconButton
+              onClick={() => handleRemoveFieldValuePair(index)}
+              sx={{ "&:focus": { outline: "none" } }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
         ))}
         <Button
           variant="contained"
@@ -165,7 +160,7 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
           New Field
         </Button>
       </DialogContent>
-      <Box sx={{ marginLeft: "25px", marginBottom: "10px" }}>
+      <Box sx={{ marginLeft: "25px", marginRight: "25px", marginBottom: "10px" }}>
         {errorMsg !== "" ? (
           <Typography sx={{ marginTop: "15px" }}>{errorMsg}</Typography>
         ) : (
