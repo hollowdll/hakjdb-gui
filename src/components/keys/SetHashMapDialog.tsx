@@ -160,7 +160,9 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
           New Field
         </Button>
       </DialogContent>
-      <Box sx={{ marginLeft: "25px", marginRight: "25px", marginBottom: "10px" }}>
+      <Box
+        sx={{ marginLeft: "25px", marginRight: "25px", marginBottom: "10px" }}
+      >
         {errorMsg !== "" ? (
           <Typography sx={{ marginTop: "15px" }}>{errorMsg}</Typography>
         ) : (
