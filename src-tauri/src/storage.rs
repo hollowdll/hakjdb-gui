@@ -2,8 +2,9 @@ use crate::{
     error::NO_CONNECTION_FOUND_MSG,
     grpc::{
         kvdb::{
-            DeleteAllKeysRequest, DeleteKeyRequest, GetKeysRequest, GetStringRequest,
-            GetTypeOfKeyRequest, SetHashMapRequest, SetStringRequest,
+            DeleteAllKeysRequest, DeleteKeyRequest, GetAllHashMapFieldsAndValuesRequest,
+            GetKeysRequest, GetStringRequest, GetTypeOfKeyRequest, SetHashMapRequest,
+            SetStringRequest,
         },
         GrpcConnection, MD_KEY_DATABASE,
     },
@@ -22,6 +23,13 @@ pub struct GetStringPayload {
 pub struct GetTypeOfKeyPayload {
     #[serde(rename = "keyType")]
     pub key_type: String,
+    pub ok: bool,
+}
+
+#[derive(Serialize)]
+pub struct GetAllHashMapFieldsAndValuesPayload {
+    #[serde(rename = "fieldValueMap")]
+    pub field_value_map: HashMap<String, String>,
     pub ok: bool,
 }
 
@@ -197,6 +205,38 @@ pub async fn set_hashmap(
         match response {
             Ok(response) => {
                 return Ok(response.get_ref().fields_added);
+            }
+            Err(err) => return Err(format!("{}", err)),
+        }
+    } else {
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
+    }
+}
+
+#[tauri::command]
+pub async fn get_all_hashmap_fields_and_values(
+    connection: State<'_, GrpcConnection>,
+    db_name: &str,
+    key: &str,
+) -> Result<GetAllHashMapFieldsAndValuesPayload, String> {
+    let mut guard = connection.connection.lock().await;
+    if let Some(ref mut connection) = *guard {
+        let mut request = tonic::Request::new(GetAllHashMapFieldsAndValuesRequest {
+            key: key.to_owned(),
+        });
+        request
+            .metadata_mut()
+            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        let response = connection
+            .storage_client
+            .get_all_hash_map_fields_and_values(request)
+            .await;
+        match response {
+            Ok(response) => {
+                return Ok(GetAllHashMapFieldsAndValuesPayload {
+                    field_value_map: response.get_ref().field_value_map.clone(),
+                    ok: response.get_ref().ok,
+                });
             }
             Err(err) => return Err(format!("{}", err)),
         }
