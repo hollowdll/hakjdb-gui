@@ -1,9 +1,14 @@
-export interface GetStringPayload {
+export type GetStringPayload = {
   value: string;
   ok: boolean;
-}
+};
 
-export interface GetTypeOfKeyPayload {
+export type GetTypeOfKeyPayload = {
   keyType: string;
   ok: boolean;
-}
+};
+
+export type GetAllHashMapFieldsAndValuesPayload = {
+  fieldValueMap: Record<string, string>;
+  ok: boolean;
+};

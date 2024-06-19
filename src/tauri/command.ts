@@ -3,7 +3,11 @@ import { TauriInvokeCommands } from "../types/tauri";
 import { ConnectionInfo } from "../types/types";
 import { ServerInfo, ServerLogs } from "../types/server";
 import { DatabaseInfo, Databases } from "../types/db";
-import { GetStringPayload, GetTypeOfKeyPayload } from "../types/storage";
+import {
+  GetAllHashMapFieldsAndValuesPayload,
+  GetStringPayload,
+  GetTypeOfKeyPayload,
+} from "../types/storage";
 
 const tauriInvokeCommands: TauriInvokeCommands = {
   connect: "connect",
@@ -21,6 +25,7 @@ const tauriInvokeCommands: TauriInvokeCommands = {
   getString: "get_string",
   setString: "set_string",
   setHashMap: "set_hashmap",
+  getAllHashMapFieldsAndValues: "get_all_hashmap_fields_and_values",
 };
 
 export const invokeConnect = (
@@ -132,4 +137,17 @@ export const invokeSetHashMap = (
     key,
     fieldValueMap,
   });
+};
+
+export const invokeGetAllHashMapFieldsAndValues = (
+  dbName: string,
+  key: string,
+): Promise<GetAllHashMapFieldsAndValuesPayload> => {
+  return invoke<GetAllHashMapFieldsAndValuesPayload>(
+    tauriInvokeCommands.getAllHashMapFieldsAndValues,
+    {
+      dbName,
+      key,
+    },
+  );
 };
