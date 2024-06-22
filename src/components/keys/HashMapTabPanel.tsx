@@ -8,11 +8,14 @@ import {
   SelectChangeEvent,
   Stack,
   Typography,
+  List,
+  ListItem,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
 import { useDialogStore } from "../../state/store";
 import SetHashMapDialog from "./SetHashMapDialog";
+import GetAllHashMapFieldsAndValuesDialog from "./GetAllHashMapFieldsAndValuesDialog";
 
 type HashMapTabMenuItems = {
   setHashMap: string;
@@ -32,8 +35,15 @@ export default function HashMapTabPanel() {
   const [selectedItem, setSelectedItem] = useState("");
   const [isContentDisplayed, setIsContentDisplayed] = useState(false);
   const [displayedMsg, setDisplayedMsg] = useState("");
+  const [displayedHashMap, setDisplayedHashMap] = useState<Record<
+    string,
+    string
+  > | null>(null);
   const setIsSetHashMapDialogOpen = useDialogStore(
     (state) => state.setIsSetHashMapDialogOpen,
+  );
+  const setIsGetAllHashMapFieldsAndValuesDialogOpen = useDialogStore(
+    (state) => state.setIsGetAllHashMapFieldsAndValuesDialogOpen,
   );
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -49,7 +59,7 @@ export default function HashMapTabPanel() {
   };
 
   const handleGetAllHashMapFieldsAndValues = () => {
-    // setIsGetAllHashMapFieldsAndValuesDialogOpen(true);
+    setIsGetAllHashMapFieldsAndValuesDialogOpen(true);
   };
 
   const handleDeleteHashMapFields = () => {
@@ -71,11 +81,19 @@ export default function HashMapTabPanel() {
 
   const handleDisplayMsg = (msg: string) => {
     setDisplayedMsg(msg);
+    setDisplayedHashMap(null);
+    setIsContentDisplayed(true);
+  };
+
+  const handleDisplayHashMap = (hashMap: Record<string, string>) => {
+    setDisplayedHashMap(hashMap);
+    setDisplayedMsg("");
     setIsContentDisplayed(true);
   };
 
   const handleHideContent = () => {
     setDisplayedMsg("");
+    setDisplayedHashMap(null);
     setIsContentDisplayed(false);
   };
 
@@ -83,6 +101,11 @@ export default function HashMapTabPanel() {
     <Box>
       <SetHashMapDialog
         handleDisplayMsg={handleDisplayMsg}
+        handleHideContent={handleHideContent}
+      />
+      <GetAllHashMapFieldsAndValuesDialog
+        handleDisplayMsg={handleDisplayMsg}
+        handleDisplayHashMap={handleDisplayHashMap}
         handleHideContent={handleHideContent}
       />
       <Stack
@@ -128,7 +151,30 @@ export default function HashMapTabPanel() {
             width: "100%",
           }}
         >
-          {displayedMsg !== "" ? (
+          {displayedHashMap && Object.keys(displayedHashMap).length > 0 ? (
+            <List>
+              {Object.entries(displayedHashMap).map(([field, value], index) => (
+                <ListItem
+                  key={index}
+                  disablePadding
+                  sx={{
+                    display: "flex",
+                    justifyContent: "start",
+                    alignItems: "start",
+                  }}
+                >
+                  <Typography
+                    sx={{ color: "text.secondary", marginRight: "20px" }}
+                  >
+                    {index + 1})
+                  </Typography>
+                  <Typography sx={{ wordBreak: "break-word" }}>
+                    "{field}": "{value}"
+                  </Typography>
+                </ListItem>
+              ))}
+            </List>
+          ) : displayedMsg !== "" ? (
             <Typography>{displayedMsg}</Typography>
           ) : (
             <></>
