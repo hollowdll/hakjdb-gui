@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useDialogStore } from "../../state/store";
 import SetHashMapDialog from "./SetHashMapDialog";
 import GetAllHashMapFieldsAndValuesDialog from "./GetAllHashMapFieldsAndValuesDialog";
+import DeleteHashMapFieldsDialog from "./DeleteHashMapFieldsDialog";
 
 type HashMapTabMenuItems = {
   setHashMap: string;
@@ -45,8 +46,11 @@ export default function HashMapTabPanel() {
   const setIsGetAllHashMapFieldsAndValuesDialogOpen = useDialogStore(
     (state) => state.setIsGetAllHashMapFieldsAndValuesDialogOpen,
   );
+  const setIsDeleteHashMapFieldsDialogOpen = useDialogStore(
+    (state) => state.setIsDeleteHashMapFieldsDialogOpen,
+  );
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleSelectedItemChange = (event: SelectChangeEvent) => {
     setSelectedItem(event.target.value as string);
   };
 
@@ -63,7 +67,7 @@ export default function HashMapTabPanel() {
   };
 
   const handleDeleteHashMapFields = () => {
-    // setIsDeleteHashMapFieldsDialogOpen(true);
+    setIsDeleteHashMapFieldsDialogOpen(true);
   };
 
   const handleRunCommand = () => {
@@ -108,6 +112,10 @@ export default function HashMapTabPanel() {
         handleDisplayHashMap={handleDisplayHashMap}
         handleHideContent={handleHideContent}
       />
+      <DeleteHashMapFieldsDialog
+        handleDisplayMsg={handleDisplayMsg}
+        handleHideContent={handleHideContent}
+      />
       <Stack
         direction="row"
         spacing={2}
@@ -118,7 +126,7 @@ export default function HashMapTabPanel() {
           <Select
             label="Select RPC"
             value={selectedItem}
-            onChange={handleChange}
+            onChange={handleSelectedItemChange}
             sx={{ backgroundColor: "rgb(250, 250, 250)" }}
           >
             <MenuItem value={menuItems.setHashMap}>
