@@ -2,9 +2,9 @@ use crate::{
     error::NO_CONNECTION_FOUND_MSG,
     grpc::{
         kvdb::{
-            DeleteAllKeysRequest, DeleteKeyRequest, GetAllHashMapFieldsAndValuesRequest,
-            GetKeysRequest, GetStringRequest, GetTypeOfKeyRequest, SetHashMapRequest,
-            SetStringRequest,
+            DeleteAllKeysRequest, DeleteHashMapFieldsRequest, DeleteKeyRequest,
+            GetAllHashMapFieldsAndValuesRequest, GetKeysRequest, GetStringRequest,
+            GetTypeOfKeyRequest, SetHashMapRequest, SetStringRequest,
         },
         GrpcConnection, MD_KEY_DATABASE,
     },
@@ -30,6 +30,13 @@ pub struct GetTypeOfKeyPayload {
 pub struct GetAllHashMapFieldsAndValuesPayload {
     #[serde(rename = "fieldValueMap")]
     pub field_value_map: HashMap<String, String>,
+    pub ok: bool,
+}
+
+#[derive(Serialize)]
+pub struct DeleteHashMapFieldsPayload {
+    #[serde(rename = "fieldsRemoved")]
+    pub fields_removed: u32,
     pub ok: bool,
 }
 
@@ -235,6 +242,40 @@ pub async fn get_all_hashmap_fields_and_values(
             Ok(response) => {
                 return Ok(GetAllHashMapFieldsAndValuesPayload {
                     field_value_map: response.get_ref().field_value_map.clone(),
+                    ok: response.get_ref().ok,
+                });
+            }
+            Err(err) => return Err(format!("{}", err)),
+        }
+    } else {
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
+    }
+}
+
+#[tauri::command]
+pub async fn delete_hashmap_fields(
+    connection: State<'_, GrpcConnection>,
+    db_name: &str,
+    key: &str,
+    fields: Vec<String>,
+) -> Result<DeleteHashMapFieldsPayload, String> {
+    let mut guard = connection.connection.lock().await;
+    if let Some(ref mut connection) = *guard {
+        let mut request = tonic::Request::new(DeleteHashMapFieldsRequest {
+            key: key.to_owned(),
+            fields,
+        });
+        request
+            .metadata_mut()
+            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        let response = connection
+            .storage_client
+            .delete_hash_map_fields(request)
+            .await;
+        match response {
+            Ok(response) => {
+                return Ok(DeleteHashMapFieldsPayload {
+                    fields_removed: response.get_ref().fields_removed,
                     ok: response.get_ref().ok,
                 });
             }
