@@ -3,8 +3,8 @@ use crate::{
     grpc::{
         kvdb::{
             DeleteAllKeysRequest, DeleteHashMapFieldsRequest, DeleteKeyRequest,
-            GetAllHashMapFieldsAndValuesRequest, GetKeysRequest, GetStringRequest,
-            GetTypeOfKeyRequest, SetHashMapRequest, SetStringRequest,
+            GetAllHashMapFieldsAndValuesRequest, GetHashMapFieldValueRequest, GetKeysRequest,
+            GetStringRequest, GetTypeOfKeyRequest, SetHashMapRequest, SetStringRequest,
         },
         GrpcConnection, MD_KEY_DATABASE,
     },
@@ -37,6 +37,19 @@ pub struct GetAllHashMapFieldsAndValuesPayload {
 pub struct DeleteHashMapFieldsPayload {
     #[serde(rename = "fieldsRemoved")]
     pub fields_removed: u32,
+    pub ok: bool,
+}
+
+#[derive(Serialize)]
+pub struct HashMapFieldValuePayload {
+    pub value: String,
+    pub ok: bool,
+}
+
+#[derive(Serialize)]
+pub struct GetHashMapFieldValuePayload {
+    #[serde(rename = "fieldValueMap")]
+    pub field_value_map: HashMap<String, HashMapFieldValuePayload>,
     pub ok: bool,
 }
 
@@ -276,6 +289,51 @@ pub async fn delete_hashmap_fields(
             Ok(response) => {
                 return Ok(DeleteHashMapFieldsPayload {
                     fields_removed: response.get_ref().fields_removed,
+                    ok: response.get_ref().ok,
+                });
+            }
+            Err(err) => return Err(format!("{}", err)),
+        }
+    } else {
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
+    }
+}
+
+#[tauri::command]
+pub async fn get_hashmap_field_value(
+    connection: State<'_, GrpcConnection>,
+    db_name: &str,
+    key: &str,
+    fields: Vec<String>,
+) -> Result<GetHashMapFieldValuePayload, String> {
+    let mut guard = connection.connection.lock().await;
+    if let Some(ref mut connection) = *guard {
+        let mut request = tonic::Request::new(GetHashMapFieldValueRequest {
+            key: key.to_owned(),
+            fields,
+        });
+        request
+            .metadata_mut()
+            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        let response = connection
+            .storage_client
+            .get_hash_map_field_value(request)
+            .await;
+        match response {
+            Ok(response) => {
+                let mut field_values: HashMap<String, HashMapFieldValuePayload> = HashMap::new();
+                for (field, value) in response.get_ref().field_value_map.iter() {
+                    field_values.insert(
+                        field.to_owned(),
+                        HashMapFieldValuePayload {
+                            value: value.value.clone(),
+                            ok: value.ok,
+                        },
+                    );
+                }
+
+                return Ok(GetHashMapFieldValuePayload {
+                    field_value_map: field_values,
                     ok: response.get_ref().ok,
                 });
             }
