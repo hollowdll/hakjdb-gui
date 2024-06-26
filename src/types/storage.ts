@@ -17,3 +17,13 @@ export type DeleteHashMapFieldsPayload = {
   fieldsRemoved: number;
   ok: boolean;
 };
+
+export type HashMapFieldValue = {
+  value: string;
+  ok: boolean;
+};
+
+export type GetHashMapFieldValuePayload = {
+  fieldValueMap: Record<string, HashMapFieldValue>;
+  ok: boolean;
+};

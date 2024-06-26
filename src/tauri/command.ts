@@ -8,6 +8,7 @@ import {
   GetStringPayload,
   GetTypeOfKeyPayload,
   DeleteHashMapFieldsPayload,
+  GetHashMapFieldValuePayload,
 } from "../types/storage";
 
 const tauriInvokeCommands: TauriInvokeCommands = {
@@ -28,6 +29,7 @@ const tauriInvokeCommands: TauriInvokeCommands = {
   setHashMap: "set_hashmap",
   getAllHashMapFieldsAndValues: "get_all_hashmap_fields_and_values",
   deleteHashMapFields: "delete_hashmap_fields",
+  getHashMapFieldValue: "get_hashmap_field_value",
 };
 
 export const invokeConnect = (
@@ -161,6 +163,21 @@ export const invokeDeleteHashMapFields = (
 ): Promise<DeleteHashMapFieldsPayload> => {
   return invoke<DeleteHashMapFieldsPayload>(
     tauriInvokeCommands.deleteHashMapFields,
+    {
+      dbName,
+      key,
+      fields,
+    },
+  );
+};
+
+export const invokeGetHashMapFieldValue = (
+  dbName: string,
+  key: string,
+  fields: string[],
+): Promise<GetHashMapFieldValuePayload> => {
+  return invoke<GetHashMapFieldValuePayload>(
+    tauriInvokeCommands.getHashMapFieldValue,
     {
       dbName,
       key,
