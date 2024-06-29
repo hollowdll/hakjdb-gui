@@ -17,6 +17,7 @@ import { useDialogStore } from "../../state/store";
 import SetHashMapDialog from "./SetHashMapDialog";
 import GetAllHashMapFieldsAndValuesDialog from "./GetAllHashMapFieldsAndValuesDialog";
 import DeleteHashMapFieldsDialog from "./DeleteHashMapFieldsDialog";
+import GetHashMapFieldValueDialog from "./GetHashMapFieldValueDialog";
 
 type HashMapTabMenuItems = {
   setHashMap: string;
@@ -49,6 +50,9 @@ export default function HashMapTabPanel() {
   const setIsDeleteHashMapFieldsDialogOpen = useDialogStore(
     (state) => state.setIsDeleteHashMapFieldsDialogOpen,
   );
+  const setIsGetHashMapFieldValueDialogOpen = useDialogStore(
+    (state) => state.setIsGetHashMapFieldValueDialogOpen,
+  );
 
   const handleSelectedItemChange = (event: SelectChangeEvent) => {
     setSelectedItem(event.target.value as string);
@@ -59,7 +63,7 @@ export default function HashMapTabPanel() {
   };
 
   const handleGetHashMapFieldValue = () => {
-    // setIsGetHashMapFieldValueDialogOpen(true);
+    setIsGetHashMapFieldValueDialogOpen(true);
   };
 
   const handleGetAllHashMapFieldsAndValues = () => {
@@ -114,6 +118,11 @@ export default function HashMapTabPanel() {
       />
       <DeleteHashMapFieldsDialog
         handleDisplayMsg={handleDisplayMsg}
+        handleHideContent={handleHideContent}
+      />
+      <GetHashMapFieldValueDialog
+        handleDisplayMsg={handleDisplayMsg}
+        handleDisplayHashMap={handleDisplayHashMap}
         handleHideContent={handleHideContent}
       />
       <Stack
