@@ -186,7 +186,7 @@ export default function HashMapTabPanel() {
                     {index + 1})
                   </Typography>
                   <Typography sx={{ wordBreak: "break-word" }}>
-                    "{field}": "{value}"
+                    "{field}": {value}
                   </Typography>
                 </ListItem>
               ))}

@@ -57,9 +57,15 @@ export default function GetAllHashMapFieldsAndValuesDialog(
       .then((result) => {
         handleClose();
         if (result.ok) {
-          Object.keys(result.fieldValueMap).length > 0
-            ? props.handleDisplayHashMap(result.fieldValueMap)
-            : props.handleDisplayMsg("HashMap is empty");
+          const fieldValueMap = Object.entries(result.fieldValueMap);
+          if (fieldValueMap.length > 0) {
+            for (const [field, value] of fieldValueMap) {
+              result.fieldValueMap[field] = `"${value}"`;
+            }
+            props.handleDisplayHashMap(result.fieldValueMap);
+          } else {
+            props.handleDisplayMsg("HashMap is empty");
+          }
         } else {
           props.handleDisplayMsg("Key does not exist");
         }
