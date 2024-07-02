@@ -11,6 +11,8 @@ pub mod kvdb {
 
 /// gRPC request metadata key. The value for this key specifies the database to use.
 pub const MD_KEY_DATABASE: &str = "database";
+/// gRPC request metadata key. The value for this key specifies the server password to use.
+pub const MD_KEY_PASSWORD: &str = "password";
 
 pub struct GrpcClient {
     pub server_client: ServerServiceClient<Channel>,
@@ -42,6 +44,20 @@ impl GrpcConnection {
     pub fn new() -> GrpcConnection {
         GrpcConnection {
             connection: None.into(),
+        }
+    }
+}
+
+pub struct GrpcMetadataState {
+    pub database: Mutex<String>,
+    pub password: Mutex<String>,
+}
+
+impl GrpcMetadataState {
+    pub fn new() -> Self {
+        Self {
+            database: "default".to_owned().into(),
+            password: "".to_owned().into(),
         }
     }
 }

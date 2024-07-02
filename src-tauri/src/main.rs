@@ -8,7 +8,7 @@ use app::{
         __cmd__get_database_info, create_database, delete_database, get_all_databases,
         get_database_info,
     },
-    grpc::GrpcConnection,
+    grpc::{GrpcConnection, GrpcMetadataState},
     server::{__cmd__get_server_info, __cmd__get_server_logs, get_server_info, get_server_logs},
     storage::{
         __cmd__delete_all_keys, __cmd__delete_hashmap_fields, __cmd__delete_key,
@@ -44,6 +44,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         })
         .setup(|app| {
             app.manage(GrpcConnection::new());
+            app.manage(GrpcMetadataState::new());
 
             Ok(())
         })
