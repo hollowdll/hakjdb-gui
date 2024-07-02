@@ -27,6 +27,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
     host: "localhost",
     port: 12345,
     defaultDb: "default",
+    password: "",
   });
 
   const handleClose = () => {
@@ -91,6 +92,13 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
             name="defaultDb"
             label="Database To Use"
             value={connectionInfo.defaultDb}
+            onChange={inputChanged}
+            {...allyPropsDialogTextField()}
+          />
+          <TextField
+            name="password"
+            label="Password"
+            value={connectionInfo.password}
             onChange={inputChanged}
             {...allyPropsDialogTextField()}
           />

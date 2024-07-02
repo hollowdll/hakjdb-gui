@@ -91,6 +91,24 @@ export default function ConnectionView() {
             </Typography>
           </AccordionDetails>
         </Accordion>
+
+        <Accordion
+          expanded={accordionExpanded === "panel4"}
+          onChange={handleAccordionChange("panel4")}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <ListItemText primary="Password" {...allyPropsField()} />
+            <ListItemText
+              primary={connectionInfo.password}
+              {...allyPropsValue()}
+            />
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              Provided password to access password protected server.
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
       </Box>
     </Box>
   );
