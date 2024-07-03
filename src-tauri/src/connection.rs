@@ -1,4 +1,4 @@
-use crate::grpc::{GrpcClient, GrpcConnection};
+use crate::grpc::{GrpcClient, GrpcConnection, GrpcMetadataState};
 use tauri::State;
 
 #[tauri::command]
@@ -21,5 +21,23 @@ pub async fn disconnect(connection: State<'_, GrpcConnection>) -> Result<(), Str
     connection.connection.lock().await.take();
     println!("disconnected");
 
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn set_selected_database(
+    grpc_metadata: State<'_, GrpcMetadataState>,
+    database: &str,
+) -> Result<(), String> {
+    *grpc_metadata.database.lock().await = database.to_owned();
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn set_password(
+    grpc_metadata: State<'_, GrpcMetadataState>,
+    password: &str,
+) -> Result<(), String> {
+    *grpc_metadata.password.lock().await = password.to_owned();
     Ok(())
 }

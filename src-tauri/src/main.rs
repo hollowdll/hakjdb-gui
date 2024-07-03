@@ -2,7 +2,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use app::{
-    connection::{__cmd__connect, __cmd__disconnect, connect, disconnect},
+    connection::{
+        __cmd__connect, __cmd__disconnect, __cmd__set_password, __cmd__set_selected_database,
+        connect, disconnect, set_password, set_selected_database,
+    },
     db::{
         __cmd__create_database, __cmd__delete_database, __cmd__get_all_databases,
         __cmd__get_database_info, create_database, delete_database, get_all_databases,
@@ -66,7 +69,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
             set_hashmap,
             get_all_hashmap_fields_and_values,
             delete_hashmap_fields,
-            get_hashmap_field_value
+            get_hashmap_field_value,
+            set_selected_database,
+            set_password,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
