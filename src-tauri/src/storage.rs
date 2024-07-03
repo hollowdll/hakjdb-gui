@@ -80,6 +80,7 @@ pub async fn get_keys(
 #[tauri::command]
 pub async fn get_string(
     connection: State<'_, GrpcConnection>,
+    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
     key: &str,
 ) -> Result<GetStringPayload, String> {
@@ -88,9 +89,8 @@ pub async fn get_string(
         let mut request = tonic::Request::new(GetStringRequest {
             key: key.to_owned(),
         });
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+
         let response = connection.storage_client.get_string(request).await;
         match response {
             Ok(response) => {
@@ -109,6 +109,7 @@ pub async fn get_string(
 #[tauri::command]
 pub async fn set_string(
     connection: State<'_, GrpcConnection>,
+    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
     key: &str,
     value: &str,
@@ -119,9 +120,8 @@ pub async fn set_string(
             key: key.to_owned(),
             value: value.to_owned(),
         });
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+
         let response = connection.storage_client.set_string(request).await;
         match response {
             Ok(_response) => return Ok(()),
@@ -135,15 +135,15 @@ pub async fn set_string(
 #[tauri::command]
 pub async fn delete_key(
     connection: State<'_, GrpcConnection>,
+    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
     keys: Vec<String>,
 ) -> Result<u32, String> {
     let mut guard = connection.connection.lock().await;
     if let Some(ref mut connection) = *guard {
         let mut request = tonic::Request::new(DeleteKeyRequest { keys });
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+
         let response = connection.storage_client.delete_key(request).await;
         match response {
             Ok(response) => {
@@ -159,14 +159,14 @@ pub async fn delete_key(
 #[tauri::command]
 pub async fn delete_all_keys(
     connection: State<'_, GrpcConnection>,
+    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
 ) -> Result<(), String> {
     let mut guard = connection.connection.lock().await;
     if let Some(ref mut connection) = *guard {
         let mut request = tonic::Request::new(DeleteAllKeysRequest {});
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+
         let response = connection.storage_client.delete_all_keys(request).await;
         match response {
             Ok(_response) => return Ok(()),
@@ -180,6 +180,7 @@ pub async fn delete_all_keys(
 #[tauri::command]
 pub async fn get_type_of_key(
     connection: State<'_, GrpcConnection>,
+    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
     key: &str,
 ) -> Result<GetTypeOfKeyPayload, String> {
@@ -188,9 +189,8 @@ pub async fn get_type_of_key(
         let mut request = tonic::Request::new(GetTypeOfKeyRequest {
             key: key.to_owned(),
         });
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+
         let response = connection.storage_client.get_type_of_key(request).await;
         match response {
             Ok(response) => {
@@ -209,6 +209,7 @@ pub async fn get_type_of_key(
 #[tauri::command]
 pub async fn set_hashmap(
     connection: State<'_, GrpcConnection>,
+    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
     key: &str,
     field_value_map: HashMap<String, String>,
@@ -219,9 +220,8 @@ pub async fn set_hashmap(
             key: key.to_owned(),
             fields: field_value_map,
         });
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+
         let response = connection.storage_client.set_hash_map(request).await;
         match response {
             Ok(response) => {
@@ -237,6 +237,7 @@ pub async fn set_hashmap(
 #[tauri::command]
 pub async fn get_all_hashmap_fields_and_values(
     connection: State<'_, GrpcConnection>,
+    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
     key: &str,
 ) -> Result<GetAllHashMapFieldsAndValuesPayload, String> {
@@ -245,9 +246,8 @@ pub async fn get_all_hashmap_fields_and_values(
         let mut request = tonic::Request::new(GetAllHashMapFieldsAndValuesRequest {
             key: key.to_owned(),
         });
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+
         let response = connection
             .storage_client
             .get_all_hash_map_fields_and_values(request)
@@ -269,6 +269,7 @@ pub async fn get_all_hashmap_fields_and_values(
 #[tauri::command]
 pub async fn delete_hashmap_fields(
     connection: State<'_, GrpcConnection>,
+    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
     key: &str,
     fields: Vec<String>,
@@ -279,9 +280,8 @@ pub async fn delete_hashmap_fields(
             key: key.to_owned(),
             fields,
         });
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+
         let response = connection
             .storage_client
             .delete_hash_map_fields(request)
@@ -303,6 +303,7 @@ pub async fn delete_hashmap_fields(
 #[tauri::command]
 pub async fn get_hashmap_field_value(
     connection: State<'_, GrpcConnection>,
+    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
     key: &str,
     fields: Vec<String>,
@@ -313,9 +314,8 @@ pub async fn get_hashmap_field_value(
             key: key.to_owned(),
             fields,
         });
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+
         let response = connection
             .storage_client
             .get_hash_map_field_value(request)
