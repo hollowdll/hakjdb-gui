@@ -2,8 +2,10 @@ use kvdb::{
     database_service_client::DatabaseServiceClient, server_service_client::ServerServiceClient,
     storage_service_client::StorageServiceClient,
 };
+use tauri::State;
 use tokio::sync::Mutex;
 use tonic::transport::{Channel, Error};
+use tonic::Request;
 
 pub mod kvdb {
     tonic::include_proto!("kvdbserverapi");
@@ -60,4 +62,30 @@ impl GrpcMetadataState {
             password: "".to_owned().into(),
         }
     }
+}
+
+pub async fn insert_grpc_metadata<T>(
+    metadata_state: &State<'_, GrpcMetadataState>,
+    req: &mut Request<T>,
+) {
+    req.metadata_mut().insert(
+        MD_KEY_DATABASE,
+        metadata_state
+            .database
+            .lock()
+            .await
+            .as_str()
+            .parse()
+            .unwrap(),
+    );
+    req.metadata_mut().insert(
+        MD_KEY_PASSWORD,
+        metadata_state
+            .password
+            .lock()
+            .await
+            .as_str()
+            .parse()
+            .unwrap(),
+    );
 }

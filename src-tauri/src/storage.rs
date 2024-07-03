@@ -1,12 +1,13 @@
 use crate::{
     error::NO_CONNECTION_FOUND_MSG,
     grpc::{
+        insert_grpc_metadata,
         kvdb::{
             DeleteAllKeysRequest, DeleteHashMapFieldsRequest, DeleteKeyRequest,
             GetAllHashMapFieldsAndValuesRequest, GetHashMapFieldValueRequest, GetKeysRequest,
             GetStringRequest, GetTypeOfKeyRequest, SetHashMapRequest, SetStringRequest,
         },
-        GrpcConnection, MD_KEY_DATABASE,
+        GrpcConnection, GrpcMetadataState, MD_KEY_DATABASE,
     },
 };
 use serde::Serialize;
@@ -56,14 +57,14 @@ pub struct GetHashMapFieldValuePayload {
 #[tauri::command]
 pub async fn get_keys(
     connection: State<'_, GrpcConnection>,
+    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
 ) -> Result<Vec<String>, String> {
     let mut guard = connection.connection.lock().await;
     if let Some(ref mut connection) = *guard {
         let mut request = tonic::Request::new(GetKeysRequest {});
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
+        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+
         let response = connection.storage_client.get_keys(request).await;
         match response {
             Ok(response) => {
