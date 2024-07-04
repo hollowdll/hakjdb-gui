@@ -30,6 +30,7 @@ const tauriInvokeCommands: TauriInvokeCommands = {
   getAllHashMapFieldsAndValues: "get_all_hashmap_fields_and_values",
   deleteHashMapFields: "delete_hashmap_fields",
   getHashMapFieldValue: "get_hashmap_field_value",
+  setPassword: "set_password",
 };
 
 export const invokeConnect = (
@@ -44,6 +45,12 @@ export const invokeConnect = (
 export const invokeDisconnect = (): Promise<void> => {
   return invoke<void>(tauriInvokeCommands.disconnect);
 };
+
+export const invokeSetPassword = (password: string): Promise<void> => {
+  return invoke<void>(tauriInvokeCommands.setPassword, {
+    password,
+  });
+}
 
 export const invokeGetServerInfo = (): Promise<ServerInfo> => {
   return invoke<ServerInfo>(tauriInvokeCommands.getServerInfo);

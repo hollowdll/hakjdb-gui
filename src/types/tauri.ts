@@ -17,6 +17,7 @@ export type TauriInvokeCommands = {
   getAllHashMapFieldsAndValues: string;
   deleteHashMapFields: string;
   getHashMapFieldValue: string;
+  setPassword: string;
 };
 
 export type TauriListenEvents = {
