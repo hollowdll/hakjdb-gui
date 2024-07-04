@@ -28,7 +28,13 @@ pub async fn disconnect(connection: State<'_, GrpcConnection>) -> Result<(), Str
 pub async fn set_password(
     connection: State<'_, GrpcConnection>,
     password: &str,
+    disable: bool,
 ) -> Result<(), String> {
-    *connection.password.lock().await = Some(password.to_owned());
+    if disable {
+        *connection.password.lock().await = None;
+    } else {
+        *connection.password.lock().await = Some(password.to_owned());
+    }
+
     Ok(())
 }

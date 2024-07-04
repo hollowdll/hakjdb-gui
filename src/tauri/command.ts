@@ -46,11 +46,15 @@ export const invokeDisconnect = (): Promise<void> => {
   return invoke<void>(tauriInvokeCommands.disconnect);
 };
 
-export const invokeSetPassword = (password: string): Promise<void> => {
+export const invokeSetPassword = (
+  password: string,
+  disable: boolean,
+): Promise<void> => {
   return invoke<void>(tauriInvokeCommands.setPassword, {
     password,
+    disable,
   });
-}
+};
 
 export const invokeGetServerInfo = (): Promise<ServerInfo> => {
   return invoke<ServerInfo>(tauriInvokeCommands.getServerInfo);
