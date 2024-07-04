@@ -1,12 +1,12 @@
 use crate::{
     error::{NO_CONNECTION_FOUND_MSG, UNEXPECTED_ERROR_MSG},
     grpc::{
-        insert_grpc_metadata,
+        insert_common_grpc_metadata,
         kvdb::{
             CreateDatabaseRequest, DeleteDatabaseRequest, GetAllDatabasesRequest,
             GetDatabaseInfoRequest,
         },
-        GrpcConnection, GrpcMetadataState,
+        GrpcConnection,
     },
     util::prost_timestamp_to_iso8601,
 };
@@ -35,14 +35,12 @@ pub struct GetDatabasesPayload {
 #[tauri::command]
 pub async fn get_all_databases(
     connection: State<'_, GrpcConnection>,
-    grpc_metadata: State<'_, GrpcMetadataState>,
 ) -> Result<GetDatabasesPayload, String> {
-    let mut guard = connection.connection.lock().await;
-    if let Some(ref mut connection) = *guard {
+    if let Some(ref mut client) = *connection.client.lock().await {
         let mut request = tonic::Request::new(GetAllDatabasesRequest {});
-        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+        insert_common_grpc_metadata(&connection, &mut request).await;
 
-        let response = connection.database_client.get_all_databases(request).await;
+        let response = client.database_client.get_all_databases(request).await;
         match response {
             Ok(response) => {
                 return Ok(GetDatabasesPayload {
@@ -59,17 +57,15 @@ pub async fn get_all_databases(
 #[tauri::command]
 pub async fn get_database_info(
     connection: State<'_, GrpcConnection>,
-    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
 ) -> Result<DatabaseInfoPayload, String> {
-    let mut guard = connection.connection.lock().await;
-    if let Some(ref mut connection) = *guard {
+    if let Some(ref mut client) = *connection.client.lock().await {
         let mut request = tonic::Request::new(GetDatabaseInfoRequest {
             db_name: db_name.to_owned(),
         });
-        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+        insert_common_grpc_metadata(&connection, &mut request).await;
 
-        let response = connection.database_client.get_database_info(request).await;
+        let response = client.database_client.get_database_info(request).await;
         match response {
             Ok(response) => {
                 if let Some(data) = &response.get_ref().data {
@@ -95,17 +91,15 @@ pub async fn get_database_info(
 #[tauri::command]
 pub async fn create_database(
     connection: State<'_, GrpcConnection>,
-    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
 ) -> Result<String, String> {
-    let mut guard = connection.connection.lock().await;
-    if let Some(ref mut connection) = *guard {
+    if let Some(ref mut client) = *connection.client.lock().await {
         let mut request = tonic::Request::new(CreateDatabaseRequest {
             db_name: db_name.to_owned(),
         });
-        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+        insert_common_grpc_metadata(&connection, &mut request).await;
 
-        let response = connection.database_client.create_database(request).await;
+        let response = client.database_client.create_database(request).await;
         match response {
             Ok(response) => return Ok(response.get_ref().db_name.clone()),
             Err(err) => return Err(format!("{}", err)),
@@ -119,17 +113,15 @@ pub async fn create_database(
 #[tauri::command]
 pub async fn delete_database(
     connection: State<'_, GrpcConnection>,
-    grpc_metadata: State<'_, GrpcMetadataState>,
     db_name: &str,
 ) -> Result<String, String> {
-    let mut guard = connection.connection.lock().await;
-    if let Some(ref mut connection) = *guard {
+    if let Some(ref mut client) = *connection.client.lock().await {
         let mut request = tonic::Request::new(DeleteDatabaseRequest {
             db_name: db_name.to_owned(),
         });
-        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+        insert_common_grpc_metadata(&connection, &mut request).await;
 
-        let response = connection.database_client.delete_database(request).await;
+        let response = client.database_client.delete_database(request).await;
         match response {
             Ok(response) => return Ok(response.get_ref().db_name.clone()),
             Err(err) => return Err(format!("{}", err)),

@@ -39,53 +39,25 @@ impl GrpcClient {
 }
 
 pub struct GrpcConnection {
-    pub connection: Mutex<Option<GrpcClient>>,
+    pub client: Mutex<Option<GrpcClient>>,
+    pub password: Mutex<Option<String>>,
 }
 
 impl GrpcConnection {
     pub fn new() -> GrpcConnection {
         GrpcConnection {
-            connection: None.into(),
+            client: None.into(),
+            password: None.into(),
         }
     }
 }
 
-pub struct GrpcMetadataState {
-    pub database: Mutex<String>,
-    pub password: Mutex<String>,
-}
-
-impl GrpcMetadataState {
-    pub fn new() -> Self {
-        Self {
-            database: "default".to_owned().into(),
-            password: "".to_owned().into(),
-        }
-    }
-}
-
-pub async fn insert_grpc_metadata<T>(
-    metadata_state: &State<'_, GrpcMetadataState>,
+pub async fn insert_common_grpc_metadata<T>(
+    connection: &State<'_, GrpcConnection>,
     req: &mut Request<T>,
 ) {
-    req.metadata_mut().insert(
-        MD_KEY_DATABASE,
-        metadata_state
-            .database
-            .lock()
-            .await
-            .as_str()
-            .parse()
-            .unwrap(),
-    );
-    req.metadata_mut().insert(
-        MD_KEY_PASSWORD,
-        metadata_state
-            .password
-            .lock()
-            .await
-            .as_str()
-            .parse()
-            .unwrap(),
-    );
+    if let Some(ref password) = *connection.password.lock().await {
+        req.metadata_mut()
+            .insert(MD_KEY_PASSWORD, password.parse().unwrap());
+    }
 }

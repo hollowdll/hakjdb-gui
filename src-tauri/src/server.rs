@@ -2,9 +2,9 @@ use crate::util::bytes_to_mega;
 use crate::{
     error::{NO_CONNECTION_FOUND_MSG, UNEXPECTED_ERROR_MSG},
     grpc::{
-        insert_grpc_metadata,
+        insert_common_grpc_metadata,
         kvdb::{GetLogsRequest, GetServerInfoRequest},
-        GrpcConnection, GrpcMetadataState,
+        GrpcConnection,
     },
 };
 use serde::Serialize;
@@ -84,14 +84,12 @@ pub struct ServerLogsPayload {
 #[tauri::command]
 pub async fn get_server_info(
     connection: State<'_, GrpcConnection>,
-    grpc_metadata: State<'_, GrpcMetadataState>,
 ) -> Result<ServerInfoPayload, String> {
-    let mut guard = connection.connection.lock().await;
-    if let Some(ref mut connection) = *guard {
+    if let Some(ref mut client) = *connection.client.lock().await {
         let mut request = tonic::Request::new(GetServerInfoRequest {});
-        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+        insert_common_grpc_metadata(&connection, &mut request).await;
 
-        let response = connection.server_client.get_server_info(request).await;
+        let response = client.server_client.get_server_info(request).await;
         match response {
             Ok(response) => {
                 if let Some(data) = &response.get_ref().data {
@@ -168,14 +166,12 @@ pub async fn get_server_info(
 #[tauri::command]
 pub async fn get_server_logs(
     connection: State<'_, GrpcConnection>,
-    grpc_metadata: State<'_, GrpcMetadataState>,
 ) -> Result<ServerLogsPayload, String> {
-    let mut guard = connection.connection.lock().await;
-    if let Some(ref mut connection) = *guard {
+    if let Some(ref mut client) = *connection.client.lock().await {
         let mut request = tonic::Request::new(GetLogsRequest {});
-        insert_grpc_metadata(&grpc_metadata, &mut request).await;
+        insert_common_grpc_metadata(&connection, &mut request).await;
 
-        let response = connection.server_client.get_logs(request).await;
+        let response = client.server_client.get_logs(request).await;
         match response {
             Ok(response) => {
                 return Ok(ServerLogsPayload {
