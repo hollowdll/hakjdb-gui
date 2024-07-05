@@ -6,7 +6,16 @@ import {
   DialogActions,
   DialogContentText,
   Button,
+  InputAdornment,
+  IconButton,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+  SelectChangeEvent
 } from "@mui/material";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { listen } from "@tauri-apps/api/event";
 import { useEffect, useState, ChangeEvent } from "react";
 import { ConnectionInfo } from "../../types/types";
@@ -22,20 +31,32 @@ type ConnectionDialogProps = {
 };
 
 export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>({
     host: "localhost",
     port: 12345,
     defaultDb: "default",
     password: "",
   });
+  const [isUsePassword, setIsUsePassword] = useState(false);
+  const [isShowPassword, setIsShowPassword] = useState(false);
+
+  const handleChangeUsePassword = (event: SelectChangeEvent) => {
+    setIsUsePassword(event.target.value === 'Yes' ? true : false);
+  }
+
+  const handleClickShowPassword = () => setIsShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
 
   const handleClose = () => {
-    setDialogOpen(false);
+    setIsDialogOpen(false);
   };
 
   const handleOpen = () => {
-    setDialogOpen(true);
+    setIsDialogOpen(true);
   };
 
   const handleConnectClick = () => {
@@ -64,7 +85,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
 
   return (
     <>
-      <Dialog open={dialogOpen} onClose={handleClose}>
+      <Dialog open={isDialogOpen} onClose={handleClose}>
         <DialogTitle>New connection</DialogTitle>
         <DialogContent>
           <DialogContentText {...allyPropsDialogContentText()}>
@@ -95,13 +116,41 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
             onChange={inputChanged}
             {...allyPropsDialogTextField()}
           />
-          <TextField
-            name="password"
-            label="Password"
-            value={connectionInfo.password}
-            onChange={inputChanged}
-            {...allyPropsDialogTextField()}
-          />
+          <FormControl sx={{ marginTop: '15px', minWidth: 125 }}>
+            <InputLabel>Use Password</InputLabel>
+            <Select
+              value={isUsePassword ? 'Yes' : 'No'}
+              label="Use Password"
+              onChange={handleChangeUsePassword}
+            >
+              <MenuItem value='No'>No</MenuItem>
+              <MenuItem value='Yes'>Yes</MenuItem>
+            </Select>
+          </FormControl>
+          {isUsePassword ? (
+            <TextField
+              name="password"
+              label="Password"
+              value={connectionInfo.password}
+              onChange={inputChanged}
+              type={isShowPassword ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      sx={{ "&:focus": { outline: "none" } }}
+                    >
+                      {isShowPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              {...allyPropsDialogTextField()}
+            />
+          ) : (<></>)}
         </DialogContent>
         <DialogActions {...allyPropsDialogActions()}>
           <Button variant="contained" onClick={handleConnectClick}>
