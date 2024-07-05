@@ -5,7 +5,10 @@ import {
   Typography,
   Box,
   ListItemText,
+  IconButton,
 } from "@mui/material";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, SyntheticEvent } from "react";
 import { useConnectionInfoStore } from "../../state/store";
@@ -31,6 +34,7 @@ export default function ConnectionView() {
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
     false,
   );
+  const [isShowPassword, setIsShowPassword] = useState(false);
   const connectionInfo = useConnectionInfoStore(
     (state) => state.connectionInfo,
   );
@@ -39,6 +43,12 @@ export default function ConnectionView() {
     (panel: string) => (_event: SyntheticEvent, isExpanded: boolean) => {
       setAccordionExpanded(isExpanded ? panel : false);
     };
+
+  const handleClickShowPassword = () => setIsShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -99,11 +109,23 @@ export default function ConnectionView() {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <ListItemText primary="Password" {...allyPropsField()} />
             <ListItemText
-              primary={connectionInfo.password}
+              primary=''
               {...allyPropsValue()}
             />
           </AccordionSummary>
           <AccordionDetails>
+            <Box sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', marginBottom: '10px' }}>
+              <IconButton
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {isShowPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+              <Typography sx={{ marginLeft: '15px' }}>
+                {isShowPassword ? connectionInfo.password : '*'.repeat(connectionInfo.password.length)}
+              </Typography>
+            </Box>
             <Typography>
               Provided password to access password protected server.
             </Typography>
