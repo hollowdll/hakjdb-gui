@@ -9,6 +9,7 @@ import KeysView from "./components/views/KeysView";
 import ConnectionManager from "./components/connect/ConnectionManager";
 import HomeView from "./components/views/HomeView";
 import LoadingBackdrop from "./components/common/LoadingBackdrop";
+import AlertBox from "./components/common/AlertBox";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       </Router>
       <Toaster />
       <LoadingBackdrop />
+      <AlertBox />
     </>
   );
 }

@@ -2,13 +2,14 @@ import { ConnectionDialog } from "./ConnectionDialog";
 import { useState, useEffect } from "react";
 import { ConnectionInfo } from "../../types/types";
 import { listen } from "@tauri-apps/api/event";
-import toast from "react-hot-toast";
 import { NavBar } from "../nav/NavBar";
 import { useNavigate } from "react-router-dom";
 import { useConnectionInfoStore } from "../../state/store";
+import { useLoadingStore } from "../../state/store";
 import { invokeConnect, invokeDisconnect } from "../../tauri/command";
 import { tauriListenEvents } from "../../tauri/event";
 import { useNavigationStore } from "../../state/store";
+import { successAlert, errorAlert } from "../../utility/alert";
 
 export default function ConnectionManager() {
   const [isConnected, setIsConnected] = useState(false);
@@ -19,38 +20,28 @@ export default function ConnectionManager() {
   const setSelectedNavItemIndex = useNavigationStore(
     (state) => state.setSelectedNavItemIndex,
   );
+  const setIsLoadingBackdropOpen = useLoadingStore(
+    (state) => state.setIsLoadingBackdropOpen,
+  );
 
   const handleConnect = (connectionInfo: ConnectionInfo) => {
-    const promise = invokeConnect(connectionInfo);
-    toast.promise(
-      promise,
-      {
-        loading: "Connecting...",
-        success: (result) => {
-          setIsConnected(true);
-          setConnectionInfo(connectionInfo);
-          navigate("/connection");
-          setSelectedNavItemIndex(0);
-          return result;
-        },
-        error: (error) => {
-          const errorMsg = `Failed to connect: ${error}`;
-          console.error(errorMsg);
-          return errorMsg;
-        },
-      },
-      {
-        style: {
-          minWidth: "250px",
-        },
-        success: {
-          duration: 4000,
-        },
-        error: {
-          duration: 4000,
-        },
-      },
-    );
+    setIsLoadingBackdropOpen(true);
+    invokeConnect(connectionInfo)
+      .then((result) => {
+        setIsConnected(true);
+        setConnectionInfo(connectionInfo);
+        navigate("/connection");
+        setSelectedNavItemIndex(0);
+        successAlert(result);
+      })
+      .catch((err) => {
+        const errMsg = `Failed to connect: ${err}`;
+        console.error(errMsg);
+        errorAlert(errMsg);
+      })
+      .finally(() => {
+        setIsLoadingBackdropOpen(false);
+      });
   };
 
   useEffect(() => {

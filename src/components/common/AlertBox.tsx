@@ -1,26 +1,25 @@
 import { Alert, Snackbar } from "@mui/material";
-import { AlertColor, AlertPropsColorOverrides } from "@mui/material";
-import OverridableStringUnion from "@mui/types";
+import { useAlertBoxStore } from "../../state/store";
 
-type AlertBoxProps = {
-  message: string;
-  severity: OverridableStringUnion.OverridableStringUnion<
-    AlertColor,
-    AlertPropsColorOverrides
-  >;
-  open: boolean;
-  handleClose: () => void;
-};
+export type AlertSeverity = "success" | "error";
 
-export default function AlertBox({
-  message,
-  severity,
-  open,
-  handleClose,
-}: AlertBoxProps) {
+export default function AlertBox() {
+  const handleClose = useAlertBoxStore((state) => state.close);
+  const { isOpen, message, severity } = useAlertBoxStore((state) => ({
+    isOpen: state.isOpen,
+    message: state.message,
+    severity: state.severity,
+  }));
+
   return (
     <>
-      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+      <Snackbar
+        open={isOpen}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        sx={{ maxWidth: "400px", display: "flex", alignItems: "center" }}
+      >
         <Alert
           onClose={handleClose}
           severity={severity}

@@ -4,6 +4,7 @@ import { ServerInfo } from "../types/server";
 import { invokeGetAllDatabases } from "../tauri/command";
 import { errorAlert } from "../utility/alert";
 import { sortAlphabetically } from "../utility/sorting";
+import { AlertSeverity } from "../components/common/AlertBox";
 
 interface ConnectionInfoState {
   connectionInfo: ConnectionInfo;
@@ -18,6 +19,15 @@ interface ServerInfoState {
 interface NavigationState {
   selectedNavItemIndex: number;
   setSelectedNavItemIndex: (newIndex: number) => void;
+}
+
+interface AlertBoxState {
+  isOpen: boolean;
+  message: string;
+  severity: AlertSeverity;
+  open: () => void;
+  close: () => void;
+  setContent: (message: string, severity: AlertSeverity) => void;
 }
 
 interface DatabaseState {
@@ -67,6 +77,15 @@ export const useNavigationStore = create<NavigationState>((set) => ({
   selectedNavItemIndex: 0,
   setSelectedNavItemIndex: (newIndex) =>
     set(() => ({ selectedNavItemIndex: newIndex })),
+}));
+
+export const useAlertBoxStore = create<AlertBoxState>((set) => ({
+  isOpen: false,
+  message: "",
+  severity: "success",
+  open: () => set(() => ({ isOpen: true })),
+  close: () => set(() => ({ isOpen: false })),
+  setContent: (message, severity) => set(() => ({ message, severity })),
 }));
 
 export const useDatabaseStore = create<DatabaseState>((set) => ({

@@ -1,9 +1,15 @@
-import toast from "react-hot-toast";
+import { useAlertBoxStore } from "../state/store";
 
 export const errorAlert = (message: string) => {
-  toast.error(message, { duration: 5000 });
+  const openAlert = useAlertBoxStore.getState().open;
+  const setAlertContent = useAlertBoxStore.getState().setContent;
+  setAlertContent(message, "error");
+  openAlert();
 };
 
 export const successAlert = (message: string) => {
-  toast.success(message, { duration: 5000 });
+  const openAlert = useAlertBoxStore.getState().open;
+  const setAlertContent = useAlertBoxStore.getState().setContent;
+  setAlertContent(message, "success");
+  openAlert();
 };

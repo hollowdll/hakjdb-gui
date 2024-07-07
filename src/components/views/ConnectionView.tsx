@@ -7,8 +7,8 @@ import {
   ListItemText,
   IconButton,
 } from "@mui/material";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, SyntheticEvent } from "react";
 import { useConnectionInfoStore } from "../../state/store";
@@ -46,7 +46,9 @@ export default function ConnectionView() {
 
   const handleClickShowPassword = () => setIsShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     event.preventDefault();
   };
 
@@ -108,13 +110,17 @@ export default function ConnectionView() {
         >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <ListItemText primary="Password" {...allyPropsField()} />
-            <ListItemText
-              primary=''
-              {...allyPropsValue()}
-            />
+            <ListItemText primary="" {...allyPropsValue()} />
           </AccordionSummary>
           <AccordionDetails>
-            <Box sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', marginBottom: '10px' }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "start",
+                alignItems: "center",
+                marginBottom: "10px",
+              }}
+            >
               <IconButton
                 onClick={handleClickShowPassword}
                 onMouseDown={handleMouseDownPassword}
@@ -122,8 +128,10 @@ export default function ConnectionView() {
               >
                 {isShowPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
-              <Typography sx={{ marginLeft: '15px' }}>
-                {isShowPassword ? connectionInfo.password : '*'.repeat(connectionInfo.password.length)}
+              <Typography sx={{ marginLeft: "15px" }}>
+                {isShowPassword
+                  ? connectionInfo.password
+                  : "*".repeat(connectionInfo.password.length)}
               </Typography>
             </Box>
             <Typography>
