@@ -1,6 +1,5 @@
 import "./App.css";
 import { Box } from "@mui/material";
-import { Toaster } from "react-hot-toast";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ConnectionView from "./components/views/ConnectionView";
 import ServerView from "./components/views/server/ServerView";
@@ -26,7 +25,6 @@ function App() {
           </Routes>
         </Box>
       </Router>
-      <Toaster />
       <LoadingBackdrop />
       <AlertBox />
     </>

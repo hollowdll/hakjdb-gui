@@ -1,10 +1,12 @@
+use std::path::Path;
+
 use kvdb::{
     database_service_client::DatabaseServiceClient, server_service_client::ServerServiceClient,
     storage_service_client::StorageServiceClient,
 };
 use tauri::State;
 use tokio::sync::Mutex;
-use tonic::transport::{Channel, Error};
+use tonic::transport::{Certificate, Channel, ClientTlsConfig, Error};
 use tonic::Request;
 
 pub mod kvdb {
@@ -27,6 +29,31 @@ impl GrpcClient {
         let api_url = format!("http://{}:{}", host, port);
         let channel = Channel::from_shared(api_url.clone())
             .unwrap()
+            .connect()
+            .await?;
+
+        Ok(GrpcClient {
+            server_client: ServerServiceClient::new(channel.clone()),
+            database_client: DatabaseServiceClient::new(channel.clone()),
+            storage_client: StorageServiceClient::new(channel),
+        })
+    }
+
+    pub async fn with_tls<P>(
+        host: &str,
+        port: u16,
+        public_key_path: P,
+    ) -> Result<GrpcClient, Box<dyn std::error::Error>>
+    where
+        P: AsRef<Path>,
+    {
+        let pem = std::fs::read_to_string(public_key_path)?;
+        let ca = Certificate::from_pem(pem);
+
+        let tls = ClientTlsConfig::new().ca_certificate(ca).domain_name(host);
+        let channel = Channel::from_shared(format!("https://{}:{}", host, port))
+            .unwrap()
+            .tls_config(tls)?
             .connect()
             .await?;
 
