@@ -1,3 +1,5 @@
+use std::{path::PathBuf, str::FromStr};
+
 use crate::grpc::{GrpcClient, GrpcConnection};
 use tauri::State;
 
@@ -7,12 +9,27 @@ pub async fn connect(
     host: &str,
     port: u16,
 ) -> Result<String, String> {
-    match GrpcClient::new(host, port).await {
-        Ok(client) => {
-            *connection.client.lock().await = Some(client);
-            return Ok(format!("Connected to {}:{}", host, port));
+    if let Some(ref pem_path) = *connection.tls_pem_path.lock().await {
+        let pem = match std::fs::read_to_string(pem_path) {
+            Ok(pem) => pem,
+            Err(e) => return Err(e.to_string()),
+        };
+
+        match GrpcClient::with_tls(host, port, &pem).await {
+            Ok(client) => {
+                *connection.client.lock().await = Some(client);
+                return Ok(format!("Connected to {}:{} with TLS", host, port));
+            }
+            Err(e) => return Err(e.to_string()),
         }
-        Err(e) => return Err(e.to_string()),
+    } else {
+        match GrpcClient::new(host, port).await {
+            Ok(client) => {
+                *connection.client.lock().await = Some(client);
+                return Ok(format!("Connected to {}:{} without TLS", host, port));
+            }
+            Err(e) => return Err(e.to_string()),
+        }
     }
 }
 
@@ -34,6 +51,24 @@ pub async fn set_password(
         *connection.password.lock().await = None;
     } else {
         *connection.password.lock().await = Some(password.to_owned());
+    }
+
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn set_tls_pem_path(
+    connection: State<'_, GrpcConnection>,
+    pem_path: &str,
+    disable: bool,
+) -> Result<(), String> {
+    if disable {
+        *connection.tls_pem_path.lock().await = None;
+    } else {
+        match PathBuf::from_str(pem_path) {
+            Ok(path) => *connection.tls_pem_path.lock().await = Some(path),
+            Err(e) => return Err(e.to_string()),
+        }
     }
 
     Ok(())

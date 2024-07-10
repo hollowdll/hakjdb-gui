@@ -1,9 +1,8 @@
-use std::path::Path;
-
 use kvdb::{
     database_service_client::DatabaseServiceClient, server_service_client::ServerServiceClient,
     storage_service_client::StorageServiceClient,
 };
+use std::path::PathBuf;
 use tauri::State;
 use tokio::sync::Mutex;
 use tonic::transport::{Certificate, Channel, ClientTlsConfig, Error};
@@ -39,17 +38,8 @@ impl GrpcClient {
         })
     }
 
-    pub async fn with_tls<P>(
-        host: &str,
-        port: u16,
-        public_key_path: P,
-    ) -> Result<GrpcClient, Box<dyn std::error::Error>>
-    where
-        P: AsRef<Path>,
-    {
-        let pem = std::fs::read_to_string(public_key_path)?;
-        let ca = Certificate::from_pem(pem);
-
+    pub async fn with_tls(host: &str, port: u16, pem_content: &str) -> Result<GrpcClient, Error> {
+        let ca = Certificate::from_pem(pem_content);
         let tls = ClientTlsConfig::new().ca_certificate(ca).domain_name(host);
         let channel = Channel::from_shared(format!("https://{}:{}", host, port))
             .unwrap()
@@ -68,6 +58,7 @@ impl GrpcClient {
 pub struct GrpcConnection {
     pub client: Mutex<Option<GrpcClient>>,
     pub password: Mutex<Option<String>>,
+    pub tls_pem_path: Mutex<Option<PathBuf>>,
 }
 
 impl GrpcConnection {
@@ -75,6 +66,7 @@ impl GrpcConnection {
         GrpcConnection {
             client: None.into(),
             password: None.into(),
+            tls_pem_path: None.into(),
         }
     }
 }
