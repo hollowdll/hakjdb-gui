@@ -18,6 +18,8 @@ export type TauriInvokeCommands = {
   deleteHashMapFields: string;
   getHashMapFieldValue: string;
   setPassword: string;
+  setTlsPemPath: string;
+  openFile: string;
 };
 
 export type TauriListenEvents = {
