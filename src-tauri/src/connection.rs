@@ -1,6 +1,6 @@
-use std::{path::PathBuf, str::FromStr};
-
 use crate::grpc::{GrpcClient, GrpcConnection};
+use std::{path::PathBuf, str::FromStr};
+use tauri::api::dialog::blocking::FileDialogBuilder;
 use tauri::State;
 
 #[tauri::command]
@@ -72,4 +72,13 @@ pub async fn set_tls_pem_path(
     }
 
     Ok(())
+}
+
+#[tauri::command]
+pub fn open_file() -> Option<String> {
+    if let Some(file_path) = FileDialogBuilder::new().pick_file() {
+        return Some(file_path.to_string_lossy().into_owned());
+    } else {
+        return None;
+    }
 }
