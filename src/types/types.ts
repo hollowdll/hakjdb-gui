@@ -3,6 +3,7 @@ export interface ConnectionInfo {
   port: number;
   defaultDb: string;
   password: string;
+  tlsCertFilePath: string;
 }
 
 export interface NavItem {

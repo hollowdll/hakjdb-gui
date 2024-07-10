@@ -75,7 +75,7 @@ pub async fn set_tls_pem_path(
 }
 
 #[tauri::command]
-pub fn open_file() -> Option<String> {
+pub async fn open_file() -> Option<String> {
     if let Some(file_path) = FileDialogBuilder::new().pick_file() {
         return Some(file_path.to_string_lossy().into_owned());
     } else {

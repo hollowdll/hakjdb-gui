@@ -3,7 +3,8 @@
 
 use app::{
     connection::{
-        __cmd__connect, __cmd__disconnect, __cmd__set_password, connect, disconnect, set_password,
+        __cmd__connect, __cmd__disconnect, __cmd__open_file, __cmd__set_password,
+        __cmd__set_tls_pem_path, connect, disconnect, open_file, set_password, set_tls_pem_path,
     },
     db::{
         __cmd__create_database, __cmd__delete_database, __cmd__get_all_databases,
@@ -69,6 +70,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
             delete_hashmap_fields,
             get_hashmap_field_value,
             set_password,
+            set_tls_pem_path,
+            open_file
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

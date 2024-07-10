@@ -63,7 +63,7 @@ interface DialogState {
 }
 
 export const useConnectionInfoStore = create<ConnectionInfoState>((set) => ({
-  connectionInfo: { host: "", port: 0, defaultDb: "default", password: "" },
+  connectionInfo: { host: "", port: 0, defaultDb: "default", password: "", tlsCertFilePath: "" },
   setConnectionInfo: (newConnectionInfo) =>
     set(() => ({ connectionInfo: newConnectionInfo })),
 }));
