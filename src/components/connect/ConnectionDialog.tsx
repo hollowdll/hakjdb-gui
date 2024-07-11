@@ -17,12 +17,12 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import FolderIcon from '@mui/icons-material/Folder';
+import FolderIcon from "@mui/icons-material/Folder";
 import { listen } from "@tauri-apps/api/event";
 import { useEffect, useState, ChangeEvent } from "react";
 import { ConnectionInfo } from "../../types/types";
 import { tauriListenEvents } from "../../tauri/event";
-import { invokeOpenFile, invokeSetPassword } from "../../tauri/command";
+import { invokeOpenFile, invokeSetPassword, invokeSetTLSCertPath } from "../../tauri/command";
 import {
   allyPropsDialogTextField,
   allyPropsDialogContentText,
@@ -63,16 +63,15 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
   };
 
   const handleClickOpenFile = () => {
-    invokeOpenFile()
-      .then((result) => {
-        if (result) {
-          setConnectionInfo({
-            ...connectionInfo,
-            tlsCertFilePath: result,
-          });
-        }
-      })
-  }
+    invokeOpenFile().then((result) => {
+      if (result) {
+        setConnectionInfo({
+          ...connectionInfo,
+          tlsCertFilePath: result,
+        });
+      }
+    });
+  };
 
   const handleClose = () => {
     setIsDialogOpen(false);
@@ -87,6 +86,9 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
     isUsePassword
       ? invokeSetPassword(connectionInfo.password, false)
       : invokeSetPassword("", true);
+    isUseTLS
+      ? invokeSetTLSCertPath(connectionInfo.tlsCertFilePath, false)
+      : invokeSetTLSCertPath("", true);
     handleConnect(connectionInfo);
     handleClose();
   };
@@ -110,7 +112,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
   }, []);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Dialog open={isDialogOpen} onClose={handleClose}>
         <DialogTitle>New connection</DialogTitle>
         <DialogContent>
@@ -153,6 +155,17 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
               <MenuItem value="Yes">Yes</MenuItem>
             </Select>
           </FormControl>
+          <FormControl sx={{ marginTop: "15px", minWidth: 125 }}>
+            <InputLabel>Use TLS</InputLabel>
+            <Select
+              value={isUseTLS ? "Yes" : "No"}
+              label="Use TLS"
+              onChange={handleChangeUseTLS}
+            >
+              <MenuItem value="No">No</MenuItem>
+              <MenuItem value="Yes">Yes</MenuItem>
+            </Select>
+          </FormControl>
           {isUsePassword ? (
             <TextField
               name="password"
@@ -179,17 +192,6 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           ) : (
             <></>
           )}
-          <FormControl sx={{ marginTop: "15px", minWidth: 125 }}>
-            <InputLabel>Use TLS</InputLabel>
-            <Select
-              value={isUseTLS ? "Yes" : "No"}
-              label="Use TLS"
-              onChange={handleChangeUseTLS}
-            >
-              <MenuItem value="No">No</MenuItem>
-              <MenuItem value="Yes">Yes</MenuItem>
-            </Select>
-          </FormControl>
           {isUseTLS ? (
             <TextField
               disabled

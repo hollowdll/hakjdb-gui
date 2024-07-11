@@ -58,7 +58,7 @@ impl GrpcClient {
 pub struct GrpcConnection {
     pub client: Mutex<Option<GrpcClient>>,
     pub password: Mutex<Option<String>>,
-    pub tls_pem_path: Mutex<Option<PathBuf>>,
+    pub tls_cert_path: Mutex<Option<PathBuf>>,
 }
 
 impl GrpcConnection {
@@ -66,7 +66,7 @@ impl GrpcConnection {
         GrpcConnection {
             client: None.into(),
             password: None.into(),
-            tls_pem_path: None.into(),
+            tls_cert_path: None.into(),
         }
     }
 }

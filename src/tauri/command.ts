@@ -31,7 +31,7 @@ const tauriInvokeCommands: TauriInvokeCommands = {
   deleteHashMapFields: "delete_hashmap_fields",
   getHashMapFieldValue: "get_hashmap_field_value",
   setPassword: "set_password",
-  setTlsPemPath: "set_tls_pem_path",
+  setTLSCertPath: "set_tls_cert_path",
   openFile: "open_file",
 };
 
@@ -62,12 +62,12 @@ export const invokeSetPassword = (
   });
 };
 
-export const invokeSetTlsPemPath = (
-  pem_path: string,
+export const invokeSetTLSCertPath = (
+  cert_path: string,
   disable: boolean,
 ): Promise<void> => {
-  return invoke<void>(tauriInvokeCommands.setTlsPemPath, {
-    pem_path,
+  return invoke<void>(tauriInvokeCommands.setTLSCertPath, {
+    cert_path,
     disable,
   });
 };

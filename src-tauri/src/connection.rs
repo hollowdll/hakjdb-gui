@@ -9,8 +9,8 @@ pub async fn connect(
     host: &str,
     port: u16,
 ) -> Result<String, String> {
-    if let Some(ref pem_path) = *connection.tls_pem_path.lock().await {
-        let pem = match std::fs::read_to_string(pem_path) {
+    if let Some(ref cert_path) = *connection.tls_cert_path.lock().await {
+        let pem = match std::fs::read_to_string(cert_path) {
             Ok(pem) => pem,
             Err(e) => return Err(e.to_string()),
         };
@@ -57,16 +57,16 @@ pub async fn set_password(
 }
 
 #[tauri::command]
-pub async fn set_tls_pem_path(
+pub async fn set_tls_cert_path(
     connection: State<'_, GrpcConnection>,
-    pem_path: &str,
+    cert_path: &str,
     disable: bool,
 ) -> Result<(), String> {
     if disable {
-        *connection.tls_pem_path.lock().await = None;
+        *connection.tls_cert_path.lock().await = None;
     } else {
-        match PathBuf::from_str(pem_path) {
-            Ok(path) => *connection.tls_pem_path.lock().await = Some(path),
+        match PathBuf::from_str(cert_path) {
+            Ok(path) => *connection.tls_cert_path.lock().await = Some(path),
             Err(e) => return Err(e.to_string()),
         }
     }
