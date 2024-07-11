@@ -22,7 +22,11 @@ import { listen } from "@tauri-apps/api/event";
 import { useEffect, useState, ChangeEvent } from "react";
 import { ConnectionInfo } from "../../types/types";
 import { tauriListenEvents } from "../../tauri/event";
-import { invokeOpenFile, invokeSetPassword, invokeSetTLSCertPath } from "../../tauri/command";
+import {
+  invokeOpenFile,
+  invokeSetPassword,
+  invokeSetTLSCertPath,
+} from "../../tauri/command";
 import {
   allyPropsDialogTextField,
   allyPropsDialogContentText,
@@ -81,14 +85,14 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
     setIsDialogOpen(true);
   };
 
-  const handleConnectClick = () => {
+  const handleConnectClick = async () => {
     console.log("trying to connect ...");
     isUsePassword
-      ? invokeSetPassword(connectionInfo.password, false)
-      : invokeSetPassword("", true);
+      ? await invokeSetPassword(connectionInfo.password, false)
+      : await invokeSetPassword("", true);
     isUseTLS
-      ? invokeSetTLSCertPath(connectionInfo.tlsCertFilePath, false)
-      : invokeSetTLSCertPath("", true);
+      ? await invokeSetTLSCertPath(connectionInfo.tlsCertFilePath, false)
+      : await invokeSetTLSCertPath("", true);
     handleConnect(connectionInfo);
     handleClose();
   };

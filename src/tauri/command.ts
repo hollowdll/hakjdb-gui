@@ -63,11 +63,11 @@ export const invokeSetPassword = (
 };
 
 export const invokeSetTLSCertPath = (
-  cert_path: string,
+  certPath: string,
   disable: boolean,
 ): Promise<void> => {
   return invoke<void>(tauriInvokeCommands.setTLSCertPath, {
-    cert_path,
+    certPath,
     disable,
   });
 };
