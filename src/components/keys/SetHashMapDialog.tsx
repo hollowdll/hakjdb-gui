@@ -125,10 +125,10 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
         />
         {fieldsToSet.map((item, index) => (
           <Box
+            key={index}
             sx={{ marginTop: "15px", display: "flex", alignItems: "center" }}
           >
             <TextField
-              key={index}
               label="Field"
               name="field"
               value={item.field}
@@ -136,7 +136,6 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
               sx={{ marginRight: "10px" }}
             />
             <TextField
-              key={index}
               label="Value"
               name="value"
               value={item.value}
