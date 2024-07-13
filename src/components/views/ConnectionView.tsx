@@ -6,6 +6,7 @@ import {
   Box,
   ListItemText,
   IconButton,
+  Divider,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -109,34 +110,49 @@ export default function ConnectionView() {
           onChange={handleAccordionChange("panel4")}
         >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <ListItemText primary="Password" {...allyPropsField()} />
-            <ListItemText primary="" {...allyPropsValue()} />
+            <ListItemText primary="Using Password" {...allyPropsField()} />
+            <ListItemText
+              primary={connectionInfo.isUsePassword ? "Yes" : "No"}
+              {...allyPropsValue()}
+            />
           </AccordionSummary>
           <AccordionDetails>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "start",
-                alignItems: "center",
-                marginBottom: "10px",
-              }}
-            >
-              <IconButton
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                edge="end"
-              >
-                {isShowPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-              <Typography sx={{ marginLeft: "15px" }}>
-                {isShowPassword
-                  ? connectionInfo.password
-                  : "*".repeat(connectionInfo.password.length)}
-              </Typography>
-            </Box>
             <Typography>
-              Provided password to access password protected server.
+              If password is used for the connection. Password is needed to access password protected servers.
             </Typography>
+            {connectionInfo.isUsePassword ? (
+              <>
+                <Divider sx={{ marginTop: '10px', marginBottom: '10px' }} />
+                <Box sx={{ display: 'flex' }}>
+                  <ListItemText
+                    primary="Password"
+                    {...allyPropsField()}
+                  />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "end",
+                      alignItems: "center",
+                      color: "text.secondary",
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    <Typography sx={{ marginLeft: "15px" }}>
+                      {isShowPassword
+                        ? connectionInfo.password
+                        : "*".repeat(connectionInfo.password.length)}
+                    </Typography>
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {isShowPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </Box>
+                </Box>
+              </>
+            ) : (<></>)}
           </AccordionDetails>
         </Accordion>
 
@@ -146,16 +162,37 @@ export default function ConnectionView() {
         >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <ListItemText
-              primary="TLS certification file path"
+              primary="Using TLS"
               {...allyPropsField()}
             />
             <ListItemText
-              primary={connectionInfo.tlsCertFilePath}
+              primary={connectionInfo.isUseTLS ? "Yes" : "No"}
               {...allyPropsValue()}
             />
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>File path to the TLS certification.</Typography>
+            <Typography>
+              If TLS is used for the connection. TLS is needed to access TLS enabled servers for secure communication.
+            </Typography>
+            {connectionInfo.isUseTLS ? (
+              <>
+                <Divider sx={{ marginTop: '10px', marginBottom: '10px' }} />
+                <Box sx={{ display: 'flex' }}>
+                  <ListItemText
+                    primary="Certification path"
+                    {...allyPropsField()}
+                  />
+                  <ListItemText
+                    primary={connectionInfo.tlsCertFilePath}
+                    sx={{
+                      textAlign: "end",
+                      color: "text.secondary",
+                      wordBreak: "break-word",
+                    }}
+                  />
+                </Box>
+              </>
+            ) : (<></>)}
           </AccordionDetails>
         </Accordion>
       </Box>
