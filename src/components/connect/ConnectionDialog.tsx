@@ -45,17 +45,16 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
     defaultDb: "default",
     password: "",
     tlsCertFilePath: "",
+    isUsePassword: false,
+    isUseTLS: false,
   });
-  const [isUsePassword, setIsUsePassword] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [isUseTLS, setIsUseTLS] = useState(false);
 
-  const handleChangeUsePassword = (event: SelectChangeEvent) => {
-    setIsUsePassword(event.target.value === "Yes" ? true : false);
-  };
-
-  const handleChangeUseTLS = (event: SelectChangeEvent) => {
-    setIsUseTLS(event.target.value === "Yes" ? true : false);
+  const handleChangeBooleanField = (event: SelectChangeEvent) => {
+    setConnectionInfo({
+      ...connectionInfo,
+      [event.target.name]: event.target.value === "Yes" ? true : false,
+    });
   };
 
   const handleClickShowPassword = () => setIsShowPassword((show) => !show);
@@ -87,10 +86,10 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
 
   const handleConnectClick = async () => {
     console.log("trying to connect ...");
-    isUsePassword
+    connectionInfo.isUsePassword
       ? await invokeSetPassword(connectionInfo.password, false)
       : await invokeSetPassword("", true);
-    isUseTLS
+    connectionInfo.isUseTLS
       ? await invokeSetTLSCertPath(connectionInfo.tlsCertFilePath, false)
       : await invokeSetTLSCertPath("", true);
     handleConnect(connectionInfo);
@@ -151,9 +150,10 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           <FormControl sx={{ marginTop: "15px", minWidth: 125 }}>
             <InputLabel>Use Password</InputLabel>
             <Select
-              value={isUsePassword ? "Yes" : "No"}
+              name="isUsePassword"
+              value={connectionInfo.isUsePassword ? "Yes" : "No"}
               label="Use Password"
-              onChange={handleChangeUsePassword}
+              onChange={handleChangeBooleanField}
             >
               <MenuItem value="No">No</MenuItem>
               <MenuItem value="Yes">Yes</MenuItem>
@@ -162,15 +162,16 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           <FormControl sx={{ marginTop: "15px", minWidth: 125 }}>
             <InputLabel>Use TLS</InputLabel>
             <Select
-              value={isUseTLS ? "Yes" : "No"}
+              name="isUseTLS"
+              value={connectionInfo.isUseTLS ? "Yes" : "No"}
               label="Use TLS"
-              onChange={handleChangeUseTLS}
+              onChange={handleChangeBooleanField}
             >
               <MenuItem value="No">No</MenuItem>
               <MenuItem value="Yes">Yes</MenuItem>
             </Select>
           </FormControl>
-          {isUsePassword ? (
+          {connectionInfo.isUsePassword ? (
             <TextField
               name="password"
               label="Password"
@@ -196,7 +197,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           ) : (
             <></>
           )}
-          {isUseTLS ? (
+          {connectionInfo.isUseTLS ? (
             <TextField
               disabled
               name="tlsCertFilePath"

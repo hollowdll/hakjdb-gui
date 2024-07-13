@@ -145,16 +145,17 @@ export default function ConnectionView() {
           onChange={handleAccordionChange("panel5")}
         >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <ListItemText primary="TLS certification file path" {...allyPropsField()} />
+            <ListItemText
+              primary="TLS certification file path"
+              {...allyPropsField()}
+            />
             <ListItemText
               primary={connectionInfo.tlsCertFilePath}
               {...allyPropsValue()}
             />
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-              File path to the TLS certification.
-            </Typography>
+            <Typography>File path to the TLS certification.</Typography>
           </AccordionDetails>
         </Accordion>
       </Box>

@@ -4,6 +4,8 @@ export interface ConnectionInfo {
   defaultDb: string;
   password: string;
   tlsCertFilePath: string;
+  isUsePassword: boolean;
+  isUseTLS: boolean;
 }
 
 export interface NavItem {
