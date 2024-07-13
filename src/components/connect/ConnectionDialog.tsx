@@ -49,6 +49,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
     isUseTLS: false,
   });
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isTLSCertFileChosen, setIsTLSCertFileChosen] = useState(false);
 
   const handleChangeBooleanField = (event: SelectChangeEvent) => {
     setConnectionInfo({
@@ -72,6 +73,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           ...connectionInfo,
           tlsCertFilePath: result,
         });
+        setIsTLSCertFileChosen(true);
       }
     });
   };
@@ -202,7 +204,11 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
               disabled
               name="tlsCertFilePath"
               label="TLS certificate file path"
-              value={connectionInfo.tlsCertFilePath}
+              value={
+                isTLSCertFileChosen
+                  ? connectionInfo.tlsCertFilePath
+                  : "No file chosen"
+              }
               onChange={inputChanged}
               InputProps={{
                 endAdornment: (

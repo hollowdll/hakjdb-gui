@@ -118,16 +118,14 @@ export default function ConnectionView() {
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              If password is used for the connection. Password is needed to access password protected servers.
+              If password is used for the connection. Password is needed to
+              access password protected servers.
             </Typography>
             {connectionInfo.isUsePassword ? (
               <>
-                <Divider sx={{ marginTop: '10px', marginBottom: '10px' }} />
-                <Box sx={{ display: 'flex' }}>
-                  <ListItemText
-                    primary="Password"
-                    {...allyPropsField()}
-                  />
+                <Divider sx={{ marginTop: "10px", marginBottom: "10px" }} />
+                <Box sx={{ display: "flex" }}>
+                  <ListItemText primary="Password" {...allyPropsField()} />
                   <Box
                     sx={{
                       display: "flex",
@@ -152,7 +150,9 @@ export default function ConnectionView() {
                   </Box>
                 </Box>
               </>
-            ) : (<></>)}
+            ) : (
+              <></>
+            )}
           </AccordionDetails>
         </Accordion>
 
@@ -161,10 +161,7 @@ export default function ConnectionView() {
           onChange={handleAccordionChange("panel5")}
         >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <ListItemText
-              primary="Using TLS"
-              {...allyPropsField()}
-            />
+            <ListItemText primary="Using TLS" {...allyPropsField()} />
             <ListItemText
               primary={connectionInfo.isUseTLS ? "Yes" : "No"}
               {...allyPropsValue()}
@@ -172,12 +169,13 @@ export default function ConnectionView() {
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              If TLS is used for the connection. TLS is needed to access TLS enabled servers for secure communication.
+              If TLS is used for the connection. TLS is needed to access TLS
+              enabled servers for secure communication.
             </Typography>
             {connectionInfo.isUseTLS ? (
               <>
-                <Divider sx={{ marginTop: '10px', marginBottom: '10px' }} />
-                <Box sx={{ display: 'flex' }}>
+                <Divider sx={{ marginTop: "10px", marginBottom: "10px" }} />
+                <Box sx={{ display: "flex" }}>
                   <ListItemText
                     primary="Certification path"
                     {...allyPropsField()}
@@ -192,7 +190,9 @@ export default function ConnectionView() {
                   />
                 </Box>
               </>
-            ) : (<></>)}
+            ) : (
+              <></>
+            )}
           </AccordionDetails>
         </Accordion>
       </Box>
