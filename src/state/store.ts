@@ -75,7 +75,10 @@ export const useConnectionInfoStore = create<ConnectionInfoState>((set) => ({
   },
   setConnectionInfo: (newConnectionInfo) =>
     set(() => ({ connectionInfo: newConnectionInfo })),
-  setDefaultDb: (name) => set((state) => ({ connectionInfo: { ...state.connectionInfo, defaultDb: name } })),
+  setDefaultDb: (name) =>
+    set((state) => ({
+      connectionInfo: { ...state.connectionInfo, defaultDb: name },
+    })),
 }));
 
 export const useServerInfoStore = create<ServerInfoState>((set) => ({

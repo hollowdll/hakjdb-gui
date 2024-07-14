@@ -100,7 +100,7 @@ export default function ConnectionView() {
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              Commands in Keys view use this database as the default database.
+              RPCs in Keys view use this database as the default database.
             </Typography>
           </AccordionDetails>
         </Accordion>

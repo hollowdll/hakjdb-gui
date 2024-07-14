@@ -31,8 +31,9 @@ export default function DatabaseList() {
   );
   const databases = useDatabaseStore((state) => state.databases);
   const setDatabases = useDatabaseStore((state) => state.setDatabases);
-  const setDefaultDb = useConnectionInfoStore(
-    (state) => state.setDefaultDb,
+  const setDefaultDb = useConnectionInfoStore((state) => state.setDefaultDb);
+  const connectionInfo = useConnectionInfoStore(
+    (state) => state.connectionInfo,
   );
 
   const closeAccordion = () => {
@@ -41,18 +42,22 @@ export default function DatabaseList() {
 
   const handleAccordionChange =
     (panel: string, dbName: string) =>
-      (_event: SyntheticEvent, isExpanded: boolean) => {
-        if (isExpanded) {
-          setAccordionExpanded(panel);
-          handleGetDatabaseInfo(dbName);
-        } else {
-          setAccordionExpanded(false);
-        }
-      };
+    (_event: SyntheticEvent, isExpanded: boolean) => {
+      if (isExpanded) {
+        setAccordionExpanded(panel);
+        handleGetDatabaseInfo(dbName);
+      } else {
+        setAccordionExpanded(false);
+      }
+    };
 
   const handleSetDefaultDb = (name: string) => {
     setDefaultDb(name);
-  }
+  };
+
+  const isDbSetAsDefault = (name: string): boolean => {
+    return name === connectionInfo.defaultDb;
+  };
 
   const handleGetDatabaseInfo = (dbName: string) => {
     console.log("getting db info");
@@ -122,8 +127,21 @@ export default function DatabaseList() {
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
+                  {isDbSetAsDefault(dbName) ? (
+                    <Typography sx={{ marginBottom: "15px" }}>
+                      This database is set as the default database for the
+                      connection.
+                    </Typography>
+                  ) : (
+                    <></>
+                  )}
                   <Stack spacing={2} direction="row">
-                    <Button variant="contained" onClick={() => handleSetDefaultDb(dbName)}>Set as default</Button>
+                    <Button
+                      variant="contained"
+                      onClick={() => handleSetDefaultDb(dbName)}
+                    >
+                      Set as default
+                    </Button>
                     <DeleteDatabaseDialog
                       dbName={dbName}
                       closeDbListAccordion={closeAccordion}
