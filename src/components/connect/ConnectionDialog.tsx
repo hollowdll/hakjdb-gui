@@ -149,7 +149,9 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
             onChange={inputChanged}
             {...allyPropsDialogTextField()}
           />
-          <FormControl sx={{ marginTop: "15px", minWidth: 125 }}>
+          <FormControl
+            sx={{ marginTop: "15px", marginRight: "15px", minWidth: 125 }}
+          >
             <InputLabel>Use Password</InputLabel>
             <Select
               name="isUsePassword"

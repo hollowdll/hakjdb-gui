@@ -57,7 +57,9 @@ export default function ConnectionView() {
   return (
     <Box sx={{ width: "100%" }}>
       <h1>Connection</h1>
-      <Typography sx={{ marginBottom: "15px" }}>Connection settings currently being used.</Typography>
+      <Typography sx={{ marginBottom: "15px" }}>
+        Connection settings currently being used.
+      </Typography>
       <Box sx={{ paddingTop: "1em" }}>
         <Accordion
           expanded={accordionExpanded === "panel1"}
