@@ -16,3 +16,9 @@ export function allyPropsDialogActions() {
     sx: { m: "5px" },
   };
 }
+
+export function allyPropsAccordionSummary() {
+  return {
+    sx: { userSelect: 'text' },
+  };
+}

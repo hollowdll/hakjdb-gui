@@ -20,6 +20,7 @@ import { DatabaseInfo } from "../../types/db";
 import { useDatabaseStore } from "../../state/store";
 import { useConnectionInfoStore } from "../../state/store";
 import DeleteDatabaseDialog from "./DeleteDatabaseDialog";
+import { allyPropsAccordionSummary } from "../../utility/props";
 
 export default function DatabaseList() {
   const [errorMsg, setErrorMsg] = useState("");
@@ -42,14 +43,14 @@ export default function DatabaseList() {
 
   const handleAccordionChange =
     (panel: string, dbName: string) =>
-    (_event: SyntheticEvent, isExpanded: boolean) => {
-      if (isExpanded) {
-        setAccordionExpanded(panel);
-        handleGetDatabaseInfo(dbName);
-      } else {
-        setAccordionExpanded(false);
-      }
-    };
+      (_event: SyntheticEvent, isExpanded: boolean) => {
+        if (isExpanded) {
+          setAccordionExpanded(panel);
+          handleGetDatabaseInfo(dbName);
+        } else {
+          setAccordionExpanded(false);
+        }
+      };
 
   const handleSetDefaultDb = (name: string) => {
     setDefaultDb(name);
@@ -121,7 +122,7 @@ export default function DatabaseList() {
                 onChange={handleAccordionChange(`panel${index + 1}`, dbName)}
                 key={index + 1}
               >
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} {...allyPropsAccordionSummary()}>
                   <Typography sx={{ wordBreak: "break-word" }}>
                     {dbName}
                   </Typography>
@@ -153,7 +154,7 @@ export default function DatabaseList() {
                   ) : dbInfo ? (
                     <>
                       <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />} {...allyPropsAccordionSummary()}>
                           <ListItemText
                             primary="Name"
                             {...allyPropsInfoField()}
@@ -169,7 +170,7 @@ export default function DatabaseList() {
                       </Accordion>
 
                       <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />} {...allyPropsAccordionSummary()}>
                           <ListItemText
                             primary="Created At"
                             {...allyPropsInfoField()}
@@ -187,7 +188,7 @@ export default function DatabaseList() {
                       </Accordion>
 
                       <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />} {...allyPropsAccordionSummary()}>
                           <ListItemText
                             primary="Updated At"
                             {...allyPropsInfoField()}
@@ -205,7 +206,7 @@ export default function DatabaseList() {
                       </Accordion>
 
                       <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />} {...allyPropsAccordionSummary()}>
                           <ListItemText
                             primary="Keys"
                             {...allyPropsInfoField()}
@@ -223,7 +224,7 @@ export default function DatabaseList() {
                       </Accordion>
 
                       <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />} {...allyPropsAccordionSummary()}>
                           <ListItemText
                             primary="Data Size"
                             {...allyPropsInfoField()}
