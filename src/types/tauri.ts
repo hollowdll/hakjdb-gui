@@ -25,4 +25,5 @@ export type TauriInvokeCommands = {
 export type TauriListenEvents = {
   newConnection: string;
   disconnect: string;
+  setDarkMode: string;
 };

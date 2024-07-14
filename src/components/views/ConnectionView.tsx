@@ -151,7 +151,7 @@ export default function ConnectionView() {
                       wordBreak: "break-word",
                     }}
                   >
-                    <Typography sx={{ marginLeft: "15px" }}>
+                    <Typography sx={{ marginRight: "5px" }}>
                       {isShowPassword
                         ? connectionInfo.password
                         : "*".repeat(connectionInfo.password.length)}

@@ -31,8 +31,7 @@ const MENU_ITEM_ID_DARK_MODE: &str = "dark-mode";
 
 const EVENT_ID_NEW_CONNECTION: &str = "new-connection";
 const EVENT_ID_DISCONNECT: &str = "disconnect";
-const EVENT_ID_ENABLE_LIGHT_MODE: &str = "enable-light-mode";
-const EVENT_ID_ENABLE_DARK_MODE: &str = "enable-dark-mode";
+const EVENT_ID_SET_DARK_MODE: &str = "set-dark-mode";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -56,20 +55,20 @@ async fn main() -> Result<(), Box<dyn Error>> {
         )
         .on_menu_event(|event| match event.menu_item_id() {
             MENU_ITEM_ID_NEW_CONNECTION => {
-                println!("Event -> {}", EVENT_ID_NEW_CONNECTION);
+                println!("Event -> New connection");
                 let _ = event.window().emit(EVENT_ID_NEW_CONNECTION, ());
             }
             MENU_ITEM_ID_DISCONNECT => {
-                println!("Event -> {}", EVENT_ID_DISCONNECT);
+                println!("Event -> Disconnect");
                 let _ = event.window().emit(EVENT_ID_DISCONNECT, ());
             }
             MENU_ITEM_ID_LIGHT_MODE => {
-                println!("Event -> {}", EVENT_ID_ENABLE_LIGHT_MODE);
-                let _ = event.window().emit(EVENT_ID_ENABLE_LIGHT_MODE, ());
+                println!("Event -> Enable light mode");
+                let _ = event.window().emit(EVENT_ID_SET_DARK_MODE, false);
             }
             MENU_ITEM_ID_DARK_MODE => {
-                println!("Event -> {}", EVENT_ID_ENABLE_DARK_MODE);
-                let _ = event.window().emit(EVENT_ID_ENABLE_DARK_MODE, ());
+                println!("Event -> Enable dark mode");
+                let _ = event.window().emit(EVENT_ID_SET_DARK_MODE, true);
             }
             _ => {}
         })

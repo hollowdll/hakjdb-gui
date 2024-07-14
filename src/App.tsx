@@ -1,6 +1,6 @@
 import "./App.css";
 import { Box, CssBaseline, PaletteMode, useMediaQuery } from "@mui/material";
-import { amber, deepOrange, grey } from "@mui/material/colors";
+import { deepOrange, grey } from "@mui/material/colors";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ConnectionView from "./components/views/ConnectionView";
@@ -13,6 +13,8 @@ import LoadingBackdrop from "./components/common/LoadingBackdrop";
 import AlertBox from "./components/common/AlertBox";
 import { useThemeStore } from "./state/store";
 import { useEffect, useMemo } from "react";
+import { tauriListenEvents } from "./tauri/event";
+import { listen } from "@tauri-apps/api/event";
 
 const getDesignTokens = (mode: PaletteMode) => ({
   palette: {
@@ -63,6 +65,16 @@ function App() {
   useEffect(() => {
     if (prefersDarkMode) setDarkMode(true);
   }, [prefersDarkMode, setDarkMode]);
+
+  useEffect(() => {
+    const unlisten = listen<boolean>(tauriListenEvents.setDarkMode, (event) => {
+      setDarkMode(event.payload);
+    });
+
+    return () => {
+      unlisten.then((resolve) => resolve());
+    };
+  }, [setDarkMode]);
 
   return (
     <ThemeProvider theme={theme}>
