@@ -24,24 +24,52 @@ use app::{
 use std::error::Error;
 use tauri::{CustomMenuItem, Manager, Menu, Submenu};
 
+const MENU_ITEM_ID_NEW_CONNECTION: &str = "new-connection";
+const MENU_ITEM_ID_DISCONNECT: &str = "disconnect";
+const MENU_ITEM_ID_LIGHT_MODE: &str = "light-mode";
+const MENU_ITEM_ID_DARK_MODE: &str = "dark-mode";
+
+const EVENT_ID_NEW_CONNECTION: &str = "new-connection";
+const EVENT_ID_DISCONNECT: &str = "disconnect";
+const EVENT_ID_ENABLE_LIGHT_MODE: &str = "enable-light-mode";
+const EVENT_ID_ENABLE_DARK_MODE: &str = "enable-dark-mode";
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     tauri::Builder::default()
-        .menu(Menu::os_default("kvdb-gui").add_submenu(Submenu::new(
-            "Connect",
-            Menu::with_items([
-                CustomMenuItem::new("new-connection", "New Connection").into(),
-                CustomMenuItem::new("disconnect", "Disconnect").into(),
-            ]),
-        )))
+        .menu(
+            Menu::os_default("kvdb-gui")
+                .add_submenu(Submenu::new(
+                    "Connect",
+                    Menu::with_items([
+                        CustomMenuItem::new(MENU_ITEM_ID_NEW_CONNECTION, "New Connection").into(),
+                        CustomMenuItem::new(MENU_ITEM_ID_DISCONNECT, "Disconnect").into(),
+                    ]),
+                ))
+                .add_submenu(Submenu::new(
+                    "Theme",
+                    Menu::with_items([
+                        CustomMenuItem::new(MENU_ITEM_ID_LIGHT_MODE, "Light Mode").into(),
+                        CustomMenuItem::new(MENU_ITEM_ID_DARK_MODE, "Dark Mode").into(),
+                    ]),
+                )),
+        )
         .on_menu_event(|event| match event.menu_item_id() {
-            "new-connection" => {
-                println!("Menu event -> New Connection");
-                let _ = event.window().emit("new-connection", ());
+            MENU_ITEM_ID_NEW_CONNECTION => {
+                println!("Event -> {}", EVENT_ID_NEW_CONNECTION);
+                let _ = event.window().emit(EVENT_ID_NEW_CONNECTION, ());
             }
-            "disconnect" => {
-                println!("Menu event -> Disconnect");
-                let _ = event.window().emit("disconnect", ());
+            MENU_ITEM_ID_DISCONNECT => {
+                println!("Event -> {}", EVENT_ID_DISCONNECT);
+                let _ = event.window().emit(EVENT_ID_DISCONNECT, ());
+            }
+            MENU_ITEM_ID_LIGHT_MODE => {
+                println!("Event -> {}", EVENT_ID_ENABLE_LIGHT_MODE);
+                let _ = event.window().emit(EVENT_ID_ENABLE_LIGHT_MODE, ());
+            }
+            MENU_ITEM_ID_DARK_MODE => {
+                println!("Event -> {}", EVENT_ID_ENABLE_DARK_MODE);
+                let _ = event.window().emit(EVENT_ID_ENABLE_DARK_MODE, ());
             }
             _ => {}
         })
