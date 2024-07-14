@@ -24,7 +24,7 @@ export default function AlertBox() {
           onClose={handleClose}
           severity={severity}
           variant="filled"
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", wordBreak: 'break-word' }}
         >
           {message}
         </Alert>
