@@ -19,6 +19,6 @@ export function allyPropsDialogActions() {
 
 export function allyPropsAccordionSummary() {
   return {
-    sx: { userSelect: 'text' },
+    sx: { userSelect: "text" },
   };
 }

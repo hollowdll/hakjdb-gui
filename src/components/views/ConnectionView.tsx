@@ -62,7 +62,10 @@ export default function ConnectionView() {
           expanded={accordionExpanded === "panel1"}
           onChange={handleAccordionChange("panel1")}
         >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} {...allyPropsAccordionSummary()}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            {...allyPropsAccordionSummary()}
+          >
             <ListItemText primary="Host" {...allyPropsField()} />
             <ListItemText primary={connectionInfo.host} {...allyPropsValue()} />
           </AccordionSummary>
@@ -77,7 +80,10 @@ export default function ConnectionView() {
           expanded={accordionExpanded === "panel2"}
           onChange={handleAccordionChange("panel2")}
         >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} {...allyPropsAccordionSummary()}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            {...allyPropsAccordionSummary()}
+          >
             <ListItemText primary="Port" {...allyPropsField()} />
             <ListItemText primary={connectionInfo.port} {...allyPropsValue()} />
           </AccordionSummary>
@@ -92,7 +98,10 @@ export default function ConnectionView() {
           expanded={accordionExpanded === "panel3"}
           onChange={handleAccordionChange("panel3")}
         >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} {...allyPropsAccordionSummary()}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            {...allyPropsAccordionSummary()}
+          >
             <ListItemText primary="Default Database" {...allyPropsField()} />
             <ListItemText
               primary={connectionInfo.defaultDb}
@@ -110,7 +119,10 @@ export default function ConnectionView() {
           expanded={accordionExpanded === "panel4"}
           onChange={handleAccordionChange("panel4")}
         >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} {...allyPropsAccordionSummary()}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            {...allyPropsAccordionSummary()}
+          >
             <ListItemText primary="Using Password" {...allyPropsField()} />
             <ListItemText
               primary={connectionInfo.isUsePassword ? "Yes" : "No"}
@@ -161,7 +173,10 @@ export default function ConnectionView() {
           expanded={accordionExpanded === "panel5"}
           onChange={handleAccordionChange("panel5")}
         >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} {...allyPropsAccordionSummary()}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            {...allyPropsAccordionSummary()}
+          >
             <ListItemText primary="Using TLS" {...allyPropsField()} />
             <ListItemText
               primary={connectionInfo.isUseTLS ? "Yes" : "No"}
