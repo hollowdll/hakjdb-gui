@@ -1,5 +1,7 @@
 import "./App.css";
-import { Box } from "@mui/material";
+import { Box, CssBaseline, PaletteMode, useMediaQuery } from "@mui/material";
+import { amber, deepOrange, grey } from '@mui/material/colors';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ConnectionView from "./components/views/ConnectionView";
 import ServerView from "./components/views/server/ServerView";
@@ -9,10 +11,56 @@ import ConnectionManager from "./components/connect/ConnectionManager";
 import HomeView from "./components/views/HomeView";
 import LoadingBackdrop from "./components/common/LoadingBackdrop";
 import AlertBox from "./components/common/AlertBox";
+import { useThemeStore } from "./state/store";
+import { useMemo } from "react";
+
+const getDesignTokens = (mode: PaletteMode) => ({
+  palette: {
+    mode,
+    ...(mode === "light"
+      ? {
+        primary: grey,
+        background: {
+          default: deepOrange[100],
+          box: deepOrange[700],
+          paper: deepOrange[500],
+        },
+        divider: grey[500],
+        text: {
+          primary: grey[900],
+          secondary: grey[600],
+        },
+      }
+      : {
+        primary: deepOrange,
+        background: {
+          default: deepOrange[900],
+          box: deepOrange[700],
+        },
+        text: {
+          primary: "#fff",
+          secondary: grey[500],
+        }
+      }),
+  },
+});
 
 function App() {
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: isDarkMode ? "dark" : "light",
+        },
+      }),
+    [isDarkMode],
+  );
+
   return (
-    <>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Router>
         <Box sx={{ display: "flex" }}>
           <ConnectionManager />
@@ -27,7 +75,7 @@ function App() {
       </Router>
       <LoadingBackdrop />
       <AlertBox />
-    </>
+    </ThemeProvider>
   );
 }
 

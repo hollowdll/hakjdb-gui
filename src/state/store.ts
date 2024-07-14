@@ -63,6 +63,11 @@ interface DialogState {
   setIsDeleteHashMapFieldsDialogOpen: (isOpen: boolean) => void;
 }
 
+interface ThemeState {
+  isDarkMode: boolean;
+  setDarkMode: (enable: boolean) => void;
+}
+
 export const useConnectionInfoStore = create<ConnectionInfoState>((set) => ({
   connectionInfo: {
     host: "",
@@ -154,4 +159,9 @@ export const useDialogStore = create<DialogState>((set) => ({
     set(() => ({ isGetAllHashMapFieldsAndValuesDialogOpen: isOpen })),
   setIsDeleteHashMapFieldsDialogOpen: (isOpen) =>
     set(() => ({ isDeleteHashMapFieldsDialogOpen: isOpen })),
+}));
+
+export const useThemeStore = create<ThemeState>((set) => ({
+  isDarkMode: false,
+  setDarkMode: (enable: boolean) => set(() => ({ isDarkMode: enable })),
 }));
