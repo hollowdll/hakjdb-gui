@@ -144,7 +144,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           />
           <TextField
             name="defaultDb"
-            label="Database To Use"
+            label="Default Database"
             value={connectionInfo.defaultDb}
             onChange={inputChanged}
             {...allyPropsDialogTextField()}

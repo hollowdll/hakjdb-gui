@@ -92,7 +92,7 @@ export default function ConnectionView() {
           onChange={handleAccordionChange("panel3")}
         >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <ListItemText primary="Database To Use" {...allyPropsField()} />
+            <ListItemText primary="Default Database" {...allyPropsField()} />
             <ListItemText
               primary={connectionInfo.defaultDb}
               {...allyPropsValue()}
@@ -100,7 +100,7 @@ export default function ConnectionView() {
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              Commands in Keys view use this database by default.
+              Commands in Keys view use this database as the default database.
             </Typography>
           </AccordionDetails>
         </Accordion>

@@ -9,6 +9,7 @@ import { AlertSeverity } from "../components/common/AlertBox";
 interface ConnectionInfoState {
   connectionInfo: ConnectionInfo;
   setConnectionInfo: (newConnectionInfo: ConnectionInfo) => void;
+  setDefaultDb: (name: string) => void;
 }
 
 interface ServerInfoState {
@@ -74,6 +75,7 @@ export const useConnectionInfoStore = create<ConnectionInfoState>((set) => ({
   },
   setConnectionInfo: (newConnectionInfo) =>
     set(() => ({ connectionInfo: newConnectionInfo })),
+  setDefaultDb: (name) => set((state) => ({ connectionInfo: { ...state.connectionInfo, defaultDb: name } })),
 }));
 
 export const useServerInfoStore = create<ServerInfoState>((set) => ({

@@ -13,10 +13,12 @@ import {
   CircularProgress,
   Stack,
   ListItemText,
+  Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { DatabaseInfo } from "../../types/db";
 import { useDatabaseStore } from "../../state/store";
+import { useConnectionInfoStore } from "../../state/store";
 import DeleteDatabaseDialog from "./DeleteDatabaseDialog";
 
 export default function DatabaseList() {
@@ -29,6 +31,9 @@ export default function DatabaseList() {
   );
   const databases = useDatabaseStore((state) => state.databases);
   const setDatabases = useDatabaseStore((state) => state.setDatabases);
+  const setDefaultDb = useConnectionInfoStore(
+    (state) => state.setDefaultDb,
+  );
 
   const closeAccordion = () => {
     setAccordionExpanded(false);
@@ -44,6 +49,10 @@ export default function DatabaseList() {
           setAccordionExpanded(false);
         }
       };
+
+  const handleSetDefaultDb = (name: string) => {
+    setDefaultDb(name);
+  }
 
   const handleGetDatabaseInfo = (dbName: string) => {
     console.log("getting db info");
@@ -108,12 +117,13 @@ export default function DatabaseList() {
                 key={index + 1}
               >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography sx={{ wordBreak: 'break-word' }}>
+                  <Typography sx={{ wordBreak: "break-word" }}>
                     {dbName}
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Stack spacing={2} direction="row">
+                    <Button variant="contained" onClick={() => handleSetDefaultDb(dbName)}>Set as default</Button>
                     <DeleteDatabaseDialog
                       dbName={dbName}
                       closeDbListAccordion={closeAccordion}
