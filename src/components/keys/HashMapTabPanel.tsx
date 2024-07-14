@@ -154,6 +154,7 @@ export default function HashMapTabPanel() {
         </FormControl>
         <Button
           variant="contained"
+          color="success"
           onClick={handleRunCommand}
           endIcon={<PlayArrowIcon />}
         >

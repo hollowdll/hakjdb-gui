@@ -100,6 +100,7 @@ export default function StringTabPanel() {
         </FormControl>
         <Button
           variant="contained"
+          color="success"
           onClick={handleRunCommand}
           endIcon={<PlayArrowIcon />}
         >

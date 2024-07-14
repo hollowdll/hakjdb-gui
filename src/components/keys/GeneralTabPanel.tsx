@@ -158,6 +158,7 @@ export default function GeneralTabPanel() {
         </FormControl>
         <Button
           variant="contained"
+          color="success"
           onClick={handleRunCommand}
           endIcon={<PlayArrowIcon />}
         >
