@@ -36,14 +36,14 @@ export default function DatabaseList() {
 
   const handleAccordionChange =
     (panel: string, dbName: string) =>
-    (_event: SyntheticEvent, isExpanded: boolean) => {
-      if (isExpanded) {
-        setAccordionExpanded(panel);
-        handleGetDatabaseInfo(dbName);
-      } else {
-        setAccordionExpanded(false);
-      }
-    };
+      (_event: SyntheticEvent, isExpanded: boolean) => {
+        if (isExpanded) {
+          setAccordionExpanded(panel);
+          handleGetDatabaseInfo(dbName);
+        } else {
+          setAccordionExpanded(false);
+        }
+      };
 
   const handleGetDatabaseInfo = (dbName: string) => {
     console.log("getting db info");
@@ -108,7 +108,7 @@ export default function DatabaseList() {
                 key={index + 1}
               >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography sx={{ display: "flex", alignItems: "center" }}>
+                  <Typography sx={{ wordBreak: 'break-word' }}>
                     {dbName}
                   </Typography>
                 </AccordionSummary>

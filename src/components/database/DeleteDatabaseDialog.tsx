@@ -65,7 +65,7 @@ export default function DeleteDatabaseDialog({
         Delete
       </Button>
       <Dialog open={isOpen} onClose={handleClose}>
-        <DialogTitle>Delete Database {dbName}</DialogTitle>
+        <DialogTitle sx={{ wordBreak: 'break-word' }}>Delete Database {dbName}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Deleted databases cannot be restored. Deleting a database also
