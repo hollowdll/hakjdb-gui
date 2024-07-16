@@ -13,6 +13,7 @@ import StorageIcon from "@mui/icons-material/Storage";
 import FolderIcon from "@mui/icons-material/Folder";
 import KeyIcon from "@mui/icons-material/Key";
 import { useNavigationStore } from "../../state/store";
+import { useThemeStore } from "../../state/store";
 
 const drawerWidth = 240;
 const navItemNames: NavItemNames = {
@@ -43,6 +44,7 @@ const renderIcon = (item: NavItem) => {
 
 export function NavBar() {
   const navigate = useNavigate();
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
   const selectedIndex = useNavigationStore(
     (state) => state.selectedNavItemIndex,
   );
@@ -72,7 +74,13 @@ export function NavBar() {
             onClick={() => navigate(item.href)}
             sx={{
               backgroundColor:
-                selectedIndex === index ? "rgb(225,225,225)" : "white",
+                selectedIndex === index
+                  ? isDarkMode
+                    ? "rgb(50,50,50)"
+                    : "rgb(225,225,225)"
+                  : isDarkMode
+                    ? "rgb(25,25,25)"
+                    : "rgb(255,255,255)",
             }}
           >
             <ListItemButton

@@ -1,5 +1,5 @@
 import "./App.css";
-import { Box } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ConnectionView from "./components/views/ConnectionView";
@@ -20,7 +20,10 @@ function App() {
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
   const setDarkMode = useThemeStore((state) => state.setDarkMode);
 
-  const theme = useMemo(() => createTheme(getDesignTokens(isDarkMode ? "dark" : "light")), [isDarkMode]);
+  const theme = useMemo(
+    () => createTheme(getDesignTokens(isDarkMode ? "dark" : "light")),
+    [isDarkMode],
+  );
 
   useEffect(() => {
     const unlisten = listen<boolean>(tauriListenEvents.setDarkMode, (event) => {
@@ -34,6 +37,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Router>
         <Box sx={{ display: "flex" }}>
           <ConnectionManager />
