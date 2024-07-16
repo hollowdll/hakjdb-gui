@@ -79,7 +79,7 @@ export function NavBar() {
                     ? "rgb(50,50,50)"
                     : "rgb(225,225,225)"
                   : isDarkMode
-                    ? "rgb(25,25,25)"
+                    ? "rgb(20,20,20)"
                     : "rgb(255,255,255)",
             }}
           >
