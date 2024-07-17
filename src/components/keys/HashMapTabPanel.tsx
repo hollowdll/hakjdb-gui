@@ -13,11 +13,12 @@ import {
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
-import { useDialogStore } from "../../state/store";
+import { useDialogStore, useThemeStore } from "../../state/store";
 import SetHashMapDialog from "./SetHashMapDialog";
 import GetAllHashMapFieldsAndValuesDialog from "./GetAllHashMapFieldsAndValuesDialog";
 import DeleteHashMapFieldsDialog from "./DeleteHashMapFieldsDialog";
 import GetHashMapFieldValueDialog from "./GetHashMapFieldValueDialog";
+import { boxBackgroundColor } from "../../style";
 
 type HashMapTabMenuItems = {
   setHashMap: string;
@@ -41,6 +42,7 @@ export default function HashMapTabPanel() {
     string,
     string
   > | null>(null);
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
   const setIsSetHashMapDialogOpen = useDialogStore(
     (state) => state.setIsSetHashMapDialogOpen,
   );
@@ -136,7 +138,7 @@ export default function HashMapTabPanel() {
             label="Select RPC"
             value={selectedItem}
             onChange={handleSelectedItemChange}
-            sx={{ backgroundColor: "rgb(250, 250, 250)" }}
+            sx={{ backgroundColor: boxBackgroundColor(isDarkMode) }}
           >
             <MenuItem value={menuItems.setHashMap}>
               {menuItems.setHashMap}
@@ -165,7 +167,7 @@ export default function HashMapTabPanel() {
         <Box
           sx={{
             p: 3,
-            backgroundColor: "rgb(250, 250, 250)",
+            backgroundColor: boxBackgroundColor(isDarkMode),
             width: "100%",
           }}
         >

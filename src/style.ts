@@ -44,3 +44,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
       }),
   },
 });
+
+export function boxBackgroundColor(isDarkMode: boolean) {
+  return isDarkMode ? "rgb(20,20,20)" : "rgb(250,250,250)"
+}

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
-import { useLoadingStore } from "../../state/store";
+import { useLoadingStore, useThemeStore } from "../../state/store";
 import { invokeGetKeys } from "../../tauri/command";
 import { errorAlert } from "../../utility/alert";
 import { useConnectionInfoStore } from "../../state/store";
@@ -21,6 +21,7 @@ import { useDialogStore } from "../../state/store";
 import DeleteKeyDialog from "./DeleteKeyDialog";
 import DeleteAllKeysDialog from "./DeleteAllKeysDialog";
 import GetTypeOfKeyDialog from "./GetTypeOfKeyDialog";
+import { boxBackgroundColor } from "../../style";
 
 type GeneralTabMenuItems = {
   getKeys: string;
@@ -41,6 +42,7 @@ export default function GeneralTabPanel() {
   const [isContentDisplayed, setIsContentDisplayed] = useState(false);
   const [displayedKeys, setDisplayedKeys] = useState<string[] | null>(null);
   const [displayedMsg, setDisplayedMsg] = useState("");
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
   const setIsLoadingBackdropOpen = useLoadingStore(
     (state) => state.setIsLoadingBackdropOpen,
   );
@@ -142,7 +144,7 @@ export default function GeneralTabPanel() {
             label="Select RPC"
             value={selectedItem}
             onChange={handleChange}
-            sx={{ backgroundColor: "rgb(250, 250, 250)" }}
+            sx={{ backgroundColor: boxBackgroundColor(isDarkMode) }}
           >
             <MenuItem value={menuItems.getKeys}>{menuItems.getKeys}</MenuItem>
             <MenuItem value={menuItems.deleteAllKeys}>
@@ -169,7 +171,7 @@ export default function GeneralTabPanel() {
         <Box
           sx={{
             p: 3,
-            backgroundColor: "rgb(250, 250, 250)",
+            backgroundColor: boxBackgroundColor(isDarkMode),
             width: "100%",
           }}
         >

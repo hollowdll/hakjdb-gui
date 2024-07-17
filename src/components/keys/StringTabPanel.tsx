@@ -11,9 +11,10 @@ import {
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
-import { useDialogStore } from "../../state/store";
+import { useDialogStore, useThemeStore } from "../../state/store";
 import SetStringDialog from "./SetStringDialog";
 import GetStringDialog from "./GetStringDialog";
+import { boxBackgroundColor } from "../../style";
 
 type StringTabMenuItems = {
   setString: string;
@@ -29,6 +30,7 @@ export default function StringTabPanel() {
   const [selectedItem, setSelectedItem] = useState("");
   const [isContentDisplayed, setIsContentDisplayed] = useState(false);
   const [displayedMsg, setDisplayedMsg] = useState("");
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
   const setIsSetStringDialogOpen = useDialogStore(
     (state) => state.setIsSetStringDialogOpen,
   );
@@ -88,7 +90,7 @@ export default function StringTabPanel() {
             label="Select RPC"
             value={selectedItem}
             onChange={handleChange}
-            sx={{ backgroundColor: "rgb(250, 250, 250)" }}
+            sx={{ backgroundColor: boxBackgroundColor(isDarkMode) }}
           >
             <MenuItem value={menuItems.setString}>
               {menuItems.setString}
@@ -111,7 +113,7 @@ export default function StringTabPanel() {
         <Box
           sx={{
             p: 3,
-            backgroundColor: "rgb(250, 250, 250)",
+            backgroundColor: boxBackgroundColor(isDarkMode),
             width: "100%",
           }}
         >

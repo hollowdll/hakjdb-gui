@@ -7,7 +7,7 @@ export default function LoadingBackdrop() {
 
   return (
     <div>
-      <Backdrop sx={{ color: "#fff", zIndex: 9999 }} open={isOpen}>
+      <Backdrop sx={{ color: "skyblue", zIndex: 9999 }} open={isOpen}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </div>

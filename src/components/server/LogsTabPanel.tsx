@@ -11,11 +11,14 @@ import LogFilterDialog from "./LogFilterDialog";
 import { errorAlert } from "../../utility/alert";
 import { invokeGetServerLogs } from "../../tauri/command";
 import { LogFilterType } from "../../types/server";
+import { boxBackgroundColor } from "../../style";
+import { useThemeStore } from "../../state/store";
 
 export default function LogsTabPanel() {
   const [serverLogs, setServerLogs] = useState<string[] | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
 
   const handleGetServerLogs = () => {
     invokeGetServerLogs()
@@ -102,9 +105,9 @@ export default function LogsTabPanel() {
       <Box
         sx={{
           p: 3,
-          backgroundColor: "rgb(250, 250, 250)",
           width: "100%",
           overflow: "auto",
+          backgroundColor: boxBackgroundColor(isDarkMode),
         }}
       >
         {isLoading ? (

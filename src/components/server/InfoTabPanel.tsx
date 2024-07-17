@@ -19,6 +19,8 @@ import { useState, useEffect, SyntheticEvent } from "react";
 import { errorAlert } from "../../utility/alert";
 import { invokeGetServerInfo } from "../../tauri/command";
 import { allyPropsAccordionSummary } from "../../utility/props";
+import { useThemeStore } from "../../state/store";
+import { boxBackgroundColor } from "../../style";
 
 type AccordionProps = {
   accordionExpanded: string | false;
@@ -495,6 +497,7 @@ export default function InfoTabPanel() {
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
     false,
   );
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
 
   const handleAccordionChange =
     (panel: string) => (_event: SyntheticEvent, isExpanded: boolean) => {
@@ -522,8 +525,8 @@ export default function InfoTabPanel() {
     <Box
       sx={{
         p: 3,
-        backgroundColor: "rgb(250, 250, 250)",
         width: "100%",
+        backgroundColor: boxBackgroundColor(isDarkMode),
       }}
     >
       {isLoading ? (
