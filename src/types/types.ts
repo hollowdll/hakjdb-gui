@@ -6,6 +6,7 @@ export interface ConnectionInfo {
   tlsCertFilePath: string;
   isUsePassword: boolean;
   isUseTLS: boolean;
+  isConnected: boolean;
 }
 
 export interface NavItem {

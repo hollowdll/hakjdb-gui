@@ -18,7 +18,12 @@ export default function AlertBox() {
         autoHideDuration={5000}
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        sx={{ maxWidth: "400px", display: "flex", alignItems: "center" }}
+        sx={{
+          maxWidth: "400px",
+          display: "flex",
+          alignItems: "center",
+          marginBottom: "30px",
+        }}
       >
         <Alert
           onClose={handleClose}

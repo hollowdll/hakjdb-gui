@@ -77,6 +77,7 @@ export const useConnectionInfoStore = create<ConnectionInfoState>((set) => ({
     tlsCertFilePath: "",
     isUsePassword: false,
     isUseTLS: false,
+    isConnected: false,
   },
   setConnectionInfo: (newConnectionInfo) =>
     set(() => ({ connectionInfo: newConnectionInfo })),

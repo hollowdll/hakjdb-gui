@@ -47,6 +47,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
     tlsCertFilePath: "",
     isUsePassword: false,
     isUseTLS: false,
+    isConnected: false,
   });
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isTLSCertFileChosen, setIsTLSCertFileChosen] = useState(false);
