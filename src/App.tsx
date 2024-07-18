@@ -15,6 +15,7 @@ import { useEffect, useMemo } from "react";
 import { tauriListenEvents } from "./tauri/event";
 import { listen } from "@tauri-apps/api/event";
 import { getDesignTokens } from "./style";
+import { BottomBar } from "./components/layout/BottomBar";
 
 function App() {
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
@@ -52,6 +53,7 @@ function App() {
       </Router>
       <LoadingBackdrop />
       <AlertBox />
+      <BottomBar />
     </ThemeProvider>
   );
 }
