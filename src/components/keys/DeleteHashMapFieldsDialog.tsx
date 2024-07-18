@@ -163,7 +163,7 @@ export default function DeleteHashMapFieldsDialog(
         <Button variant="contained" onClick={handleDeleteHashMapFields}>
           Ok
         </Button>
-        <Button variant="outlined" onClick={handleClose} color="error">
+        <Button variant="outlined" onClick={handleClose} color="primary">
           Cancel
         </Button>
       </DialogActions>

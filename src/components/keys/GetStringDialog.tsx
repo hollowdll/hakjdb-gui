@@ -98,7 +98,7 @@ export default function GetStringDialog(props: GetStringDialogProps) {
         <Button variant="contained" onClick={handleGetString}>
           Ok
         </Button>
-        <Button variant="outlined" onClick={handleClose} color="error">
+        <Button variant="outlined" onClick={handleClose} color="primary">
           Cancel
         </Button>
       </DialogActions>

@@ -235,7 +235,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           <Button variant="contained" onClick={handleConnectClick}>
             Connect
           </Button>
-          <Button variant="outlined" onClick={handleClose} color="error">
+          <Button variant="outlined" onClick={handleClose} color="primary">
             Cancel
           </Button>
         </DialogActions>

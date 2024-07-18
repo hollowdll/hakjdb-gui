@@ -65,7 +65,7 @@ export default function DeleteAllKeysDialog(props: DeleteAllKeysDialogProps) {
         <Button variant="contained" onClick={handleDeleteAllKeys} color="error">
           Delete
         </Button>
-        <Button variant="outlined" onClick={handleClose} color="error">
+        <Button variant="outlined" onClick={handleClose} color="primary">
           Cancel
         </Button>
       </DialogActions>

@@ -170,7 +170,7 @@ export default function GetHashMapFieldValueDialog(
         <Button variant="contained" onClick={handleGetHashMapFieldValue}>
           Ok
         </Button>
-        <Button variant="outlined" onClick={handleClose} color="error">
+        <Button variant="outlined" onClick={handleClose} color="primary">
           Cancel
         </Button>
       </DialogActions>

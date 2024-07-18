@@ -171,7 +171,7 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
         <Button variant="contained" onClick={handleSetHashMap}>
           Ok
         </Button>
-        <Button variant="outlined" onClick={handleClose} color="error">
+        <Button variant="outlined" onClick={handleClose} color="primary">
           Cancel
         </Button>
       </DialogActions>

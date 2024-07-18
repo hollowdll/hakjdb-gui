@@ -140,7 +140,7 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
         <Button variant="contained" onClick={handleDeleteKey}>
           Ok
         </Button>
-        <Button variant="outlined" onClick={handleClose} color="error">
+        <Button variant="outlined" onClick={handleClose} color="primary">
           Cancel
         </Button>
       </DialogActions>

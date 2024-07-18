@@ -69,7 +69,7 @@ export default function LogFilterDialog({
           <Button variant="contained" onClick={handleFilter}>
             Filter
           </Button>
-          <Button variant="outlined" onClick={handleClose} color="error">
+          <Button variant="outlined" onClick={handleClose} color="primary">
             Cancel
           </Button>
         </DialogActions>

@@ -104,7 +104,7 @@ export default function SetStringDialog(props: SetStringDialogProps) {
         <Button variant="contained" onClick={handleSetString}>
           Ok
         </Button>
-        <Button variant="outlined" onClick={handleClose} color="error">
+        <Button variant="outlined" onClick={handleClose} color="primary">
           Cancel
         </Button>
       </DialogActions>

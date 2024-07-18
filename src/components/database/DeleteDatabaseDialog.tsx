@@ -78,7 +78,7 @@ export default function DeleteDatabaseDialog({
           <Button variant="contained" onClick={handleDeleteDb} color="error">
             Delete
           </Button>
-          <Button variant="outlined" onClick={handleClose} color="error">
+          <Button variant="outlined" onClick={handleClose} color="primary">
             Cancel
           </Button>
         </DialogActions>

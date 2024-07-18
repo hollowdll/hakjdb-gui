@@ -100,7 +100,7 @@ export default function GetTypeOfKeyDialog(props: GetTypeOfKeyDialogProps) {
         <Button variant="contained" onClick={handleGetTypeOfKey}>
           Ok
         </Button>
-        <Button variant="outlined" onClick={handleClose} color="error">
+        <Button variant="outlined" onClick={handleClose} color="primary">
           Cancel
         </Button>
       </DialogActions>
