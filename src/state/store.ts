@@ -8,8 +8,10 @@ import { AlertSeverity } from "../components/common/AlertBox";
 
 interface ConnectionInfoState {
   connectionInfo: ConnectionInfo;
+  isConnected: boolean;
   setConnectionInfo: (newConnectionInfo: ConnectionInfo) => void;
   setDefaultDb: (name: string) => void;
+  setIsConnected: (isConnected: boolean) => void;
 }
 
 interface ServerInfoState {
@@ -77,14 +79,16 @@ export const useConnectionInfoStore = create<ConnectionInfoState>((set) => ({
     tlsCertFilePath: "",
     isUsePassword: false,
     isUseTLS: false,
-    isConnected: false,
   },
+  isConnected: false,
   setConnectionInfo: (newConnectionInfo) =>
     set(() => ({ connectionInfo: newConnectionInfo })),
   setDefaultDb: (name) =>
     set((state) => ({
       connectionInfo: { ...state.connectionInfo, defaultDb: name },
     })),
+  setIsConnected: (isConnected) =>
+    set(() => ({ isConnected: isConnected })),
 }));
 
 export const useServerInfoStore = create<ServerInfoState>((set) => ({

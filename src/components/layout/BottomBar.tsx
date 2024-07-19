@@ -8,7 +8,7 @@ import { appVersion } from "../../version";
 export function BottomBar() {
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
   const isConnected = useConnectionInfoStore(
-    (state) => state.connectionInfo.isConnected,
+    (state) => state.isConnected,
   );
 
   return (

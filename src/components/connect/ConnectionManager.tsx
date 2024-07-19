@@ -1,5 +1,5 @@
 import { ConnectionDialog } from "./ConnectionDialog";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { ConnectionInfo } from "../../types/types";
 import { listen } from "@tauri-apps/api/event";
 import { NavBar } from "../nav/NavBar";
@@ -12,8 +12,11 @@ import { useNavigationStore } from "../../state/store";
 import { successAlert, errorAlert } from "../../utility/alert";
 
 export default function ConnectionManager() {
-  const [isConnected, setIsConnected] = useState(false);
   const navigate = useNavigate();
+  const isConnected = useConnectionInfoStore((state) => state.isConnected);
+  const setIsConnected = useConnectionInfoStore(
+    (state) => state.setIsConnected,
+  );
   const setConnectionInfo = useConnectionInfoStore(
     (state) => state.setConnectionInfo,
   );
