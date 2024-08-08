@@ -6,7 +6,9 @@ It allows you to manage kvdb servers visually with a graphical user interface. I
 
 kvdb-cli is a CLI tool for kvdb that allows you to manage kvdb servers from the command line. kvdb-gui is more user friendly for people who are not familiar with the command line, allowing you to manage kvdb servers by clicking buttons and filling forms.
 
-NOTE: This project is in early development.
+NOTE: This project is in early development and is not finished. The development is currently on hiatus until kvdb v1.0.0 is released.
+
+IMPORTANT: Currently this only works with kvdb v0.12.0. 
 
 # Build
 
