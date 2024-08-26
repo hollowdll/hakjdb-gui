@@ -37,7 +37,7 @@ const EVENT_ID_SET_DARK_MODE: &str = "set-dark-mode";
 async fn main() -> Result<(), Box<dyn Error>> {
     tauri::Builder::default()
         .menu(
-            Menu::os_default("kvdb-gui")
+            Menu::os_default("HakjDB GUI")
                 .add_submenu(Submenu::new(
                     "Connect",
                     Menu::with_items([
