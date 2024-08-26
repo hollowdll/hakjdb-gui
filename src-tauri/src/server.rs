@@ -175,17 +175,17 @@ pub async fn get_server_logs(
     connection: State<'_, GrpcConnection>,
 ) -> Result<ServerLogsPayload, String> {
     if let Some(ref mut client) = *connection.client.lock().await {
-        let mut request = tonic::Request::new(GetLogsRequest {});
-        insert_common_grpc_metadata(&connection, &mut request).await;
+        let mut req = tonic::Request::new(GetLogsRequest {});
+        insert_common_grpc_metadata(&connection, &mut req).await;
 
-        let response = client.server_client.get_logs(request).await;
-        match response {
-            Ok(response) => {
+        let resp = client.server_client.get_logs(req).await;
+        match resp {
+            Ok(resp) => {
                 return Ok(ServerLogsPayload {
-                    logs: response.get_ref().logs.clone(),
+                    logs: resp.get_ref().logs.clone(),
                 });
             }
-            Err(err) => return Err(format!("{}", err)),
+            Err(e) => return Err(e.to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());

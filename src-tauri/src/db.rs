@@ -1,12 +1,8 @@
 use crate::{
     error::{NO_CONNECTION_FOUND_MSG, UNEXPECTED_ERROR_MSG},
     grpc::{
-        insert_common_grpc_metadata,
-        kvdb::{
-            CreateDatabaseRequest, DeleteDatabaseRequest, GetAllDatabasesRequest,
-            GetDatabaseInfoRequest,
-        },
-        GrpcConnection,
+        hakjdb_api::{CreateDbRequest, DeleteDbRequest, GetAllDBsRequest, GetDbInfoRequest},
+        insert_common_grpc_metadata, GrpcConnection,
     },
     util::prost_timestamp_to_iso8601,
 };
@@ -16,6 +12,7 @@ use tauri::State;
 #[derive(Serialize)]
 pub struct DatabaseInfoPayload {
     pub name: String,
+    pub description: String,
     #[serde(rename = "createdAt")]
     pub created_at: String,
     #[serde(rename = "updatedAt")]
@@ -37,17 +34,17 @@ pub async fn get_all_databases(
     connection: State<'_, GrpcConnection>,
 ) -> Result<GetDatabasesPayload, String> {
     if let Some(ref mut client) = *connection.client.lock().await {
-        let mut request = tonic::Request::new(GetAllDatabasesRequest {});
-        insert_common_grpc_metadata(&connection, &mut request).await;
+        let mut req = tonic::Request::new(GetAllDBsRequest {});
+        insert_common_grpc_metadata(&connection, &mut req).await;
 
-        let response = client.database_client.get_all_databases(request).await;
-        match response {
-            Ok(response) => {
+        let resp = client.db_client.get_all_d_bs(req).await;
+        match resp {
+            Ok(resp) => {
                 return Ok(GetDatabasesPayload {
-                    db_names: response.get_ref().db_names.clone(),
+                    db_names: resp.get_ref().db_names.clone(),
                 });
             }
-            Err(err) => return Err(format!("{}", err)),
+            Err(e) => return Err(e.to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -60,17 +57,18 @@ pub async fn get_database_info(
     db_name: &str,
 ) -> Result<DatabaseInfoPayload, String> {
     if let Some(ref mut client) = *connection.client.lock().await {
-        let mut request = tonic::Request::new(GetDatabaseInfoRequest {
+        let mut req = tonic::Request::new(GetDbInfoRequest {
             db_name: db_name.to_owned(),
         });
-        insert_common_grpc_metadata(&connection, &mut request).await;
+        insert_common_grpc_metadata(&connection, &mut req).await;
 
-        let response = client.database_client.get_database_info(request).await;
-        match response {
-            Ok(response) => {
-                if let Some(data) = &response.get_ref().data {
+        let resp = client.db_client.get_db_info(req).await;
+        match resp {
+            Ok(resp) => {
+                if let Some(data) = &resp.get_ref().data {
                     return Ok(DatabaseInfoPayload {
                         name: data.name.to_owned(),
+                        description: data.description.to_owned(),
                         created_at: prost_timestamp_to_iso8601(data.created_at.as_ref().unwrap()),
                         updated_at: prost_timestamp_to_iso8601(data.updated_at.as_ref().unwrap()),
                         data_size: data.data_size.to_string(),
@@ -78,7 +76,7 @@ pub async fn get_database_info(
                     });
                 }
             }
-            Err(err) => return Err(format!("{}", err)),
+            Err(e) => return Err(e.to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -92,17 +90,19 @@ pub async fn get_database_info(
 pub async fn create_database(
     connection: State<'_, GrpcConnection>,
     db_name: &str,
+    description: &str,
 ) -> Result<String, String> {
     if let Some(ref mut client) = *connection.client.lock().await {
-        let mut request = tonic::Request::new(CreateDatabaseRequest {
+        let mut req = tonic::Request::new(CreateDbRequest {
             db_name: db_name.to_owned(),
+            description: description.to_owned(),
         });
-        insert_common_grpc_metadata(&connection, &mut request).await;
+        insert_common_grpc_metadata(&connection, &mut req).await;
 
-        let response = client.database_client.create_database(request).await;
-        match response {
-            Ok(response) => return Ok(response.get_ref().db_name.clone()),
-            Err(err) => return Err(format!("{}", err)),
+        let resp = client.db_client.create_db(req).await;
+        match resp {
+            Ok(resp) => return Ok(resp.get_ref().db_name.clone()),
+            Err(e) => return Err(e.to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -116,15 +116,15 @@ pub async fn delete_database(
     db_name: &str,
 ) -> Result<String, String> {
     if let Some(ref mut client) = *connection.client.lock().await {
-        let mut request = tonic::Request::new(DeleteDatabaseRequest {
+        let mut req = tonic::Request::new(DeleteDbRequest {
             db_name: db_name.to_owned(),
         });
-        insert_common_grpc_metadata(&connection, &mut request).await;
+        insert_common_grpc_metadata(&connection, &mut req).await;
 
-        let response = client.database_client.delete_database(request).await;
-        match response {
-            Ok(response) => return Ok(response.get_ref().db_name.clone()),
-            Err(err) => return Err(format!("{}", err)),
+        let resp = client.db_client.delete_db(req).await;
+        match resp {
+            Ok(resp) => return Ok(resp.get_ref().db_name.clone()),
+            Err(e) => return Err(e.to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
