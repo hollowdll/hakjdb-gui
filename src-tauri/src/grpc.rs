@@ -1,6 +1,8 @@
-use kvdb::{
-    database_service_client::DatabaseServiceClient, server_service_client::ServerServiceClient,
-    storage_service_client::StorageServiceClient,
+use hakjdb_api::{
+    auth_service_client::AuthServiceClient, db_service_client::DbServiceClient,
+    echo_service_client::EchoServiceClient, general_kv_service_client::GeneralKvServiceClient,
+    hash_map_kv_service_client::HashMapKvServiceClient, server_service_client::ServerServiceClient,
+    string_kv_service_client::StringKvServiceClient,
 };
 use std::path::PathBuf;
 use tauri::State;
@@ -30,13 +32,18 @@ pub const MD_KEY_API_VERSION: &str = "api_version";
 pub const MD_KEY_PASSWORD: &str = "password";
 
 pub struct GrpcClient {
+    pub auth_client: AuthServiceClient<Channel>,
+    pub db_client: DbServiceClient<Channel>,
     pub server_client: ServerServiceClient<Channel>,
-    pub database_client: DatabaseServiceClient<Channel>,
-    pub storage_client: StorageServiceClient<Channel>,
+    pub echo_client: EchoServiceClient<Channel>,
+    pub general_kv_client: GeneralKvServiceClient<Channel>,
+    pub string_kv_client: StringKvServiceClient<Channel>,
+    pub hashmap_kv_client: HashMapKvServiceClient<Channel>,
 }
 
 impl GrpcClient {
-    pub async fn new(host: &str, port: u16) -> Result<GrpcClient, Error> {
+    /// Returns a new insecure gRPC client.
+    pub async fn insecure(host: &str, port: u16) -> Result<GrpcClient, Error> {
         let api_url = format!("http://{}:{}", host, port);
         let channel = Channel::from_shared(api_url.clone())
             .unwrap()
@@ -44,13 +51,20 @@ impl GrpcClient {
             .await?;
 
         Ok(GrpcClient {
+            auth_client: AuthServiceClient::new(channel.clone()),
+            db_client: DbServiceClient::new(channel.clone()),
             server_client: ServerServiceClient::new(channel.clone()),
-            database_client: DatabaseServiceClient::new(channel.clone()),
-            storage_client: StorageServiceClient::new(channel),
+            echo_client: EchoServiceClient::new(channel.clone()),
+            general_kv_client: GeneralKvServiceClient::new(channel.clone()),
+            string_kv_client: StringKvServiceClient::new(channel.clone()),
+            hashmap_kv_client: HashMapKvServiceClient::new(channel.clone()),
         })
     }
 
-    pub async fn with_tls(host: &str, port: u16, pem_content: &str) -> Result<GrpcClient, Error> {
+    /// Returns a new secure gRPC client that uses TLS.
+    /// pem_content is the content of the server certificate file.
+    /// It needs to be a PEM encoded X509 certificate.
+    pub async fn secure(host: &str, port: u16, pem_content: &str) -> Result<GrpcClient, Error> {
         let ca = Certificate::from_pem(pem_content);
         let tls = ClientTlsConfig::new().ca_certificate(ca).domain_name(host);
         let channel = Channel::from_shared(format!("https://{}:{}", host, port))
@@ -60,17 +74,23 @@ impl GrpcClient {
             .await?;
 
         Ok(GrpcClient {
+            auth_client: AuthServiceClient::new(channel.clone()),
+            db_client: DbServiceClient::new(channel.clone()),
             server_client: ServerServiceClient::new(channel.clone()),
-            database_client: DatabaseServiceClient::new(channel.clone()),
-            storage_client: StorageServiceClient::new(channel),
+            echo_client: EchoServiceClient::new(channel.clone()),
+            general_kv_client: GeneralKvServiceClient::new(channel.clone()),
+            string_kv_client: StringKvServiceClient::new(channel.clone()),
+            hashmap_kv_client: HashMapKvServiceClient::new(channel.clone()),
         })
     }
 }
 
 pub struct GrpcConnection {
     pub client: Mutex<Option<GrpcClient>>,
+    /// DEPRECATED.
     pub password: Mutex<Option<String>>,
     pub tls_cert_path: Mutex<Option<PathBuf>>,
+    pub auth_token: Mutex<Option<String>>,
 }
 
 impl GrpcConnection {
@@ -79,6 +99,7 @@ impl GrpcConnection {
             client: None.into(),
             password: None.into(),
             tls_cert_path: None.into(),
+            auth_token: None.into(),
         }
     }
 }
@@ -87,8 +108,8 @@ pub async fn insert_common_grpc_metadata<T>(
     connection: &State<'_, GrpcConnection>,
     req: &mut Request<T>,
 ) {
-    if let Some(ref password) = *connection.password.lock().await {
+    if let Some(ref auth_token) = *connection.auth_token.lock().await {
         req.metadata_mut()
-            .insert(MD_KEY_PASSWORD, password.parse().unwrap());
+            .insert(MD_KEY_AUTH_TOKEN, auth_token.parse().unwrap());
     }
 }
