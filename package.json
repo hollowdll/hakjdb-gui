@@ -12,7 +12,7 @@
     "prepare": "husky",
     "format": "npx @biomejs/biome format --write ./src",
     "format-rs": "cd src-tauri && cargo fmt",
-    "precommit": "npm run format && npm run format-rs"
+    "precommit": "npm run lint"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

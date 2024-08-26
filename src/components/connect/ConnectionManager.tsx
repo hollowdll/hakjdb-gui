@@ -61,7 +61,7 @@ export default function ConnectionManager() {
     return () => {
       disconnect.then((resolve) => resolve());
     };
-  }, [navigate]);
+  }, [navigate, setIsConnected]);
 
   return (
     <>
