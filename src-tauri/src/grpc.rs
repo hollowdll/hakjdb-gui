@@ -43,7 +43,7 @@ pub struct GrpcClient {
 
 impl GrpcClient {
     /// Returns a new insecure gRPC client.
-    pub async fn insecure(host: &str, port: u16) -> Result<GrpcClient, Error> {
+    pub async fn new_insecure(host: &str, port: u16) -> Result<GrpcClient, Error> {
         let api_url = format!("http://{}:{}", host, port);
         let channel = Channel::from_shared(api_url.clone())
             .unwrap()
@@ -64,7 +64,7 @@ impl GrpcClient {
     /// Returns a new secure gRPC client that uses TLS.
     /// pem_content is the content of the server certificate file.
     /// It needs to be a PEM encoded X509 certificate.
-    pub async fn secure(host: &str, port: u16, pem_content: &str) -> Result<GrpcClient, Error> {
+    pub async fn new_secure(host: &str, port: u16, pem_content: &str) -> Result<GrpcClient, Error> {
         let ca = Certificate::from_pem(pem_content);
         let tls = ClientTlsConfig::new().ca_certificate(ca).domain_name(host);
         let channel = Channel::from_shared(format!("https://{}:{}", host, port))

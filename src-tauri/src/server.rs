@@ -1,10 +1,9 @@
 use crate::util::bytes_to_mega;
 use crate::{
-    error::{NO_CONNECTION_FOUND_MSG, UNEXPECTED_ERROR_MSG},
+    error::NO_CONNECTION_FOUND_MSG,
     grpc::{
-        insert_common_grpc_metadata,
-        kvdb::{GetLogsRequest, GetServerInfoRequest},
-        GrpcConnection,
+        hakjdb_api::{GetLogsRequest, GetServerInfoRequest},
+        insert_common_grpc_metadata, GrpcConnection,
     },
 };
 use serde::Serialize;
@@ -20,6 +19,8 @@ pub struct ServerInfoPayload {
     pub storage_info: StorageInfoPayload,
     #[serde(rename = "clientInfo")]
     pub client_info: ClientInfoPayload,
+    #[serde(rename = "dbInfo")]
+    pub db_info: DatabaseInfoPayload,
 }
 
 #[derive(Serialize)]
@@ -49,13 +50,21 @@ pub struct ClientInfoPayload {
 }
 
 #[derive(Serialize)]
-pub struct GeneralInfoPayload {
-    #[serde(rename = "kvdbVersion")]
-    pub kvdb_version: String,
-    #[serde(rename = "goVersion")]
-    pub go_version: String,
+pub struct DatabaseInfoPayload {
     #[serde(rename = "dbCount")]
     pub db_count: String,
+    #[serde(rename = "defaultDb")]
+    pub default_db: String,
+}
+
+#[derive(Serialize)]
+pub struct GeneralInfoPayload {
+    #[serde(rename = "serverVersion")]
+    pub server_version: String,
+    #[serde(rename = "goVersion")]
+    pub go_version: String,
+    #[serde(rename = "apiVersion")]
+    pub api_version: String,
     pub os: String,
     pub arch: String,
     #[serde(rename = "processId")]
@@ -66,14 +75,12 @@ pub struct GeneralInfoPayload {
     pub tcp_port: String,
     #[serde(rename = "tlsEnabled")]
     pub tls_enabled: bool,
-    #[serde(rename = "passwordEnabled")]
-    pub password_enabled: bool,
+    #[serde(rename = "authEnabled")]
+    pub auth_enabled: bool,
     #[serde(rename = "logfileEnabled")]
     pub logfile_enabled: bool,
     #[serde(rename = "debugEnabled")]
     pub debug_enabled: bool,
-    #[serde(rename = "defaultDb")]
-    pub default_db: String,
 }
 
 #[derive(Serialize)]
@@ -86,81 +93,81 @@ pub async fn get_server_info(
     connection: State<'_, GrpcConnection>,
 ) -> Result<ServerInfoPayload, String> {
     if let Some(ref mut client) = *connection.client.lock().await {
-        let mut request = tonic::Request::new(GetServerInfoRequest {});
-        insert_common_grpc_metadata(&connection, &mut request).await;
+        let mut req = tonic::Request::new(GetServerInfoRequest {});
+        insert_common_grpc_metadata(&connection, &mut req).await;
 
-        let response = client.server_client.get_server_info(request).await;
-        match response {
-            Ok(response) => {
-                if let Some(data) = &response.get_ref().data {
-                    return Ok(ServerInfoPayload {
-                        general_info: GeneralInfoPayload {
-                            kvdb_version: data.general_info.as_ref().unwrap().kvdb_version.clone(),
-                            go_version: data.general_info.as_ref().unwrap().go_version.clone(),
-                            db_count: data.general_info.as_ref().unwrap().db_count.to_string(),
-                            os: data.general_info.as_ref().unwrap().os.clone(),
-                            arch: data.general_info.as_ref().unwrap().arch.clone(),
-                            process_id: data.general_info.as_ref().unwrap().process_id.to_string(),
-                            uptime_seconds: data
-                                .general_info
-                                .as_ref()
-                                .unwrap()
-                                .uptime_seconds
-                                .to_string(),
-                            tcp_port: data.general_info.as_ref().unwrap().tcp_port.to_string(),
-                            tls_enabled: data.general_info.as_ref().unwrap().tls_enabled,
-                            password_enabled: data.general_info.as_ref().unwrap().password_enabled,
-                            logfile_enabled: data.general_info.as_ref().unwrap().logfile_enabled,
-                            debug_enabled: data.general_info.as_ref().unwrap().debug_enabled,
-                            default_db: data.general_info.as_ref().unwrap().default_db.clone(),
-                        },
-                        memory_info: MemoryInfoPayload {
-                            memory_alloc_mega_byte: bytes_to_mega(
-                                data.memory_info.as_ref().unwrap().memory_alloc,
-                            )
+        let resp = client.server_client.get_server_info(req).await;
+        match resp {
+            Ok(resp) => {
+                let resp = resp.get_ref();
+                return Ok(ServerInfoPayload {
+                    general_info: GeneralInfoPayload {
+                        server_version: resp.general_info.as_ref().unwrap().server_version.clone(),
+                        go_version: resp.general_info.as_ref().unwrap().go_version.clone(),
+                        api_version: resp.general_info.as_ref().unwrap().api_version.clone(),
+                        os: resp.general_info.as_ref().unwrap().os.clone(),
+                        arch: resp.general_info.as_ref().unwrap().arch.clone(),
+                        process_id: resp.general_info.as_ref().unwrap().process_id.to_string(),
+                        uptime_seconds: resp
+                            .general_info
+                            .as_ref()
+                            .unwrap()
+                            .uptime_seconds
                             .to_string(),
-                            memory_total_alloc_mega_byte: bytes_to_mega(
-                                data.memory_info.as_ref().unwrap().memory_total_alloc,
-                            )
+                        tcp_port: resp.general_info.as_ref().unwrap().tcp_port.to_string(),
+                        tls_enabled: resp.general_info.as_ref().unwrap().tls_enabled,
+                        auth_enabled: resp.general_info.as_ref().unwrap().auth_enabled,
+                        logfile_enabled: resp.general_info.as_ref().unwrap().logfile_enabled,
+                        debug_enabled: resp.general_info.as_ref().unwrap().debug_enabled,
+                    },
+                    memory_info: MemoryInfoPayload {
+                        memory_alloc_mega_byte: bytes_to_mega(
+                            resp.memory_info.as_ref().unwrap().memory_alloc,
+                        )
+                        .to_string(),
+                        memory_total_alloc_mega_byte: bytes_to_mega(
+                            resp.memory_info.as_ref().unwrap().memory_total_alloc,
+                        )
+                        .to_string(),
+                        memory_sys_mega_byte: bytes_to_mega(
+                            resp.memory_info.as_ref().unwrap().memory_sys,
+                        )
+                        .to_string(),
+                    },
+                    storage_info: StorageInfoPayload {
+                        total_data_size: resp
+                            .storage_info
+                            .as_ref()
+                            .unwrap()
+                            .total_data_size
                             .to_string(),
-                            memory_sys_mega_byte: bytes_to_mega(
-                                data.memory_info.as_ref().unwrap().memory_sys,
-                            )
+                        total_keys: resp.storage_info.as_ref().unwrap().total_keys.to_string(),
+                    },
+                    client_info: ClientInfoPayload {
+                        client_connections: resp
+                            .client_info
+                            .as_ref()
+                            .unwrap()
+                            .client_connections
                             .to_string(),
-                        },
-                        storage_info: StorageInfoPayload {
-                            total_data_size: data
-                                .storage_info
-                                .as_ref()
-                                .unwrap()
-                                .total_data_size
-                                .to_string(),
-                            total_keys: data.storage_info.as_ref().unwrap().total_keys.to_string(),
-                        },
-                        client_info: ClientInfoPayload {
-                            client_connections: data
-                                .client_info
-                                .as_ref()
-                                .unwrap()
-                                .client_connections
-                                .to_string(),
-                            max_client_connections: data
-                                .client_info
-                                .as_ref()
-                                .unwrap()
-                                .max_client_connections
-                                .to_string(),
-                        },
-                    });
-                }
+                        max_client_connections: resp
+                            .client_info
+                            .as_ref()
+                            .unwrap()
+                            .max_client_connections
+                            .to_string(),
+                    },
+                    db_info: DatabaseInfoPayload {
+                        db_count: resp.db_info.as_ref().unwrap().db_count.to_string(),
+                        default_db: resp.db_info.as_ref().unwrap().default_db.clone(),
+                    },
+                });
             }
-            Err(err) => return Err(format!("{}", err)),
+            Err(e) => return Err(e.to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
     }
-
-    return Err(UNEXPECTED_ERROR_MSG.to_string());
 }
 
 #[tauri::command]

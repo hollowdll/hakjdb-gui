@@ -15,7 +15,7 @@ pub async fn connect(
             Err(e) => return Err(e.to_string()),
         };
 
-        match GrpcClient::with_tls(host, port, &pem).await {
+        match GrpcClient::new_secure(host, port, &pem).await {
             Ok(client) => {
                 *connection.client.lock().await = Some(client);
                 return Ok(format!("Connected to {}:{} with TLS", host, port));
@@ -23,7 +23,7 @@ pub async fn connect(
             Err(e) => return Err(e.to_string()),
         }
     } else {
-        match GrpcClient::new(host, port).await {
+        match GrpcClient::new_insecure(host, port).await {
             Ok(client) => {
                 *connection.client.lock().await = Some(client);
                 return Ok(format!("Connected to {}:{} without TLS", host, port));
@@ -74,6 +74,8 @@ pub async fn set_tls_cert_path(
     Ok(())
 }
 
+/// Opens system file explorer dialog for file selection.
+/// Returns the path of the selected file.
 #[tauri::command]
 pub async fn open_file() -> Option<String> {
     if let Some(file_path) = FileDialogBuilder::new().pick_file() {
