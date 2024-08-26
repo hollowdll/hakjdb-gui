@@ -3,9 +3,8 @@ use crate::{
     grpc::{
         insert_common_grpc_metadata,
         kvdb::{
-            DeleteAllKeysRequest, DeleteHashMapFieldsRequest, DeleteKeyRequest,
-            GetAllHashMapFieldsAndValuesRequest, GetHashMapFieldValueRequest, GetKeysRequest,
-            GetStringRequest, GetTypeOfKeyRequest, SetHashMapRequest, SetStringRequest,
+            DeleteHashMapFieldsRequest, GetAllHashMapFieldsAndValuesRequest,
+            GetHashMapFieldValueRequest, GetStringRequest, SetHashMapRequest, SetStringRequest,
         },
         GrpcConnection, MD_KEY_DATABASE,
     },
@@ -21,23 +20,9 @@ pub struct GetStringPayload {
 }
 
 #[derive(Serialize)]
-pub struct GetTypeOfKeyPayload {
-    #[serde(rename = "keyType")]
-    pub key_type: String,
-    pub ok: bool,
-}
-
-#[derive(Serialize)]
 pub struct GetAllHashMapFieldsAndValuesPayload {
     #[serde(rename = "fieldValueMap")]
     pub field_value_map: HashMap<String, String>,
-    pub ok: bool,
-}
-
-#[derive(Serialize)]
-pub struct DeleteHashMapFieldsPayload {
-    #[serde(rename = "fieldsRemoved")]
-    pub fields_removed: u32,
     pub ok: bool,
 }
 
@@ -54,29 +39,11 @@ pub struct GetHashMapFieldValuePayload {
     pub ok: bool,
 }
 
-#[tauri::command]
-pub async fn get_keys(
-    connection: State<'_, GrpcConnection>,
-    db_name: &str,
-) -> Result<Vec<String>, String> {
-    let mut guard = connection.client.lock().await;
-    if let Some(ref mut client) = *guard {
-        let mut request = tonic::Request::new(GetKeysRequest {});
-        insert_common_grpc_metadata(&connection, &mut request).await;
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
-
-        let response = client.storage_client.get_keys(request).await;
-        match response {
-            Ok(response) => {
-                return Ok(response.get_ref().keys.clone());
-            }
-            Err(err) => return Err(format!("{}", err)),
-        }
-    } else {
-        return Err(NO_CONNECTION_FOUND_MSG.to_string());
-    }
+#[derive(Serialize)]
+pub struct DeleteHashMapFieldsPayload {
+    #[serde(rename = "fieldsRemoved")]
+    pub fields_removed: u32,
+    pub ok: bool,
 }
 
 #[tauri::command]
@@ -131,86 +98,6 @@ pub async fn set_string(
         let response = client.storage_client.set_string(request).await;
         match response {
             Ok(_response) => return Ok(()),
-            Err(err) => return Err(format!("{}", err)),
-        }
-    } else {
-        return Err(NO_CONNECTION_FOUND_MSG.to_string());
-    }
-}
-
-#[tauri::command]
-pub async fn delete_key(
-    connection: State<'_, GrpcConnection>,
-    db_name: &str,
-    keys: Vec<String>,
-) -> Result<u32, String> {
-    let mut guard = connection.client.lock().await;
-    if let Some(ref mut client) = *guard {
-        let mut request = tonic::Request::new(DeleteKeyRequest { keys });
-        insert_common_grpc_metadata(&connection, &mut request).await;
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
-
-        let response = client.storage_client.delete_key(request).await;
-        match response {
-            Ok(response) => {
-                return Ok(response.get_ref().keys_deleted);
-            }
-            Err(err) => return Err(format!("{}", err)),
-        }
-    } else {
-        return Err(NO_CONNECTION_FOUND_MSG.to_string());
-    }
-}
-
-#[tauri::command]
-pub async fn delete_all_keys(
-    connection: State<'_, GrpcConnection>,
-    db_name: &str,
-) -> Result<(), String> {
-    let mut guard = connection.client.lock().await;
-    if let Some(ref mut client) = *guard {
-        let mut request = tonic::Request::new(DeleteAllKeysRequest {});
-        insert_common_grpc_metadata(&connection, &mut request).await;
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
-
-        let response = client.storage_client.delete_all_keys(request).await;
-        match response {
-            Ok(_response) => return Ok(()),
-            Err(err) => return Err(format!("{}", err)),
-        }
-    } else {
-        return Err(NO_CONNECTION_FOUND_MSG.to_string());
-    }
-}
-
-#[tauri::command]
-pub async fn get_type_of_key(
-    connection: State<'_, GrpcConnection>,
-    db_name: &str,
-    key: &str,
-) -> Result<GetTypeOfKeyPayload, String> {
-    let mut guard = connection.client.lock().await;
-    if let Some(ref mut client) = *guard {
-        let mut request = tonic::Request::new(GetTypeOfKeyRequest {
-            key: key.to_owned(),
-        });
-        insert_common_grpc_metadata(&connection, &mut request).await;
-        request
-            .metadata_mut()
-            .insert(MD_KEY_DATABASE, db_name.parse().unwrap());
-
-        let response = client.storage_client.get_type_of_key(request).await;
-        match response {
-            Ok(response) => {
-                return Ok(GetTypeOfKeyPayload {
-                    key_type: response.get_ref().key_type.to_owned(),
-                    ok: response.get_ref().ok,
-                });
-            }
             Err(err) => return Err(format!("{}", err)),
         }
     } else {
