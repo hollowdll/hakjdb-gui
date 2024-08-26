@@ -12,9 +12,21 @@ pub mod kvdb {
     tonic::include_proto!("kvdbserverapi");
 }
 
-/// gRPC request metadata key. The value for this key specifies the database to use.
+pub mod hakjdb_api {
+    tonic::include_proto!("api.v1.authpb");
+    tonic::include_proto!("api.v1.dbpb");
+    tonic::include_proto!("api.v1.echopb");
+    tonic::include_proto!("api.v1.kvpb");
+    tonic::include_proto!("api.v1.serverpb");
+}
+
+/// gRPC metadata key for the database to use.
 pub const MD_KEY_DATABASE: &str = "database";
-/// gRPC request metadata key. The value for this key specifies the server password to use.
+/// gRPC metadata key for authentication token.
+pub const MD_KEY_AUTH_TOKEN: &str = "auth_token";
+/// gRPC metadata key for API version.
+pub const MD_KEY_API_VERSION: &str = "api_version";
+/// DEPRECATED.
 pub const MD_KEY_PASSWORD: &str = "password";
 
 pub struct GrpcClient {
