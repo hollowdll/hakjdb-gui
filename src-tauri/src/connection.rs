@@ -41,6 +41,7 @@ pub async fn disconnect(connection: State<'_, GrpcConnection>) -> Result<(), Str
     Ok(())
 }
 
+/// DEPRECATED
 #[tauri::command]
 pub async fn set_password(
     connection: State<'_, GrpcConnection>,

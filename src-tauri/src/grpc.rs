@@ -102,6 +102,14 @@ impl GrpcConnection {
             auth_token: None.into(),
         }
     }
+
+    pub async fn set_auth_token(&self, token: String) {
+        *self.auth_token.lock().await = Some(token);
+    }
+
+    pub async fn reset_auth_token(&self) {
+        *self.auth_token.lock().await = None;
+    }
 }
 
 pub async fn insert_common_grpc_metadata<T>(

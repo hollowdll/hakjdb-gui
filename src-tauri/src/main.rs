@@ -2,24 +2,31 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use app::{
+    auth::{__cmd__authenticate, authenticate},
     connection::{
         __cmd__connect, __cmd__disconnect, __cmd__open_file, __cmd__set_password,
         __cmd__set_tls_cert_path, connect, disconnect, open_file, set_password, set_tls_cert_path,
     },
     db::{
-        __cmd__create_database, __cmd__delete_database, __cmd__get_all_databases,
-        __cmd__get_database_info, create_database, delete_database, get_all_databases,
-        get_database_info,
+        __cmd__change_database, __cmd__create_database, __cmd__delete_database,
+        __cmd__get_all_databases, __cmd__get_database_info, change_database, create_database,
+        delete_database, get_all_databases, get_database_info,
     },
+    echo::{__cmd__unary_echo, unary_echo},
     grpc::GrpcConnection,
-    server::{__cmd__get_server_info, __cmd__get_server_logs, get_server_info, get_server_logs},
-    storage::{
-        __cmd__delete_all_keys, __cmd__delete_hashmap_fields, __cmd__delete_key,
-        __cmd__get_all_hashmap_fields_and_values, __cmd__get_hashmap_field_value, __cmd__get_keys,
-        __cmd__get_string, __cmd__get_type_of_key, __cmd__set_hashmap, __cmd__set_string,
-        delete_all_keys, delete_hashmap_fields, delete_key, get_all_hashmap_fields_and_values,
-        get_hashmap_field_value, get_keys, get_string, get_type_of_key, set_hashmap, set_string,
+    kv::{
+        general_kv::{
+            __cmd__delete_all_keys, __cmd__delete_keys, __cmd__get_all_keys, __cmd__get_key_type,
+            delete_all_keys, delete_keys, get_all_keys, get_key_type,
+        },
+        hashmap_kv::{
+            __cmd__delete_hashmap_fields, __cmd__get_all_hashmap_fields_and_values,
+            __cmd__get_hashmap_field_values, __cmd__set_hashmap, delete_hashmap_fields,
+            get_all_hashmap_fields_and_values, get_hashmap_field_values, set_hashmap,
+        },
+        string_kv::{__cmd__get_string, __cmd__set_string, get_string, set_string},
     },
+    server::{__cmd__get_server_info, __cmd__get_server_logs, get_server_info, get_server_logs},
 };
 use std::error::Error;
 use tauri::{CustomMenuItem, Manager, Menu, Submenu};
@@ -86,19 +93,22 @@ async fn main() -> Result<(), Box<dyn Error>> {
             get_database_info,
             create_database,
             delete_database,
-            get_keys,
-            get_type_of_key,
+            change_database,
+            get_all_keys,
+            get_key_type,
+            delete_keys,
+            delete_all_keys,
             get_string,
             set_string,
-            delete_key,
-            delete_all_keys,
             set_hashmap,
             get_all_hashmap_fields_and_values,
             delete_hashmap_fields,
-            get_hashmap_field_value,
+            get_hashmap_field_values,
             set_password,
             set_tls_cert_path,
-            open_file
+            open_file,
+            authenticate,
+            unary_echo
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
