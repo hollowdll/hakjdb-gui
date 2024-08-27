@@ -1,14 +1,14 @@
 # Overview
 
-kvdb-gui is a cross-platform GUI desktop application for [kvdb](https://github.com/hollowdll/kvdb) in-memory key-value store project.
+HakjDB GUI is a cross-platform GUI desktop application for [HakjDB](https://github.com/hollowdll/hakjdb) in-memory key-value data store project.
 
-It allows you to manage kvdb servers visually with a graphical user interface. It is an alternative tool for the kvdb CLI tool.
+It allows you to control and iteract with HakjDB servers visually with a graphical user interface. It is an alternative tool for the hakjctl CLI tool.
 
-kvdb-cli is a CLI tool for kvdb that allows you to manage kvdb servers from the command line. kvdb-gui is more user friendly for people who are not familiar with the command line, allowing you to manage kvdb servers by clicking buttons and filling forms.
+hakjctl is a CLI tool for HakjDB that allows you to control HakjDB servers from the command line. HakjDB GUI is more user friendly for people who are not familiar with the command line, allowing you to control HakjDB servers by clicking buttons and filling forms.
 
-NOTE: This project is in early development and is not finished. The development is currently on hiatus until kvdb v1.0.0 is released.
+NOTE: This project is not finished. The `main` branch is currently unstable and being reworked to work with the API v1.
 
-IMPORTANT: Currently this only works with kvdb v0.12.0. 
+Tested platforms: Linux and Windows.
 
 # Build
 
