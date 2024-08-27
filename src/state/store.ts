@@ -45,22 +45,22 @@ interface LoadingState {
 }
 
 interface DialogState {
-  isGetTypeOfKeyDialogOpen: boolean;
-  isDeleteKeyDialogOpen: boolean;
+  isGetKeyTypeDialogOpen: boolean;
+  isDeleteKeysDialogOpen: boolean;
   isDeleteAllKeysDialogOpen: boolean;
   isSetStringDialogOpen: boolean;
   isGetStringDialogOpen: boolean;
   isSetHashMapDialogOpen: boolean;
-  isGetHashMapFieldValueDialogOpen: boolean;
+  isGetHashMapFieldValuesDialogOpen: boolean;
   isGetAllHashMapFieldsAndValuesDialogOpen: boolean;
   isDeleteHashMapFieldsDialogOpen: boolean;
-  setIsGetTypeOfKeyDialogOpen: (isOpen: boolean) => void;
-  setIsDeleteKeyDialogOpen: (isOpen: boolean) => void;
+  setIsGetKeyTypeDialogOpen: (isOpen: boolean) => void;
+  setIsDeleteKeysDialogOpen: (isOpen: boolean) => void;
   setIsDeleteAllKeysDialogOpen: (isOpen: boolean) => void;
   setIsSetStringDialogOpen: (isOpen: boolean) => void;
   setIsGetStringDialogOpen: (isOpen: boolean) => void;
   setIsSetHashMapDialogOpen: (isOpen: boolean) => void;
-  setIsGetHashMapFieldValueDialogOpen: (isOpen: boolean) => void;
+  setIsGetHashMapFieldValuesDialogOpen: (isOpen: boolean) => void;
   setIsGetAllHashMapFieldsAndValuesDialogOpen: (isOpen: boolean) => void;
   setIsDeleteHashMapFieldsDialogOpen: (isOpen: boolean) => void;
 }
@@ -136,19 +136,19 @@ export const useLoadingStore = create<LoadingState>((set) => ({
 }));
 
 export const useDialogStore = create<DialogState>((set) => ({
-  isGetTypeOfKeyDialogOpen: false,
-  isDeleteKeyDialogOpen: false,
+  isGetKeyTypeDialogOpen: false,
+  isDeleteKeysDialogOpen: false,
   isDeleteAllKeysDialogOpen: false,
   isSetStringDialogOpen: false,
   isGetStringDialogOpen: false,
   isSetHashMapDialogOpen: false,
-  isGetHashMapFieldValueDialogOpen: false,
+  isGetHashMapFieldValuesDialogOpen: false,
   isGetAllHashMapFieldsAndValuesDialogOpen: false,
   isDeleteHashMapFieldsDialogOpen: false,
-  setIsGetTypeOfKeyDialogOpen: (isOpen) =>
-    set(() => ({ isGetTypeOfKeyDialogOpen: isOpen })),
-  setIsDeleteKeyDialogOpen: (isOpen) =>
-    set(() => ({ isDeleteKeyDialogOpen: isOpen })),
+  setIsGetKeyTypeDialogOpen: (isOpen) =>
+    set(() => ({ isGetKeyTypeDialogOpen: isOpen })),
+  setIsDeleteKeysDialogOpen: (isOpen) =>
+    set(() => ({ isDeleteKeysDialogOpen: isOpen })),
   setIsDeleteAllKeysDialogOpen: (isOpen) =>
     set(() => ({ isDeleteAllKeysDialogOpen: isOpen })),
   setIsSetStringDialogOpen: (isOpen) =>
@@ -157,8 +157,8 @@ export const useDialogStore = create<DialogState>((set) => ({
     set(() => ({ isGetStringDialogOpen: isOpen })),
   setIsSetHashMapDialogOpen: (isOpen) =>
     set(() => ({ isSetHashMapDialogOpen: isOpen })),
-  setIsGetHashMapFieldValueDialogOpen: (isOpen) =>
-    set(() => ({ isGetHashMapFieldValueDialogOpen: isOpen })),
+  setIsGetHashMapFieldValuesDialogOpen: (isOpen) =>
+    set(() => ({ isGetHashMapFieldValuesDialogOpen: isOpen })),
   setIsGetAllHashMapFieldsAndValuesDialogOpen: (isOpen) =>
     set(() => ({ isGetAllHashMapFieldsAndValuesDialogOpen: isOpen })),
   setIsDeleteHashMapFieldsDialogOpen: (isOpen) =>
