@@ -18,7 +18,7 @@ export type TauriInvokeCommands = {
   getAllHashMapFieldsAndValues: string;
   deleteHashMapFields: string;
   getHashMapFieldValues: string;
-  setPassword: string;
+  resetAuthToken: string;
   setTLSCertPath: string;
   openFile: string;
   authenticate: string;

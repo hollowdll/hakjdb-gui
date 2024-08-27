@@ -24,7 +24,6 @@ import { ConnectionInfo } from "../../types/types";
 import { tauriListenEvents } from "../../tauri/event";
 import {
   invokeOpenFile,
-  invokeSetPassword,
   invokeSetTLSCertPath,
 } from "../../tauri/command";
 import {
@@ -88,9 +87,6 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
 
   const handleConnectClick = async () => {
     console.log("trying to connect ...");
-    connectionInfo.isUsePassword
-      ? await invokeSetPassword(connectionInfo.password, false)
-      : await invokeSetPassword("", true);
     connectionInfo.isUseTLS
       ? await invokeSetTLSCertPath(connectionInfo.tlsCertFilePath, false)
       : await invokeSetTLSCertPath("", true);

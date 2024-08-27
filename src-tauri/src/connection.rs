@@ -41,19 +41,9 @@ pub async fn disconnect(connection: State<'_, GrpcConnection>) -> Result<(), Str
     Ok(())
 }
 
-/// DEPRECATED
 #[tauri::command]
-pub async fn set_password(
-    connection: State<'_, GrpcConnection>,
-    password: &str,
-    disable: bool,
-) -> Result<(), String> {
-    if disable {
-        *connection.password.lock().await = None;
-    } else {
-        *connection.password.lock().await = Some(password.to_owned());
-    }
-
+pub async fn reset_auth_token(connection: State<'_, GrpcConnection>) -> Result<(), String> {
+    connection.reset_auth_token().await;
     Ok(())
 }
 
