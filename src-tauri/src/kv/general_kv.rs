@@ -18,7 +18,7 @@ pub struct GetKeyTypePayload {
 }
 
 #[tauri::command]
-pub async fn get_keys(
+pub async fn get_all_keys(
     connection: State<'_, GrpcConnection>,
     db_name: &str,
 ) -> Result<Vec<String>, String> {
