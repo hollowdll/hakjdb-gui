@@ -1,7 +1,9 @@
 use crate::{
     error::{NO_CONNECTION_FOUND_MSG, UNEXPECTED_ERROR_MSG},
     grpc::{
-        hakjdb_api::{CreateDbRequest, DeleteDbRequest, GetAllDBsRequest, GetDbInfoRequest},
+        hakjdb_api::{
+            ChangeDbRequest, CreateDbRequest, DeleteDbRequest, GetAllDBsRequest, GetDbInfoRequest,
+        },
         insert_common_grpc_metadata, GrpcConnection,
     },
     util::prost_timestamp_to_iso8601,
@@ -122,6 +124,36 @@ pub async fn delete_database(
         insert_common_grpc_metadata(&connection, &mut req).await;
 
         let resp = client.db_client.delete_db(req).await;
+        match resp {
+            Ok(resp) => return Ok(resp.get_ref().db_name.clone()),
+            Err(e) => return Err(e.to_string()),
+        }
+    } else {
+        return Err(NO_CONNECTION_FOUND_MSG.to_string());
+    }
+}
+
+/// Returns the name of the changed database.
+#[tauri::command]
+pub async fn change_database(
+    connection: State<'_, GrpcConnection>,
+    db_name: &str,
+    new_name: &str,
+    change_name: bool,
+    new_description: &str,
+    change_description: bool,
+) -> Result<String, String> {
+    if let Some(ref mut client) = *connection.client.lock().await {
+        let mut req = tonic::Request::new(ChangeDbRequest {
+            db_name: db_name.to_owned(),
+            new_name: new_name.to_owned(),
+            change_name,
+            new_description: new_description.to_owned(),
+            change_description,
+        });
+        insert_common_grpc_metadata(&connection, &mut req).await;
+
+        let resp = client.db_client.change_db(req).await;
         match resp {
             Ok(resp) => return Ok(resp.get_ref().db_name.clone()),
             Err(e) => return Err(e.to_string()),
