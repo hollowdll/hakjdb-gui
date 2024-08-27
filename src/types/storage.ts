@@ -1,29 +1,29 @@
 export type GetStringPayload = {
-  value: string;
+  value: Uint8Array;
   ok: boolean;
 };
 
-export type GetTypeOfKeyPayload = {
+export type GetKeyTypePayload = {
   keyType: string;
   ok: boolean;
 };
 
 export type GetAllHashMapFieldsAndValuesPayload = {
-  fieldValueMap: Record<string, string>;
+  fieldValueMap: Record<string, Uint8Array>;
   ok: boolean;
 };
 
 export type DeleteHashMapFieldsPayload = {
-  fieldsRemoved: number;
+  fieldsRemovedCount: number;
   ok: boolean;
 };
 
 export type HashMapFieldValue = {
-  value: string;
+  value: Uint8Array;
   ok: boolean;
 };
 
-export type GetHashMapFieldValuePayload = {
+export type GetHashMapFieldValuesPayload = {
   fieldValueMap: Record<string, HashMapFieldValue>;
   ok: boolean;
 };

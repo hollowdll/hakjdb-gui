@@ -7,19 +7,22 @@ export type TauriInvokeCommands = {
   getDatabaseInfo: string;
   createDatabase: string;
   deleteDatabase: string;
-  getKeys: string;
-  getTypeOfKey: string;
-  deleteKey: string;
+  changeDatabase: string;
+  getAllKeys: string;
+  getKeyType: string;
+  deleteKeys: string;
   deleteAllKeys: string;
   getString: string;
   setString: string;
   setHashMap: string;
   getAllHashMapFieldsAndValues: string;
   deleteHashMapFields: string;
-  getHashMapFieldValue: string;
+  getHashMapFieldValues: string;
   setPassword: string;
   setTLSCertPath: string;
   openFile: string;
+  authenticate: string;
+  unaryEcho: string;
 };
 
 export type TauriListenEvents = {

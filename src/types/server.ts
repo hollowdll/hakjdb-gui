@@ -3,6 +3,12 @@ export interface ServerInfo {
   memoryInfo: MemoryInfo;
   storageInfo: StorageInfo;
   clientInfo: ClientInfo;
+  dbInfo: DatabaseInfo;
+}
+
+export interface DatabaseInfo {
+  dbCount: string;
+  defaultDb: string;
 }
 
 export interface MemoryInfo {
@@ -22,19 +28,18 @@ export interface ClientInfo {
 }
 
 export interface GeneralInfo {
-  kvdbVersion: string;
+  ServerVersion: string;
   goVersion: string;
-  dbCount: string;
+  apiVersion: string;
   os: string;
   arch: string;
   processId: string;
   uptimeSeconds: string;
   tcpPort: string;
   tlsEnabled: boolean;
-  passwordEnabled: boolean;
+  authEnabled: boolean;
   logfileEnabled: boolean;
   debugEnabled: boolean;
-  defaultDb: string;
 }
 
 export interface ServerLogs {

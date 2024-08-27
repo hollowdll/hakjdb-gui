@@ -2,13 +2,13 @@ import { invoke } from "@tauri-apps/api";
 import { TauriInvokeCommands } from "../types/tauri";
 import { ConnectionInfo } from "../types/types";
 import { ServerInfo, ServerLogs } from "../types/server";
-import { DatabaseInfo, Databases } from "../types/db";
+import { Database, Databases } from "../types/db";
 import {
   GetAllHashMapFieldsAndValuesPayload,
   GetStringPayload,
-  GetTypeOfKeyPayload,
+  GetKeyTypePayload,
   DeleteHashMapFieldsPayload,
-  GetHashMapFieldValuePayload,
+  GetHashMapFieldValuesPayload,
 } from "../types/storage";
 
 const tauriInvokeCommands: TauriInvokeCommands = {
@@ -20,19 +20,22 @@ const tauriInvokeCommands: TauriInvokeCommands = {
   getDatabaseInfo: "get_database_info",
   createDatabase: "create_database",
   deleteDatabase: "delete_database",
-  getKeys: "get_keys",
-  getTypeOfKey: "get_type_of_key",
-  deleteKey: "delete_key",
+  changeDatabase: "change_database",
+  getAllKeys: "get_all_keys",
+  getKeyType: "get_key_type",
+  deleteKeys: "delete_keys",
   deleteAllKeys: "delete_all_keys",
   getString: "get_string",
   setString: "set_string",
   setHashMap: "set_hashmap",
   getAllHashMapFieldsAndValues: "get_all_hashmap_fields_and_values",
   deleteHashMapFields: "delete_hashmap_fields",
-  getHashMapFieldValue: "get_hashmap_field_value",
+  getHashMapFieldValues: "get_hashmap_field_values",
   setPassword: "set_password",
   setTLSCertPath: "set_tls_cert_path",
   openFile: "open_file",
+  authenticate: "authenticate",
+  unaryEcho: "unary_echo",
 };
 
 export const invokeOpenFile = (): Promise<string | null> => {
@@ -84,17 +87,19 @@ export const invokeGetAllDatabases = (): Promise<Databases> => {
   return invoke<Databases>(tauriInvokeCommands.getAllDatabases);
 };
 
-export const invokeGetDatabaseInfo = (
-  dbName: string,
-): Promise<DatabaseInfo> => {
-  return invoke<DatabaseInfo>(tauriInvokeCommands.getDatabaseInfo, {
+export const invokeGetDatabaseInfo = (dbName: string): Promise<Database> => {
+  return invoke<Database>(tauriInvokeCommands.getDatabaseInfo, {
     dbName,
   });
 };
 
-export const invokeCreateDatabase = (dbName: string): Promise<string> => {
+export const invokeCreateDatabase = (
+  dbName: string,
+  description: string,
+): Promise<string> => {
   return invoke<string>(tauriInvokeCommands.createDatabase, {
     dbName,
+    description,
   });
 };
 
@@ -104,17 +109,43 @@ export const invokeDeleteDatabase = (dbName: string): Promise<string> => {
   });
 };
 
-export const invokeGetKeys = (dbName: string): Promise<string[]> => {
-  return invoke<string[]>(tauriInvokeCommands.getKeys, {
+export const invokeChangeDatabase = (
+  dbName: string,
+  newName: string,
+  changeName: boolean,
+  newDescription: string,
+  changeDescription: boolean,
+): Promise<string> => {
+  return invoke<string>(tauriInvokeCommands.changeDatabase, {
+    dbName,
+    newName,
+    changeName,
+    newDescription,
+    changeDescription,
+  });
+};
+
+export const invokeGetAllKeys = (dbName: string): Promise<string[]> => {
+  return invoke<string[]>(tauriInvokeCommands.getAllKeys, {
     dbName,
   });
 };
 
-export const invokeDeleteKey = (
+export const invokeGetKeyType = (
+  dbName: string,
+  key: string,
+): Promise<GetKeyTypePayload> => {
+  return invoke<GetKeyTypePayload>(tauriInvokeCommands.getKeyType, {
+    dbName,
+    key,
+  });
+};
+
+export const invokeDeleteKeys = (
   dbName: string,
   keys: string[],
 ): Promise<number> => {
-  return invoke<number>(tauriInvokeCommands.deleteKey, {
+  return invoke<number>(tauriInvokeCommands.deleteKeys, {
     dbName,
     keys,
   });
@@ -139,7 +170,7 @@ export const invokeGetString = (
 export const invokeSetString = (
   dbName: string,
   key: string,
-  value: string,
+  value: Uint8Array,
 ): Promise<void> => {
   return invoke<void>(tauriInvokeCommands.setString, {
     dbName,
@@ -148,20 +179,10 @@ export const invokeSetString = (
   });
 };
 
-export const invokeGetTypeOfKey = (
-  dbName: string,
-  key: string,
-): Promise<GetTypeOfKeyPayload> => {
-  return invoke<GetTypeOfKeyPayload>(tauriInvokeCommands.getTypeOfKey, {
-    dbName,
-    key,
-  });
-};
-
 export const invokeSetHashMap = (
   dbName: string,
   key: string,
-  fieldValueMap: Record<string, string>,
+  fieldValueMap: Record<string, Uint8Array>,
 ): Promise<number> => {
   return invoke<number>(tauriInvokeCommands.setHashMap, {
     dbName,
@@ -198,17 +219,25 @@ export const invokeDeleteHashMapFields = (
   );
 };
 
-export const invokeGetHashMapFieldValue = (
+export const invokeGetHashMapFieldValues = (
   dbName: string,
   key: string,
   fields: string[],
-): Promise<GetHashMapFieldValuePayload> => {
-  return invoke<GetHashMapFieldValuePayload>(
-    tauriInvokeCommands.getHashMapFieldValue,
+): Promise<GetHashMapFieldValuesPayload> => {
+  return invoke<GetHashMapFieldValuesPayload>(
+    tauriInvokeCommands.getHashMapFieldValues,
     {
       dbName,
       key,
       fields,
     },
   );
+};
+
+export const invokeAuthenticate = (password: string): Promise<void> => {
+  return invoke<void>(tauriInvokeCommands.authenticate, { password });
+};
+
+export const invokeUnaryEcho = (msg: string): Promise<string> => {
+  return invoke<string>(tauriInvokeCommands.unaryEcho, { msg });
 };
