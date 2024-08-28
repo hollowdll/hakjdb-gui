@@ -7,7 +7,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "kvdb-gui",
+    "productName": "HakjDB GUI",
     "version": "0.1.0"
   },
   "tauri": {
@@ -57,7 +57,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "kvdb-gui",
+        "title": "HakjDB GUI",
         "height": 600,
         "width": 800,
         "minHeight": 600,
