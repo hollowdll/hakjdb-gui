@@ -22,10 +22,7 @@ import { listen } from "@tauri-apps/api/event";
 import { useEffect, useState, ChangeEvent } from "react";
 import { ConnectionInfo } from "../../types/types";
 import { tauriListenEvents } from "../../tauri/event";
-import {
-  invokeOpenFile,
-  invokeSetTLSCertPath,
-} from "../../tauri/command";
+import { invokeOpenFile, invokeSetTLSCertPath } from "../../tauri/command";
 import {
   allyPropsDialogTextField,
   allyPropsDialogContentText,

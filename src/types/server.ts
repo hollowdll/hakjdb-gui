@@ -28,7 +28,7 @@ export interface ClientInfo {
 }
 
 export interface GeneralInfo {
-  ServerVersion: string;
+  serverVersion: string;
   goVersion: string;
   apiVersion: string;
   os: string;
