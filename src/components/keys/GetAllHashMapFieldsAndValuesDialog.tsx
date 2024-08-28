@@ -51,18 +51,20 @@ export default function GetAllHashMapFieldsAndValuesDialog(
   };
 
   const handleGetAllHashMapFieldsAndValues = () => {
+    const decoder = new TextDecoder();
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
     invokeGetAllHashMapFieldsAndValues(dbToUse, keyToUse)
       .then((result) => {
         handleClose();
         if (result.ok) {
-          const fieldValueMap = Object.entries(result.fieldValueMap);
-          if (fieldValueMap.length > 0) {
-            for (const [field, value] of fieldValueMap) {
-              result.fieldValueMap[field] = `"${value}"`;
+          const fieldValueMap: Record<string, string> = {};
+          const fieldValueMapEntries = Object.entries(result.fieldValueMap);
+          if (fieldValueMapEntries.length > 0) {
+            for (const [field, value] of fieldValueMapEntries) {
+              fieldValueMap[field] = `"${decoder.decode(value)}"`;
             }
-            props.handleDisplayHashMap(result.fieldValueMap);
+            props.handleDisplayHashMap(fieldValueMap);
           } else {
             props.handleDisplayMsg("HashMap is empty");
           }

@@ -59,11 +59,12 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
   };
 
   const handleSetHashMap = () => {
+    const encoder = new TextEncoder();
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
-    const keyValueMap: Record<string, string> = {};
+    const keyValueMap: Record<string, Uint8Array> = {};
     for (const fieldValuePair of fieldsToSet) {
-      keyValueMap[fieldValuePair.field] = fieldValuePair.value;
+      keyValueMap[fieldValuePair.field] = encoder.encode(fieldValuePair.value);
     }
 
     invokeSetHashMap(dbToUse, keyToUse, keyValueMap)

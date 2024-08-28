@@ -55,9 +55,10 @@ export default function SetStringDialog(props: SetStringDialogProps) {
   };
 
   const handleSetString = () => {
+    const encodedValue = new TextEncoder().encode(params.value);
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
-    invokeSetString(dbToUse, params.key, params.value)
+    invokeSetString(dbToUse, params.key, encodedValue)
       .then(() => {
         handleClose();
         props.handleDisplayMsg("OK");

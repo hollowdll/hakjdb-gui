@@ -14,7 +14,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
-import { invokeGetHashMapFieldValue } from "../../tauri/command";
+import { invokeGetHashMapFieldValues } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
 import { useConnectionInfoStore } from "../../state/store";
@@ -24,14 +24,14 @@ import {
   allyPropsDialogContentText,
 } from "../../utility/props";
 
-type GetHashMapFieldValueDialogProps = {
+type GetHashMapFieldValuesDialogProps = {
   handleDisplayMsg: (msg: string) => void;
   handleDisplayHashMap: (hashMap: Record<string, string>) => void;
   handleHideContent: () => void;
 };
 
-export default function GetHashMapFieldValueDialog(
-  props: GetHashMapFieldValueDialogProps,
+export default function GetHashMapFieldValuesDialog(
+  props: GetHashMapFieldValuesDialogProps,
 ) {
   const [errorMsg, setErrorMsg] = useState("");
   const [keyToUse, setKeyToUse] = useState("");
@@ -43,10 +43,10 @@ export default function GetHashMapFieldValueDialog(
     (state) => state.connectionInfo.defaultDb,
   );
   const setIsOpen = useDialogStore(
-    (state) => state.setIsGetHashMapFieldValueDialogOpen,
+    (state) => state.setIsGetHashMapFieldValuesDialogOpen,
   );
   const isOpen = useDialogStore(
-    (state) => state.isGetHashMapFieldValueDialogOpen,
+    (state) => state.isGetHashMapFieldValuesDialogOpen,
   );
 
   const handleClose = () => {
@@ -59,10 +59,10 @@ export default function GetHashMapFieldValueDialog(
     setErrorMsg("");
   };
 
-  const handleGetHashMapFieldValue = () => {
+  const handleGetHashMapFieldValues = () => {
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
-    invokeGetHashMapFieldValue(dbToUse, keyToUse, fieldsToGet)
+    invokeGetHashMapFieldValues(dbToUse, keyToUse, fieldsToGet)
       .then((result) => {
         if (result.ok) {
           const fieldValueMap: Record<string, string> = {};
@@ -79,7 +79,7 @@ export default function GetHashMapFieldValueDialog(
         resetForm();
       })
       .catch((err) => {
-        setErrorMsg(`GetHashMapFieldValue failed: ${err}`);
+        setErrorMsg(`GetHashMapFieldValues failed: ${err}`);
         props.handleHideContent();
       })
       .finally(() => {
@@ -113,7 +113,7 @@ export default function GetHashMapFieldValueDialog(
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      <DialogTitle>GetHashMapFieldValue</DialogTitle>
+      <DialogTitle>GetHashMapFieldValues</DialogTitle>
       <DialogContent>
         <DialogContentText
           {...allyPropsDialogContentText()}
@@ -167,7 +167,7 @@ export default function GetHashMapFieldValueDialog(
         )}
       </Box>
       <DialogActions {...allyPropsDialogActions()}>
-        <Button variant="contained" onClick={handleGetHashMapFieldValue}>
+        <Button variant="contained" onClick={handleGetHashMapFieldValues}>
           Ok
         </Button>
         <Button variant="outlined" onClick={handleClose} color="primary">

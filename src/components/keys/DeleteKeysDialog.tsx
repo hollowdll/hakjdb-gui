@@ -14,7 +14,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
-import { invokeDeleteKey } from "../../tauri/command";
+import { invokeDeleteKeys } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
 import { useConnectionInfoStore } from "../../state/store";
@@ -29,7 +29,7 @@ type DeleteKeyDialogProps = {
   handleHideContent: () => void;
 };
 
-export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
+export default function DeleteKeysDialog(props: DeleteKeyDialogProps) {
   const [errorMsg, setErrorMsg] = useState("");
   const [keysToDelete, setKeysToDelete] = useState<string[]>([""]);
   const setIsLoadingBackdropOpen = useLoadingStore(
@@ -38,8 +38,8 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
   const dbToUse = useConnectionInfoStore(
     (state) => state.connectionInfo.defaultDb,
   );
-  const setIsOpen = useDialogStore((state) => state.setIsDeleteKeyDialogOpen);
-  const isOpen = useDialogStore((state) => state.isDeleteKeyDialogOpen);
+  const setIsOpen = useDialogStore((state) => state.setIsDeleteKeysDialogOpen);
+  const isOpen = useDialogStore((state) => state.isDeleteKeysDialogOpen);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -50,17 +50,17 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
     setErrorMsg("");
   };
 
-  const handleDeleteKey = () => {
+  const handleDeleteKeys = () => {
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
-    invokeDeleteKey(dbToUse, keysToDelete)
+    invokeDeleteKeys(dbToUse, keysToDelete)
       .then((result) => {
         handleClose();
         props.handleDisplayMsg(`Number of keys deleted: ${result}`);
         resetForm();
       })
       .catch((err) => {
-        setErrorMsg(`DeleteKey failed: ${err}`);
+        setErrorMsg(`DeleteKeys failed: ${err}`);
         props.handleHideContent();
       })
       .finally(() => {
@@ -90,7 +90,7 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      <DialogTitle>DeleteKey</DialogTitle>
+      <DialogTitle>DeleteKeys</DialogTitle>
       <DialogContent>
         <DialogContentText {...allyPropsDialogContentText()}>
           Specify the keys to delete.
@@ -137,7 +137,7 @@ export default function DeleteKeyDialog(props: DeleteKeyDialogProps) {
         )}
       </Box>
       <DialogActions {...allyPropsDialogActions()}>
-        <Button variant="contained" onClick={handleDeleteKey}>
+        <Button variant="contained" onClick={handleDeleteKeys}>
           Ok
         </Button>
         <Button variant="outlined" onClick={handleClose} color="primary">

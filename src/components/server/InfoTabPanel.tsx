@@ -128,10 +128,10 @@ function MemoryInfoList({ info, accordion }: MemoryInfoListProps) {
           expandIcon={<ExpandMoreIcon />}
           {...allyPropsAccordionSummary()}
         >
-          <ListItemText primary="memory_sys" {...allyPropsInfoField()} />
+          <ListItemText primary="System Memory" {...allyPropsInfoField()} />
           <ListItemText
             primary={`${Number(info.memorySysMegaByte).toFixed(1)} MB`}
-            {...allyPropsInfoValue("System Memory")}
+            {...allyPropsInfoValue("memory-sys")}
           />
         </AccordionSummary>
         <AccordionDetails>

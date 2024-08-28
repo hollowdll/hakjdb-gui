@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState, ChangeEvent } from "react";
-import { invokeGetTypeOfKey } from "../../tauri/command";
+import { invokeGetKeyType } from "../../tauri/command";
 import { useLoadingStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
 import {
@@ -21,12 +21,12 @@ type GetTypeOfKeyParams = {
   key: string;
 };
 
-type GetTypeOfKeyDialogProps = {
+type GetKeyTypeDialogProps = {
   handleDisplayMsg: (msg: string) => void;
   handleHideContent: () => void;
 };
 
-export default function GetTypeOfKeyDialog(props: GetTypeOfKeyDialogProps) {
+export default function GetKeyTypeDialog(props: GetKeyTypeDialogProps) {
   const [errorMsg, setErrorMsg] = useState("");
   const [params, setParams] = useState<GetTypeOfKeyParams>({
     key: "",
@@ -38,9 +38,9 @@ export default function GetTypeOfKeyDialog(props: GetTypeOfKeyDialogProps) {
     (state) => state.connectionInfo.defaultDb,
   );
   const setIsOpen = useDialogStore(
-    (state) => state.setIsGetTypeOfKeyDialogOpen,
+    (state) => state.setIsGetKeyTypeDialogOpen,
   );
-  const isOpen = useDialogStore((state) => state.isGetTypeOfKeyDialogOpen);
+  const isOpen = useDialogStore((state) => state.isGetKeyTypeDialogOpen);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -53,10 +53,10 @@ export default function GetTypeOfKeyDialog(props: GetTypeOfKeyDialogProps) {
     setErrorMsg("");
   };
 
-  const handleGetTypeOfKey = () => {
+  const handleGetKeyType = () => {
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
-    invokeGetTypeOfKey(dbToUse, params.key)
+    invokeGetKeyType(dbToUse, params.key)
       .then((result) => {
         handleClose();
         if (result.ok) {
@@ -81,7 +81,7 @@ export default function GetTypeOfKeyDialog(props: GetTypeOfKeyDialogProps) {
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      <DialogTitle>GetTypeOfKey</DialogTitle>
+      <DialogTitle>GetKeyType</DialogTitle>
       <DialogContent>
         <TextField
           label="Key"
@@ -97,7 +97,7 @@ export default function GetTypeOfKeyDialog(props: GetTypeOfKeyDialogProps) {
         )}
       </DialogContent>
       <DialogActions {...allyPropsDialogActions()}>
-        <Button variant="contained" onClick={handleGetTypeOfKey}>
+        <Button variant="contained" onClick={handleGetKeyType}>
           Ok
         </Button>
         <Button variant="outlined" onClick={handleClose} color="primary">

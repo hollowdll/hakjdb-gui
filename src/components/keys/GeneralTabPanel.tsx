@@ -14,27 +14,27 @@ import {
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
 import { useLoadingStore, useThemeStore } from "../../state/store";
-import { invokeGetKeys } from "../../tauri/command";
+import { invokeGetAllKeys } from "../../tauri/command";
 import { errorAlert } from "../../utility/alert";
 import { useConnectionInfoStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
-import DeleteKeyDialog from "./DeleteKeyDialog";
+import DeleteKeysDialog from "./DeleteKeysDialog";
 import DeleteAllKeysDialog from "./DeleteAllKeysDialog";
-import GetTypeOfKeyDialog from "./GetTypeOfKeyDialog";
+import GetKeyTypeDialog from "./GetKeyTypeDialog";
 import { boxBackgroundColor } from "../../style";
 
 type GeneralTabMenuItems = {
-  getKeys: string;
+  getAllKeys: string;
   deleteAllKeys: string;
-  deleteKey: string;
-  getTypeOfKey: string;
+  deleteKeys: string;
+  getKeyType: string;
 };
 
 const menuItems: GeneralTabMenuItems = {
-  getKeys: "GetKeys",
+  getAllKeys: "GetAllKeys",
   deleteAllKeys: "DeleteAllKeys",
-  deleteKey: "DeleteKey",
-  getTypeOfKey: "GetTypeOfKey",
+  deleteKeys: "DeleteKeys",
+  getKeyType: "GetKeyType",
 };
 
 export default function GeneralTabPanel() {
@@ -46,11 +46,11 @@ export default function GeneralTabPanel() {
   const setIsLoadingBackdropOpen = useLoadingStore(
     (state) => state.setIsLoadingBackdropOpen,
   );
-  const setIsGetTypeOfKeyDialogOpen = useDialogStore(
-    (state) => state.setIsGetTypeOfKeyDialogOpen,
+  const setIsGetKeyTypeDialogOpen = useDialogStore(
+    (state) => state.setIsGetKeyTypeDialogOpen,
   );
-  const setIsDeleteKeyDialogOpen = useDialogStore(
-    (state) => state.setIsDeleteKeyDialogOpen,
+  const setIsDeleteKeysDialogOpen = useDialogStore(
+    (state) => state.setIsDeleteKeysDialogOpen,
   );
   const setIsDeleteAllKeysDialogOpen = useDialogStore(
     (state) => state.setIsDeleteAllKeysDialogOpen,
@@ -65,20 +65,20 @@ export default function GeneralTabPanel() {
 
   const handleRunCommand = () => {
     switch (selectedItem) {
-      case menuItems.getKeys:
+      case menuItems.getAllKeys:
         return handleGetKeys();
       case menuItems.deleteAllKeys:
         return handleDeleteAllKeys();
-      case menuItems.deleteKey:
-        return handleDeleteKey();
-      case menuItems.getTypeOfKey:
-        return handleGetTypeOfKey();
+      case menuItems.deleteKeys:
+        return handleDeleteKeys();
+      case menuItems.getKeyType:
+        return handleGetKeyType();
     }
   };
 
   const handleGetKeys = () => {
     setIsLoadingBackdropOpen(true);
-    invokeGetKeys(dbToUse)
+    invokeGetAllKeys(dbToUse)
       .then((result) => {
         if (result.length < 1) {
           setDisplayedMsg("No keys in the database");
@@ -99,12 +99,12 @@ export default function GeneralTabPanel() {
     setIsDeleteAllKeysDialogOpen(true);
   };
 
-  const handleDeleteKey = () => {
-    setIsDeleteKeyDialogOpen(true);
+  const handleDeleteKeys = () => {
+    setIsDeleteKeysDialogOpen(true);
   };
 
-  const handleGetTypeOfKey = () => {
-    setIsGetTypeOfKeyDialogOpen(true);
+  const handleGetKeyType = () => {
+    setIsGetKeyTypeDialogOpen(true);
   };
 
   const handleDisplayMsg = (msg: string) => {
@@ -121,11 +121,11 @@ export default function GeneralTabPanel() {
 
   return (
     <Box>
-      <GetTypeOfKeyDialog
+      <GetKeyTypeDialog
         handleDisplayMsg={handleDisplayMsg}
         handleHideContent={handleHideContent}
       />
-      <DeleteKeyDialog
+      <DeleteKeysDialog
         handleDisplayMsg={handleDisplayMsg}
         handleHideContent={handleHideContent}
       />
@@ -146,15 +146,15 @@ export default function GeneralTabPanel() {
             onChange={handleChange}
             sx={{ backgroundColor: boxBackgroundColor(isDarkMode) }}
           >
-            <MenuItem value={menuItems.getKeys}>{menuItems.getKeys}</MenuItem>
+            <MenuItem value={menuItems.getAllKeys}>{menuItems.getAllKeys}</MenuItem>
             <MenuItem value={menuItems.deleteAllKeys}>
               {menuItems.deleteAllKeys}
             </MenuItem>
-            <MenuItem value={menuItems.deleteKey}>
-              {menuItems.deleteKey}
+            <MenuItem value={menuItems.deleteKeys}>
+              {menuItems.deleteKeys}
             </MenuItem>
-            <MenuItem value={menuItems.getTypeOfKey}>
-              {menuItems.getTypeOfKey}
+            <MenuItem value={menuItems.getKeyType}>
+              {menuItems.getKeyType}
             </MenuItem>
           </Select>
         </FormControl>
