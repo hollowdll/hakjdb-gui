@@ -273,7 +273,7 @@ export default function DatabaseList() {
                         </AccordionSummary>
                         <AccordionDetails>
                           <Typography>
-                            Size of the stored data in bytes.
+                            Estimated size of the stored data in bytes.
                           </Typography>
                         </AccordionDetails>
                       </Accordion>

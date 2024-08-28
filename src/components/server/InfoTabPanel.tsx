@@ -165,7 +165,7 @@ function StorageInfoList({ info, accordion }: StorageInfoListProps) {
           />
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Total amount of stored data in bytes.</Typography>
+          <Typography>Estimated total amount of stored data in bytes.</Typography>
         </AccordionDetails>
       </Accordion>
 
