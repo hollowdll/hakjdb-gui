@@ -15,9 +15,14 @@ import { useDatabaseStore } from "../../state/store";
 import { useLoadingStore } from "../../state/store";
 import { allyPropsDialogActions } from "../../utility/props";
 
+type FormFields = {
+  name: string;
+  description: string;
+}
+
 export default function CreateDatabaseDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dbName, setDbName] = useState("");
+  const [formFields, setFormFields] = useState<FormFields>({ name: "", description: "" });
   const [errorMsg, setErrorMsg] = useState("");
   const getAllDatabases = useDatabaseStore((state) => state.getAllDatabases);
   const setIsLoadingBackdropOpen = useLoadingStore(
@@ -33,14 +38,14 @@ export default function CreateDatabaseDialog() {
   };
 
   const resetForm = () => {
-    setDbName("");
+    setFormFields({ name: "", description: "" })
     setErrorMsg("");
   };
 
   const handleCreateDb = () => {
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
-    invokeCreateDatabase(dbName)
+    invokeCreateDatabase(formFields.name, formFields.description)
       .then((result) => {
         setDialogOpen(false);
         successAlert(`Created database ${result}`);
@@ -56,7 +61,7 @@ export default function CreateDatabaseDialog() {
   };
 
   const inputChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setDbName(event.target.value);
+    setFormFields({ ...formFields, [event.target.name]: event.target.value })
   };
 
   return (
@@ -69,7 +74,16 @@ export default function CreateDatabaseDialog() {
         <DialogContent>
           <TextField
             label="Name"
-            value={dbName}
+            name="name"
+            value={formFields.name}
+            onChange={inputChanged}
+            fullWidth
+            sx={{ marginTop: "10px" }}
+          />
+          <TextField
+            label="Description"
+            name="description"
+            value={formFields.description}
             onChange={inputChanged}
             fullWidth
             sx={{ marginTop: "10px" }}

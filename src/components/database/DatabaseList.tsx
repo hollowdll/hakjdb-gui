@@ -16,7 +16,7 @@ import {
   Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { DatabaseInfo } from "../../types/db";
+import { Database } from "../../types/db";
 import { useDatabaseStore } from "../../state/store";
 import { useConnectionInfoStore } from "../../state/store";
 import DeleteDatabaseDialog from "./DeleteDatabaseDialog";
@@ -26,7 +26,7 @@ export default function DatabaseList() {
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isDbInfoLoading, setIsDbInfoLoading] = useState(true);
-  const [dbInfo, setDbInfo] = useState<DatabaseInfo | null>(null);
+  const [dbInfo, setDbInfo] = useState<Database | null>(null);
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
     false,
   );
@@ -43,14 +43,14 @@ export default function DatabaseList() {
 
   const handleAccordionChange =
     (panel: string, dbName: string) =>
-    (_event: SyntheticEvent, isExpanded: boolean) => {
-      if (isExpanded) {
-        setAccordionExpanded(panel);
-        handleGetDatabaseInfo(dbName);
-      } else {
-        setAccordionExpanded(false);
-      }
-    };
+      (_event: SyntheticEvent, isExpanded: boolean) => {
+        if (isExpanded) {
+          setAccordionExpanded(panel);
+          handleGetDatabaseInfo(dbName);
+        } else {
+          setAccordionExpanded(false);
+        }
+      };
 
   const handleSetDefaultDb = (name: string) => {
     setDefaultDb(name);
@@ -172,6 +172,25 @@ export default function DatabaseList() {
                         </AccordionSummary>
                         <AccordionDetails>
                           <Typography>Name of the database.</Typography>
+                        </AccordionDetails>
+                      </Accordion>
+
+                      <Accordion>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          {...allyPropsAccordionSummary()}
+                        >
+                          <ListItemText
+                            primary="Description"
+                            {...allyPropsInfoField()}
+                          />
+                          <ListItemText
+                            primary={dbInfo.description}
+                            {...allyPropsInfoValue("description")}
+                          />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography>Description of the database.</Typography>
                         </AccordionDetails>
                       </Accordion>
 
