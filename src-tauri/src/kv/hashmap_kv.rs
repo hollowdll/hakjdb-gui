@@ -34,7 +34,7 @@ pub struct GetHashMapFieldValuesPayload {
 
 #[derive(Serialize)]
 pub struct DeleteHashMapFieldsPayload {
-    #[serde(rename = "fieldsRemoved")]
+    #[serde(rename = "fieldsRemovedCount")]
     pub fields_removed_count: u32,
     pub ok: bool,
 }

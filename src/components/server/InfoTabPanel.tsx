@@ -279,6 +279,25 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
           expandIcon={<ExpandMoreIcon />}
           {...allyPropsAccordionSummary()}
         >
+          <ListItemText primary="API Version" {...allyPropsInfoField()} />
+          <ListItemText
+            primary={info.apiVersion}
+            {...allyPropsInfoValue("api-version")}
+          />
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>Version of the HakjDB API.</Typography>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion
+        expanded={accordionExpanded === "panel10"}
+        onChange={handleAccordionChange("panel10")}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          {...allyPropsAccordionSummary()}
+        >
           <ListItemText primary="Go Version" {...allyPropsInfoField()} />
           <ListItemText
             primary={info.goVersion}
@@ -291,8 +310,8 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel10"}
-        onChange={handleAccordionChange("panel10")}
+        expanded={accordionExpanded === "panel11"}
+        onChange={handleAccordionChange("panel11")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -307,8 +326,8 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel11"}
-        onChange={handleAccordionChange("panel11")}
+        expanded={accordionExpanded === "panel12"}
+        onChange={handleAccordionChange("panel12")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -323,8 +342,8 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel12"}
-        onChange={handleAccordionChange("panel12")}
+        expanded={accordionExpanded === "panel13"}
+        onChange={handleAccordionChange("panel13")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -342,8 +361,8 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel13"}
-        onChange={handleAccordionChange("panel13")}
+        expanded={accordionExpanded === "panel14"}
+        onChange={handleAccordionChange("panel14")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -361,8 +380,8 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel14"}
-        onChange={handleAccordionChange("panel14")}
+        expanded={accordionExpanded === "panel15"}
+        onChange={handleAccordionChange("panel15")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -380,8 +399,8 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel15"}
-        onChange={handleAccordionChange("panel15")}
+        expanded={accordionExpanded === "panel16"}
+        onChange={handleAccordionChange("panel16")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -399,8 +418,8 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel16"}
-        onChange={handleAccordionChange("panel16")}
+        expanded={accordionExpanded === "panel17"}
+        onChange={handleAccordionChange("panel17")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -421,8 +440,8 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel17"}
-        onChange={handleAccordionChange("panel17")}
+        expanded={accordionExpanded === "panel18"}
+        onChange={handleAccordionChange("panel18")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -440,8 +459,8 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel18"}
-        onChange={handleAccordionChange("panel18")}
+        expanded={accordionExpanded === "panel19"}
+        onChange={handleAccordionChange("panel19")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -468,8 +487,8 @@ function DatabaseInfoList({ info, accordion }: DatabaseInfoListProps) {
     <Box sx={{ paddingTop: "1em" }}>
       <h3>Databases</h3>
       <Accordion
-        expanded={accordionExpanded === "panel19"}
-        onChange={handleAccordionChange("panel19")}
+        expanded={accordionExpanded === "panel20"}
+        onChange={handleAccordionChange("panel20")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -487,8 +506,8 @@ function DatabaseInfoList({ info, accordion }: DatabaseInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel20"}
-        onChange={handleAccordionChange("panel20")}
+        expanded={accordionExpanded === "panel21"}
+        onChange={handleAccordionChange("panel21")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}

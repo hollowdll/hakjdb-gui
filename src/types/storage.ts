@@ -1,5 +1,5 @@
 export type GetStringPayload = {
-  value: Uint8Array;
+  value: number[];
   ok: boolean;
 };
 
@@ -9,7 +9,7 @@ export type GetKeyTypePayload = {
 };
 
 export type GetAllHashMapFieldsAndValuesPayload = {
-  fieldValueMap: Record<string, Uint8Array>;
+  fieldValueMap: Record<string, number[]>;
   ok: boolean;
 };
 
@@ -19,7 +19,7 @@ export type DeleteHashMapFieldsPayload = {
 };
 
 export type HashMapFieldValue = {
-  value: Uint8Array;
+  value: number[];
   ok: boolean;
 };
 

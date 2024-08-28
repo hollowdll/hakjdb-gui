@@ -16,6 +16,7 @@ import {
   allyPropsDialogTextField,
 } from "../../utility/props";
 import { useConnectionInfoStore } from "../../state/store";
+import { textEncoder } from "../../utility/encoding";
 
 type SetStringParams = {
   key: string;
@@ -55,10 +56,10 @@ export default function SetStringDialog(props: SetStringDialogProps) {
   };
 
   const handleSetString = () => {
-    const encodedValue = new TextEncoder().encode(params.value);
+    const value = Array.from(textEncoder.encode(params.value));
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
-    invokeSetString(dbToUse, params.key, encodedValue)
+    invokeSetString(dbToUse, params.key, value)
       .then(() => {
         handleClose();
         props.handleDisplayMsg("OK");

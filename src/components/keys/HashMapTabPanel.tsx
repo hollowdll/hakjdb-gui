@@ -17,19 +17,19 @@ import { useDialogStore, useThemeStore } from "../../state/store";
 import SetHashMapDialog from "./SetHashMapDialog";
 import GetAllHashMapFieldsAndValuesDialog from "./GetAllHashMapFieldsAndValuesDialog";
 import DeleteHashMapFieldsDialog from "./DeleteHashMapFieldsDialog";
-import GetHashMapFieldValueDialog from "./GetHashMapFieldValueDialog";
+import GetHashMapFieldValuesDialog from "./GetHashMapFieldValueDialog";
 import { boxBackgroundColor } from "../../style";
 
 type HashMapTabMenuItems = {
   setHashMap: string;
-  getHashMapFieldValue: string;
+  getHashMapFieldValues: string;
   getAllHashMapFieldsAndValues: string;
   deleteHashMapFields: string;
 };
 
 const menuItems: HashMapTabMenuItems = {
   setHashMap: "SetHashMap",
-  getHashMapFieldValue: "GetHashMapFieldValue",
+  getHashMapFieldValues: "GetHashMapFieldValues",
   getAllHashMapFieldsAndValues: "GetAllHashMapFieldsAndValues",
   deleteHashMapFields: "DeleteHashMapFields",
 };
@@ -52,8 +52,8 @@ export default function HashMapTabPanel() {
   const setIsDeleteHashMapFieldsDialogOpen = useDialogStore(
     (state) => state.setIsDeleteHashMapFieldsDialogOpen,
   );
-  const setIsGetHashMapFieldValueDialogOpen = useDialogStore(
-    (state) => state.setIsGetHashMapFieldValueDialogOpen,
+  const setIsGetHashMapFieldValuesDialogOpen = useDialogStore(
+    (state) => state.setIsGetHashMapFieldValuesDialogOpen,
   );
 
   const handleSelectedItemChange = (event: SelectChangeEvent) => {
@@ -64,8 +64,8 @@ export default function HashMapTabPanel() {
     setIsSetHashMapDialogOpen(true);
   };
 
-  const handleGetHashMapFieldValue = () => {
-    setIsGetHashMapFieldValueDialogOpen(true);
+  const handleGetHashMapFieldValues = () => {
+    setIsGetHashMapFieldValuesDialogOpen(true);
   };
 
   const handleGetAllHashMapFieldsAndValues = () => {
@@ -80,8 +80,8 @@ export default function HashMapTabPanel() {
     switch (selectedItem) {
       case menuItems.setHashMap:
         return handleSetHashMap();
-      case menuItems.getHashMapFieldValue:
-        return handleGetHashMapFieldValue();
+      case menuItems.getHashMapFieldValues:
+        return handleGetHashMapFieldValues();
       case menuItems.getAllHashMapFieldsAndValues:
         return handleGetAllHashMapFieldsAndValues();
       case menuItems.deleteHashMapFields:
@@ -122,7 +122,7 @@ export default function HashMapTabPanel() {
         handleDisplayMsg={handleDisplayMsg}
         handleHideContent={handleHideContent}
       />
-      <GetHashMapFieldValueDialog
+      <GetHashMapFieldValuesDialog
         handleDisplayMsg={handleDisplayMsg}
         handleDisplayHashMap={handleDisplayHashMap}
         handleHideContent={handleHideContent}
@@ -143,8 +143,8 @@ export default function HashMapTabPanel() {
             <MenuItem value={menuItems.setHashMap}>
               {menuItems.setHashMap}
             </MenuItem>
-            <MenuItem value={menuItems.getHashMapFieldValue}>
-              {menuItems.getHashMapFieldValue}
+            <MenuItem value={menuItems.getHashMapFieldValues}>
+              {menuItems.getHashMapFieldValues}
             </MenuItem>
             <MenuItem value={menuItems.getAllHashMapFieldsAndValues}>
               {menuItems.getAllHashMapFieldsAndValues}

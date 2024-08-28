@@ -16,6 +16,7 @@ import {
   allyPropsDialogTextField,
 } from "../../utility/props";
 import { useConnectionInfoStore } from "../../state/store";
+import { textDecoder } from "../../utility/encoding";
 
 type GetStringParams = {
   key: string;
@@ -58,7 +59,8 @@ export default function GetStringDialog(props: GetStringDialogProps) {
       .then((result) => {
         handleClose();
         if (result.ok) {
-          props.handleDisplayMsg(`"${result.value}"`);
+          const value = textDecoder.decode(new Uint8Array(result.value));
+          props.handleDisplayMsg(`"${value}"`);
         } else {
           props.handleDisplayMsg("Key does not exist");
         }

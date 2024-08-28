@@ -16,6 +16,7 @@ import {
   allyPropsDialogTextField,
 } from "../../utility/props";
 import { useConnectionInfoStore } from "../../state/store";
+import { textDecoder } from "../../utility/encoding";
 
 type GetAllHashMapFieldsAndValuesDialogProps = {
   handleDisplayMsg: (msg: string) => void;
@@ -51,7 +52,6 @@ export default function GetAllHashMapFieldsAndValuesDialog(
   };
 
   const handleGetAllHashMapFieldsAndValues = () => {
-    const decoder = new TextDecoder();
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
     invokeGetAllHashMapFieldsAndValues(dbToUse, keyToUse)
@@ -62,7 +62,7 @@ export default function GetAllHashMapFieldsAndValuesDialog(
           const fieldValueMapEntries = Object.entries(result.fieldValueMap);
           if (fieldValueMapEntries.length > 0) {
             for (const [field, value] of fieldValueMapEntries) {
-              fieldValueMap[field] = `"${decoder.decode(value)}"`;
+              fieldValueMap[field] = `"${textDecoder.decode(new Uint8Array(value))}"`;
             }
             props.handleDisplayHashMap(fieldValueMap);
           } else {

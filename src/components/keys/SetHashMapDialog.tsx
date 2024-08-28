@@ -22,6 +22,7 @@ import {
   allyPropsDialogTextField,
   allyPropsDialogContentText,
 } from "../../utility/props";
+import { textEncoder } from "../../utility/encoding";
 
 type SetHashMapDialogProps = {
   handleDisplayMsg: (msg: string) => void;
@@ -59,12 +60,11 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
   };
 
   const handleSetHashMap = () => {
-    const encoder = new TextEncoder();
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
-    const keyValueMap: Record<string, Uint8Array> = {};
+    const keyValueMap: Record<string, number[]> = {};
     for (const fieldValuePair of fieldsToSet) {
-      keyValueMap[fieldValuePair.field] = encoder.encode(fieldValuePair.value);
+      keyValueMap[fieldValuePair.field] = Array.from(textEncoder.encode(fieldValuePair.value));
     }
 
     invokeSetHashMap(dbToUse, keyToUse, keyValueMap)

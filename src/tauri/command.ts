@@ -164,7 +164,7 @@ export const invokeGetString = (
 export const invokeSetString = (
   dbName: string,
   key: string,
-  value: Uint8Array,
+  value: number[],
 ): Promise<void> => {
   return invoke<void>(tauriInvokeCommands.setString, {
     dbName,
@@ -176,7 +176,7 @@ export const invokeSetString = (
 export const invokeSetHashMap = (
   dbName: string,
   key: string,
-  fieldValueMap: Record<string, Uint8Array>,
+  fieldValueMap: Record<string, number[]>,
 ): Promise<number> => {
   return invoke<number>(tauriInvokeCommands.setHashMap, {
     dbName,
