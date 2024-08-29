@@ -25,11 +25,9 @@ pub mod hakjdb_api {
 /// gRPC metadata key for the database to use.
 pub const MD_KEY_DATABASE: &str = "database";
 /// gRPC metadata key for authentication token.
-pub const MD_KEY_AUTH_TOKEN: &str = "auth_token";
+pub const MD_KEY_AUTH_TOKEN: &str = "auth-token";
 /// gRPC metadata key for API version.
-pub const MD_KEY_API_VERSION: &str = "api_version";
-/// DEPRECATED.
-pub const MD_KEY_PASSWORD: &str = "password";
+pub const MD_KEY_API_VERSION: &str = "api-version";
 
 pub struct GrpcClient {
     pub auth_client: AuthServiceClient<Channel>,
@@ -87,8 +85,6 @@ impl GrpcClient {
 
 pub struct GrpcConnection {
     pub client: Mutex<Option<GrpcClient>>,
-    /// DEPRECATED.
-    pub password: Mutex<Option<String>>,
     pub tls_cert_path: Mutex<Option<PathBuf>>,
     pub auth_token: Mutex<Option<String>>,
 }
@@ -97,7 +93,6 @@ impl GrpcConnection {
     pub fn new() -> GrpcConnection {
         GrpcConnection {
             client: None.into(),
-            password: None.into(),
             tls_cert_path: None.into(),
             auth_token: None.into(),
         }

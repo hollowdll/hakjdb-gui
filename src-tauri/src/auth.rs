@@ -17,8 +17,14 @@ pub async fn authenticate(
         let resp = client.auth_client.authenticate(req).await;
         match resp {
             Ok(resp) => {
-                let auth_token = resp.get_ref().auth_token.clone();
-                connection.set_auth_token(auth_token).await;
+                connection
+                    .set_auth_token(resp.get_ref().auth_token.clone())
+                    .await;
+                if let Some(ref _auth_token) = *connection.auth_token.lock().await {
+                    println!("auth token set");
+                } else {
+                    println!("auth token not set");
+                }
                 return Ok(());
             }
             Err(e) => return Err(e.to_string()),
