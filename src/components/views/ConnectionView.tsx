@@ -7,6 +7,7 @@ import {
   ListItemText,
   IconButton,
   Divider,
+  Button,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -14,6 +15,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, SyntheticEvent } from "react";
 import { useConnectionInfoStore } from "../../state/store";
 import { allyPropsAccordionSummary } from "../../utility/props";
+import { invokeUnaryEcho } from "../../tauri/command";
+import { errorAlert, successAlert } from "../../utility/alert";
 
 function allyPropsField() {
   return {
@@ -54,12 +57,29 @@ export default function ConnectionView() {
     event.preventDefault();
   };
 
+  const testConnection = () => {
+    invokeUnaryEcho("")
+      .then(() => {
+        successAlert("Connection is working");
+      })
+      .catch((err) => {
+        errorAlert(`Connection failed: ${err}`);
+      })
+  }
+
   return (
     <Box sx={{ width: "100%" }}>
       <h1>Connection</h1>
       <Typography sx={{ marginBottom: "15px" }}>
         Connection settings currently being used.
       </Typography>
+      <Button
+        variant="contained"
+        onClick={testConnection}
+        sx={{ marginTop: "5px" }}
+      >
+        Test Connection
+      </Button>
       <Box sx={{ paddingTop: "1em" }}>
         <Accordion
           expanded={accordionExpanded === "panel1"}
