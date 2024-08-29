@@ -20,6 +20,7 @@ import { Database } from "../../types/db";
 import { useDatabaseStore } from "../../state/store";
 import { useConnectionInfoStore } from "../../state/store";
 import DeleteDatabaseDialog from "./DeleteDatabaseDialog";
+import ChangeDatabaseDialog from "./ChangeDatabaseDialog";
 import { allyPropsAccordionSummary } from "../../utility/props";
 
 export default function DatabaseList() {
@@ -143,6 +144,7 @@ export default function DatabaseList() {
                     <Button
                       variant="contained"
                       onClick={() => handleSetDefaultDb(dbName)}
+                      color="success"
                     >
                       Set as default
                     </Button>
@@ -150,6 +152,14 @@ export default function DatabaseList() {
                       dbName={dbName}
                       closeDbListAccordion={closeAccordion}
                     />
+                    {isDbInfoLoading ? (
+                      <CircularProgress />
+                    ) : dbInfo ? (
+                      <ChangeDatabaseDialog
+                        dbName={dbInfo.name}
+                        dbDescription={dbInfo.description}
+                      />
+                    ) : <></>}
                   </Stack>
                   <h3>Database Information</h3>
                   {isDbInfoLoading ? (

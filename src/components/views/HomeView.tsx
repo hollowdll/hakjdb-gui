@@ -25,7 +25,7 @@ export default function HomeView() {
         }}
       >
         <h1>Not connected to a HakjDB server.</h1>
-        <h1>Go to Connect {"->"} New Connection</h1>
+        <h1>Go to Connect ➡  New Connection</h1>
       </Box>
     </Box>
   );
