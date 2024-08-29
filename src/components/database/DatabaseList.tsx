@@ -45,14 +45,14 @@ export default function DatabaseList() {
 
   const handleAccordionChange =
     (panel: string, dbName: string) =>
-    (_event: SyntheticEvent, isExpanded: boolean) => {
-      if (isExpanded) {
-        setAccordionExpanded(panel);
-        handleGetDatabaseInfo(dbName);
-      } else {
-        setAccordionExpanded(false);
-      }
-    };
+      (_event: SyntheticEvent, isExpanded: boolean) => {
+        if (isExpanded) {
+          setAccordionExpanded(panel);
+          handleGetDatabaseInfo(dbName);
+        } else {
+          setAccordionExpanded(false);
+        }
+      };
 
   const handleSetDefaultDb = (name: string) => {
     setDefaultDb(name);
@@ -163,6 +163,7 @@ export default function DatabaseList() {
                       <ChangeDatabaseDialog
                         dbName={dbInfo.name}
                         dbDescription={dbInfo.description}
+                        handleGetDatabaseInfo={handleGetDatabaseInfo}
                       />
                     ) : (
                       <Button

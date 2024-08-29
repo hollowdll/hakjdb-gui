@@ -18,6 +18,7 @@ import { allyPropsDialogActions } from "../../utility/props";
 type ChangeDatabaseDialogProps = {
   dbName: string;
   dbDescription: string;
+  handleGetDatabaseInfo: (dbName: string) => void;
 };
 
 type FormFields = {
@@ -30,6 +31,7 @@ type FormFields = {
 export default function ChangeDatabaseDialog({
   dbName,
   dbDescription,
+  handleGetDatabaseInfo,
 }: ChangeDatabaseDialogProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [formFields, setFormFields] = useState<FormFields>({
@@ -76,6 +78,7 @@ export default function ChangeDatabaseDialog({
         handleClose();
         successAlert(`Successfully edited database`);
         resetForm();
+        handleGetDatabaseInfo(formFields.name);
       })
       .catch((err) => {
         setErrorMsg(`Failed to edit database: ${err}`);
@@ -112,7 +115,7 @@ export default function ChangeDatabaseDialog({
             value={formFields.description}
             onChange={inputChanged}
             fullWidth
-            sx={{ marginTop: "10px" }}
+            sx={{ marginTop: "15px" }}
           />
           {errorMsg !== "" ? (
             <Typography sx={{ marginTop: "15px" }}>{errorMsg}</Typography>

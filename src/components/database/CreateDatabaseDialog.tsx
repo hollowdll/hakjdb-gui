@@ -89,7 +89,7 @@ export default function CreateDatabaseDialog() {
             value={formFields.description}
             onChange={inputChanged}
             fullWidth
-            sx={{ marginTop: "10px" }}
+            sx={{ marginTop: "15px" }}
           />
           {errorMsg !== "" ? (
             <Typography sx={{ marginTop: "15px" }}>{errorMsg}</Typography>
