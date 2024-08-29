@@ -16,6 +16,7 @@ import {
   Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import EditIcon from "@mui/icons-material/Edit";
 import { Database } from "../../types/db";
 import { useDatabaseStore } from "../../state/store";
 import { useConnectionInfoStore } from "../../state/store";
@@ -44,14 +45,14 @@ export default function DatabaseList() {
 
   const handleAccordionChange =
     (panel: string, dbName: string) =>
-      (_event: SyntheticEvent, isExpanded: boolean) => {
-        if (isExpanded) {
-          setAccordionExpanded(panel);
-          handleGetDatabaseInfo(dbName);
-        } else {
-          setAccordionExpanded(false);
-        }
-      };
+    (_event: SyntheticEvent, isExpanded: boolean) => {
+      if (isExpanded) {
+        setAccordionExpanded(panel);
+        handleGetDatabaseInfo(dbName);
+      } else {
+        setAccordionExpanded(false);
+      }
+    };
 
   const handleSetDefaultDb = (name: string) => {
     setDefaultDb(name);
@@ -62,14 +63,13 @@ export default function DatabaseList() {
   };
 
   const handleGetDatabaseInfo = (dbName: string) => {
-    console.log("getting db info");
     setIsDbInfoLoading(true);
     invokeGetDatabaseInfo(dbName)
       .then((result) => {
         setDbInfo(result);
       })
       .catch((err) => {
-        setErrorMsg(`Failed to show database information: ${err}`);
+        setErrorMsg(`Failed to get database information: ${err}`);
         setDbInfo(null);
       })
       .finally(() => setIsDbInfoLoading(false));
@@ -140,7 +140,12 @@ export default function DatabaseList() {
                   ) : (
                     <></>
                   )}
-                  <Stack spacing={2} direction="row">
+                  <Stack
+                    spacing={2}
+                    direction="row"
+                    useFlexGap
+                    sx={{ flexWrap: "wrap" }}
+                  >
                     <Button
                       variant="contained"
                       onClick={() => handleSetDefaultDb(dbName)}
@@ -159,7 +164,15 @@ export default function DatabaseList() {
                         dbName={dbInfo.name}
                         dbDescription={dbInfo.description}
                       />
-                    ) : <></>}
+                    ) : (
+                      <Button
+                        variant="contained"
+                        disabled
+                        endIcon={<EditIcon />}
+                      >
+                        Edit
+                      </Button>
+                    )}
                   </Stack>
                   <h3>Database Information</h3>
                   {isDbInfoLoading ? (

@@ -18,18 +18,26 @@ import { allyPropsDialogActions } from "../../utility/props";
 type ChangeDatabaseDialogProps = {
   dbName: string;
   dbDescription: string;
-}
+};
 
 type FormFields = {
   name: string;
   description: string;
   changeName: boolean;
   changeDescription: boolean;
-}
+};
 
-export default function ChangeDatabaseDialog({ dbName, dbDescription }: ChangeDatabaseDialogProps) {
+export default function ChangeDatabaseDialog({
+  dbName,
+  dbDescription,
+}: ChangeDatabaseDialogProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [formFields, setFormFields] = useState<FormFields>({ name: dbName, description: dbDescription, changeName: true, changeDescription: true });
+  const [formFields, setFormFields] = useState<FormFields>({
+    name: dbName,
+    description: dbDescription,
+    changeName: true,
+    changeDescription: true,
+  });
   const [errorMsg, setErrorMsg] = useState("");
   const getAllDatabases = useDatabaseStore((state) => state.getAllDatabases);
   const setIsLoadingBackdropOpen = useLoadingStore(
@@ -41,7 +49,12 @@ export default function ChangeDatabaseDialog({ dbName, dbDescription }: ChangeDa
   };
 
   const handleOpen = () => {
-    setFormFields({ name: dbName, description: dbDescription, changeName: true, changeDescription: true });
+    setFormFields({
+      name: dbName,
+      description: dbDescription,
+      changeName: true,
+      changeDescription: true,
+    });
     setDialogOpen(true);
   };
 
@@ -52,7 +65,13 @@ export default function ChangeDatabaseDialog({ dbName, dbDescription }: ChangeDa
   const handleChangeDb = () => {
     setIsLoadingBackdropOpen(true);
     setErrorMsg("");
-    invokeChangeDatabase(dbName, formFields.name, formFields.changeName, formFields.description, formFields.changeDescription)
+    invokeChangeDatabase(
+      dbName,
+      formFields.name,
+      formFields.changeName,
+      formFields.description,
+      formFields.changeDescription,
+    )
       .then(() => {
         handleClose();
         successAlert(`Successfully edited database`);
@@ -68,7 +87,7 @@ export default function ChangeDatabaseDialog({ dbName, dbDescription }: ChangeDa
   };
 
   const inputChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setFormFields({ ...formFields, [event.target.name]: event.target.value })
+    setFormFields({ ...formFields, [event.target.name]: event.target.value });
   };
 
   return (

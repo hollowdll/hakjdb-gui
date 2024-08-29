@@ -64,7 +64,9 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
     setErrorMsg("");
     const keyValueMap: Record<string, number[]> = {};
     for (const fieldValuePair of fieldsToSet) {
-      keyValueMap[fieldValuePair.field] = Array.from(textEncoder.encode(fieldValuePair.value));
+      keyValueMap[fieldValuePair.field] = Array.from(
+        textEncoder.encode(fieldValuePair.value),
+      );
     }
 
     invokeSetHashMap(dbToUse, keyToUse, keyValueMap)

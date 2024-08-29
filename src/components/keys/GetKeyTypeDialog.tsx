@@ -37,9 +37,7 @@ export default function GetKeyTypeDialog(props: GetKeyTypeDialogProps) {
   const dbToUse = useConnectionInfoStore(
     (state) => state.connectionInfo.defaultDb,
   );
-  const setIsOpen = useDialogStore(
-    (state) => state.setIsGetKeyTypeDialogOpen,
-  );
+  const setIsOpen = useDialogStore((state) => state.setIsGetKeyTypeDialogOpen);
   const isOpen = useDialogStore((state) => state.isGetKeyTypeDialogOpen);
 
   const handleClose = () => {

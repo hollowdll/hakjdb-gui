@@ -62,7 +62,8 @@ export default function GetAllHashMapFieldsAndValuesDialog(
           const fieldValueMapEntries = Object.entries(result.fieldValueMap);
           if (fieldValueMapEntries.length > 0) {
             for (const [field, value] of fieldValueMapEntries) {
-              fieldValueMap[field] = `"${textDecoder.decode(new Uint8Array(value))}"`;
+              fieldValueMap[field] =
+                `"${textDecoder.decode(new Uint8Array(value))}"`;
             }
             props.handleDisplayHashMap(fieldValueMap);
           } else {

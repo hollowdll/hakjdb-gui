@@ -18,11 +18,14 @@ import { allyPropsDialogActions } from "../../utility/props";
 type FormFields = {
   name: string;
   description: string;
-}
+};
 
 export default function CreateDatabaseDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [formFields, setFormFields] = useState<FormFields>({ name: "", description: "" });
+  const [formFields, setFormFields] = useState<FormFields>({
+    name: "",
+    description: "",
+  });
   const [errorMsg, setErrorMsg] = useState("");
   const getAllDatabases = useDatabaseStore((state) => state.getAllDatabases);
   const setIsLoadingBackdropOpen = useLoadingStore(
@@ -38,7 +41,7 @@ export default function CreateDatabaseDialog() {
   };
 
   const resetForm = () => {
-    setFormFields({ name: "", description: "" })
+    setFormFields({ name: "", description: "" });
     setErrorMsg("");
   };
 
@@ -61,7 +64,7 @@ export default function CreateDatabaseDialog() {
   };
 
   const inputChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setFormFields({ ...formFields, [event.target.name]: event.target.value })
+    setFormFields({ ...formFields, [event.target.name]: event.target.value });
   };
 
   return (

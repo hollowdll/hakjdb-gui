@@ -146,7 +146,9 @@ export default function GeneralTabPanel() {
             onChange={handleChange}
             sx={{ backgroundColor: boxBackgroundColor(isDarkMode) }}
           >
-            <MenuItem value={menuItems.getAllKeys}>{menuItems.getAllKeys}</MenuItem>
+            <MenuItem value={menuItems.getAllKeys}>
+              {menuItems.getAllKeys}
+            </MenuItem>
             <MenuItem value={menuItems.deleteAllKeys}>
               {menuItems.deleteAllKeys}
             </MenuItem>

@@ -69,7 +69,8 @@ export default function GetHashMapFieldValuesDialog(
           const fieldValueMap: Record<string, string> = {};
           Object.entries(result.fieldValueMap).forEach(([field, value]) => {
             value.ok
-              ? (fieldValueMap[field] = `"${textDecoder.decode(new Uint8Array(value.value))}"`)
+              ? (fieldValueMap[field] =
+                  `"${textDecoder.decode(new Uint8Array(value.value))}"`)
               : (fieldValueMap[field] = "Field does not exist");
           });
           props.handleDisplayHashMap(fieldValueMap);

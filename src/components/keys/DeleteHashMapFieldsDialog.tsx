@@ -65,8 +65,8 @@ export default function DeleteHashMapFieldsDialog(
       .then((result) => {
         result.ok
           ? props.handleDisplayMsg(
-            `Number of fields removed: ${result.fieldsRemovedCount}`,
-          )
+              `Number of fields removed: ${result.fieldsRemovedCount}`,
+            )
           : props.handleDisplayMsg("Key does not exist");
         handleClose();
         resetForm();
