@@ -32,6 +32,7 @@ export default function DatabaseList() {
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
     false,
   );
+  const [infoPanelExpanded, setInfoPanelExpanded] = useState<string | false>(false);
   const databases = useDatabaseStore((state) => state.databases);
   const setDatabases = useDatabaseStore((state) => state.setDatabases);
   const setDefaultDb = useConnectionInfoStore((state) => state.setDefaultDb);
@@ -48,11 +49,17 @@ export default function DatabaseList() {
       (_event: SyntheticEvent, isExpanded: boolean) => {
         if (isExpanded) {
           setAccordionExpanded(panel);
+          setInfoPanelExpanded(false);
           handleGetDatabaseInfo(dbName);
         } else {
           setAccordionExpanded(false);
         }
       };
+
+  const handleInfoPanelExpandChange =
+    (panel: string) => (_event: SyntheticEvent, isExpanded: boolean) => {
+      setInfoPanelExpanded(isExpanded ? panel : false);
+    };
 
   const handleSetDefaultDb = (name: string) => {
     setDefaultDb(name);
@@ -180,7 +187,10 @@ export default function DatabaseList() {
                     <CircularProgress />
                   ) : dbInfo ? (
                     <>
-                      <Accordion>
+                      <Accordion
+                        expanded={infoPanelExpanded === "panel1"}
+                        onChange={handleInfoPanelExpandChange("panel1")}
+                      >
                         <AccordionSummary
                           expandIcon={<ExpandMoreIcon />}
                           {...allyPropsAccordionSummary()}
@@ -199,7 +209,10 @@ export default function DatabaseList() {
                         </AccordionDetails>
                       </Accordion>
 
-                      <Accordion>
+                      <Accordion
+                        expanded={infoPanelExpanded === "panel2"}
+                        onChange={handleInfoPanelExpandChange("panel2")}
+                      >
                         <AccordionSummary
                           expandIcon={<ExpandMoreIcon />}
                           {...allyPropsAccordionSummary()}
@@ -218,7 +231,10 @@ export default function DatabaseList() {
                         </AccordionDetails>
                       </Accordion>
 
-                      <Accordion>
+                      <Accordion
+                        expanded={infoPanelExpanded === "panel3"}
+                        onChange={handleInfoPanelExpandChange("panel3")}
+                      >
                         <AccordionSummary
                           expandIcon={<ExpandMoreIcon />}
                           {...allyPropsAccordionSummary()}
@@ -239,7 +255,10 @@ export default function DatabaseList() {
                         </AccordionDetails>
                       </Accordion>
 
-                      <Accordion>
+                      <Accordion
+                        expanded={infoPanelExpanded === "panel4"}
+                        onChange={handleInfoPanelExpandChange("panel4")}
+                      >
                         <AccordionSummary
                           expandIcon={<ExpandMoreIcon />}
                           {...allyPropsAccordionSummary()}
@@ -260,7 +279,10 @@ export default function DatabaseList() {
                         </AccordionDetails>
                       </Accordion>
 
-                      <Accordion>
+                      <Accordion
+                        expanded={infoPanelExpanded === "panel5"}
+                        onChange={handleInfoPanelExpandChange("panel5")}
+                      >
                         <AccordionSummary
                           expandIcon={<ExpandMoreIcon />}
                           {...allyPropsAccordionSummary()}
@@ -281,7 +303,10 @@ export default function DatabaseList() {
                         </AccordionDetails>
                       </Accordion>
 
-                      <Accordion>
+                      <Accordion
+                        expanded={infoPanelExpanded === "panel6"}
+                        onChange={handleInfoPanelExpandChange("panel6")}
+                      >
                         <AccordionSummary
                           expandIcon={<ExpandMoreIcon />}
                           {...allyPropsAccordionSummary()}
