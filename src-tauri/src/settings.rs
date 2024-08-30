@@ -6,6 +6,14 @@ pub struct AppSettings {
     pub theme: String,
 }
 
+impl AppSettings {
+    pub fn new() -> Self {
+        Self {
+            theme: "dark".to_string(),
+        }
+    }
+}
+
 pub fn serialize_settings_toml(settings: &AppSettings) -> Result<String, toml::ser::Error> {
     let toml = toml::to_string(settings)?;
     Ok(toml)
