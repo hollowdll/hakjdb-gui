@@ -65,7 +65,7 @@ export default function GetKeyTypeDialog(props: GetKeyTypeDialogProps) {
         resetForm();
       })
       .catch((err) => {
-        setErrorMsg(`GetTypeOfKey failed: ${err}`);
+        setErrorMsg(`GetKeyType failed: ${err}`);
         props.handleHideContent();
       })
       .finally(() => {

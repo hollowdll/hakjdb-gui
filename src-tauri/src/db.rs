@@ -46,7 +46,7 @@ pub async fn get_all_databases(
                     db_names: resp.get_ref().db_names.clone(),
                 });
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -78,7 +78,7 @@ pub async fn get_database_info(
                     });
                 }
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -104,7 +104,7 @@ pub async fn create_database(
         let resp = client.db_client.create_db(req).await;
         match resp {
             Ok(resp) => return Ok(resp.get_ref().db_name.clone()),
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -126,7 +126,7 @@ pub async fn delete_database(
         let resp = client.db_client.delete_db(req).await;
         match resp {
             Ok(resp) => return Ok(resp.get_ref().db_name.clone()),
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -156,7 +156,7 @@ pub async fn change_database(
         let resp = client.db_client.change_db(req).await;
         match resp {
             Ok(resp) => return Ok(resp.get_ref().db_name.clone()),
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());

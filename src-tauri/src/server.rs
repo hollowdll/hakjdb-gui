@@ -163,7 +163,7 @@ pub async fn get_server_info(
                     },
                 });
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -185,7 +185,7 @@ pub async fn get_server_logs(
                     logs: resp.get_ref().logs.clone(),
                 });
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());

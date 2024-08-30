@@ -61,7 +61,7 @@ pub async fn set_hashmap(
             Ok(resp) => {
                 return Ok(resp.get_ref().fields_added_count);
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -94,7 +94,7 @@ pub async fn get_all_hashmap_fields_and_values(
                     ok: resp.get_ref().ok,
                 });
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -126,7 +126,7 @@ pub async fn delete_hashmap_fields(
                     ok: resp.get_ref().ok,
                 });
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -171,7 +171,7 @@ pub async fn get_hashmap_field_values(
                     ok: resp.get_ref().ok,
                 });
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());

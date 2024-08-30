@@ -18,7 +18,7 @@ pub async fn unary_echo(
         let resp = client.echo_client.unary_echo(req).await;
         match resp {
             Ok(resp) => return Ok(resp.get_ref().msg.clone()),
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());

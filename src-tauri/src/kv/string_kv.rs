@@ -37,7 +37,7 @@ pub async fn get_string(
                     ok: resp.get_ref().ok,
                 });
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -64,7 +64,7 @@ pub async fn set_string(
         let resp = client.string_kv_client.set_string(req).await;
         match resp {
             Ok(_) => return Ok(()),
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());

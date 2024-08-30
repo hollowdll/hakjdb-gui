@@ -34,7 +34,7 @@ pub async fn get_all_keys(
             Ok(resp) => {
                 return Ok(resp.get_ref().keys.clone());
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -60,7 +60,7 @@ pub async fn delete_keys(
             Ok(resp) => {
                 return Ok(resp.get_ref().keys_deleted_count);
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -82,7 +82,7 @@ pub async fn delete_all_keys(
         let resp = client.general_kv_client.delete_all_keys(req).await;
         match resp {
             Ok(_) => return Ok(()),
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
@@ -112,7 +112,7 @@ pub async fn get_key_type(
                     ok: resp.get_ref().ok,
                 });
             }
-            Err(e) => return Err(e.to_string()),
+            Err(e) => return Err(e.message().to_string()),
         }
     } else {
         return Err(NO_CONNECTION_FOUND_MSG.to_string());
