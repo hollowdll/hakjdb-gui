@@ -74,6 +74,7 @@ dependencies = [
  "tauri",
  "tauri-build",
  "tokio",
+ "toml 0.8.12",
  "tonic",
  "tonic-build",
 ]
