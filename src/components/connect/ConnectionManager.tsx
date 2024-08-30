@@ -34,6 +34,7 @@ export default function ConnectionManager() {
   );
 
   const handleConnect = async (connectionInfo: ConnectionInfo) => {
+    let errMsg = "";
     setIsLoadingBackdropOpen(true);
     try {
       const connResult = await invokeConnect(connectionInfo);
@@ -50,10 +51,11 @@ export default function ConnectionManager() {
       setSelectedNavItemIndex(0);
       successAlert(connResult);
     } catch (err) {
-      const errMsg = `Failed to connect: ${err}`;
+      errMsg = `Failed to connect: ${err}`;
       errorAlert(errMsg);
     }
     setIsLoadingBackdropOpen(false);
+    return errMsg;
   };
 
   useEffect(() => {

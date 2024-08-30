@@ -26,9 +26,10 @@ export default function LogsTabPanel() {
         setServerLogs(result.logs);
       })
       .catch((err) => {
-        setErrorMsg(`Failed to show server logs: ${err}`);
+        const errMsg = `Failed to show server logs: ${err}`;
+        setErrorMsg(errMsg);
         setServerLogs(null);
-        errorAlert(err);
+        errorAlert(errMsg);
       })
       .finally(() => setIsLoading(false));
   };

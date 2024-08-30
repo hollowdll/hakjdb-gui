@@ -14,6 +14,7 @@ import {
   InputLabel,
   SelectChangeEvent,
   Box,
+  Typography,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -30,7 +31,7 @@ import {
 } from "../../utility/props";
 
 type ConnectionDialogProps = {
-  handleConnect: (connectionInfo: ConnectionInfo) => void;
+  handleConnect: (connectionInfo: ConnectionInfo) => Promise<string>;
 };
 
 export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
@@ -46,6 +47,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
   });
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isTLSCertFileChosen, setIsTLSCertFileChosen] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleChangeBooleanField = (event: SelectChangeEvent) => {
     setConnectionInfo({
@@ -87,8 +89,13 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
     connectionInfo.isUseTLS
       ? await invokeSetTLSCertPath(connectionInfo.tlsCertFilePath, false)
       : await invokeSetTLSCertPath("", true);
-    handleConnect(connectionInfo);
-    handleClose();
+    const errMsg = await handleConnect(connectionInfo);
+    if (errMsg != "") {
+      setErrorMsg(errMsg)
+    } else {
+      handleClose();
+      setErrorMsg("");
+    }
   };
 
   const inputChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +122,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
         <DialogTitle>New connection</DialogTitle>
         <DialogContent>
           <DialogContentText {...allyPropsDialogContentText()}>
-            Connect to a new kvdb server instance.
+            Connect to a HakjDB server instance.
           </DialogContentText>
           <TextField
             name="host"
@@ -220,6 +227,11 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
               }}
               {...allyPropsDialogTextField()}
             />
+          ) : (
+            <></>
+          )}
+          {errorMsg !== "" ? (
+            <Typography sx={{ marginTop: "15px" }}>{errorMsg}</Typography>
           ) : (
             <></>
           )}
