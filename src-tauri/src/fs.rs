@@ -3,15 +3,16 @@ use std::fs;
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 
-use crate::settings::{serialize_settings_toml, AppSettings};
+use crate::settings::{deserialize_settings_toml, serialize_settings_toml, AppSettings};
 
 pub const SETTINGS_FILE_NAME: &str = "hakjdb-gui.yaml";
 pub const SUBDIR_NAME: &str = "hakjdb-gui";
 
 /// Writes the settings file.
-pub fn write_settings_file(settings: &str) -> io::Result<()> {
+pub fn write_settings_file(settings: &AppSettings) -> Result<(), Box<dyn Error>> {
     let subdir = get_config_subdir(SUBDIR_NAME)?;
-    write_file(settings, subdir.join(SETTINGS_FILE_NAME))?;
+    let toml = serialize_settings_toml(settings)?;
+    write_file(&toml, subdir.join(SETTINGS_FILE_NAME))?;
 
     Ok(())
 }
@@ -26,11 +27,12 @@ where
     Ok(())
 }
 
-/// Reads the contents of the settings file.
-pub fn read_settings_file() -> io::Result<String> {
+/// Reads the settings file and loads the settings.
+pub fn load_settings_file() -> Result<AppSettings, Box<dyn Error>> {
     let subdir = get_config_subdir(SUBDIR_NAME)?;
     let content = fs::read_to_string(subdir.join(SETTINGS_FILE_NAME))?;
-    Ok(content)
+    let settings = deserialize_settings_toml(&content)?;
+    Ok(settings)
 }
 
 /// Creates a new settings file if it doesn't exist.
@@ -39,8 +41,7 @@ pub fn create_settings_file_if_not_exists() -> Result<(), Box<dyn Error>> {
     let exists = subdir.join(SETTINGS_FILE_NAME).try_exists()?;
     if !exists {
         let settings = AppSettings::new();
-        let toml = serialize_settings_toml(&settings)?;
-        write_settings_file(&toml)?;
+        write_settings_file(&settings)?;
     }
 
     Ok(())

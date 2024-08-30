@@ -1,15 +1,23 @@
 use serde::{Deserialize, Serialize};
 
+pub const THEME_LIGHT: &str = "light";
+pub const THEME_DARK: &str = "dark";
+
+#[derive(Serialize, Deserialize)]
+pub enum AppTheme {
+    Light,
+    Dark,
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct AppSettings {
-    /// Theme can be 'light' or 'dark'.
-    pub theme: String,
+    pub theme: AppTheme,
 }
 
 impl AppSettings {
     pub fn new() -> Self {
         Self {
-            theme: "dark".to_string(),
+            theme: AppTheme::Dark,
         }
     }
 }

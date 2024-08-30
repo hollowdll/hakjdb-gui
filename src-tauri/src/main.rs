@@ -14,6 +14,7 @@ use app::{
         delete_database, get_all_databases, get_database_info,
     },
     echo::{__cmd__unary_echo, unary_echo},
+    fs::{create_settings_file_if_not_exists, load_settings_file},
     grpc::GrpcConnection,
     kv::{
         general_kv::{
@@ -43,6 +44,9 @@ const EVENT_ID_SET_DARK_MODE: &str = "set-dark-mode";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    let _ = create_settings_file_if_not_exists();
+    let _settings = load_settings_file()?;
+
     tauri::Builder::default()
         .menu(
             Menu::os_default("HakjDB GUI")
