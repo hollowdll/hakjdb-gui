@@ -29,7 +29,10 @@ use app::{
         string_kv::{__cmd__get_string, __cmd__set_string, get_string, set_string},
     },
     server::{__cmd__get_server_info, __cmd__get_server_logs, get_server_info, get_server_logs},
-    settings::{AppSettingsState, __cmd__settings_set_theme, settings_set_theme},
+    settings::{
+        AppSettingsState, __cmd__settings_set_theme, handle_settings, settings_set_theme,
+        EventPayloadSetTheme, EVENT_ID_SET_DARK_MODE,
+    },
 };
 use std::error::Error;
 use tauri::{CustomMenuItem, Manager, Menu, Submenu};
@@ -41,7 +44,6 @@ const MENU_ITEM_ID_DARK_MODE: &str = "dark-mode";
 
 const EVENT_ID_NEW_CONNECTION: &str = "new-connection";
 const EVENT_ID_DISCONNECT: &str = "disconnect";
-const EVENT_ID_SET_DARK_MODE: &str = "set-dark-mode";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -77,19 +79,25 @@ async fn main() -> Result<(), Box<dyn Error>> {
             }
             MENU_ITEM_ID_LIGHT_MODE => {
                 println!("Event -> Enable light mode");
-                let _ = event.window().emit(EVENT_ID_SET_DARK_MODE, false);
+                let _ = event.window().emit(
+                    EVENT_ID_SET_DARK_MODE,
+                    EventPayloadSetTheme {
+                        dark_mode: false,
+                        save: true,
+                    },
+                );
             }
             MENU_ITEM_ID_DARK_MODE => {
                 println!("Event -> Enable dark mode");
-                let _ = event.window().emit(EVENT_ID_SET_DARK_MODE, true);
+                let _ = event.window().emit(
+                    EVENT_ID_SET_DARK_MODE,
+                    EventPayloadSetTheme {
+                        dark_mode: true,
+                        save: true,
+                    },
+                );
             }
             _ => {}
-        })
-        .setup(|app| {
-            app.manage(GrpcConnection::new());
-            app.manage(AppSettingsState::new(settings));
-
-            Ok(())
         })
         .invoke_handler(tauri::generate_handler![
             connect,
@@ -118,6 +126,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
             unary_echo,
             settings_set_theme,
         ])
+        .setup(|app| {
+            let app_handle = app.handle();
+            app.manage(GrpcConnection::new());
+            app.manage(AppSettingsState::new(settings));
+
+            tauri::async_runtime::spawn(async move {
+                handle_settings(&app_handle).await;
+            });
+
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 
