@@ -29,15 +29,17 @@ function App() {
   );
 
   useEffect(() => {
-    const unlisten = listen<EventPayloadSetDarkMode>(tauriListenEvents.setDarkMode, (event) => {
-      setDarkMode(event.payload.darkMode);
-      if (event.payload.save) {
-        invokeSettingsSetTheme(event.payload.darkMode)
-          .catch((err) => {
+    const unlisten = listen<EventPayloadSetDarkMode>(
+      tauriListenEvents.setDarkMode,
+      (event) => {
+        setDarkMode(event.payload.darkMode);
+        if (event.payload.save) {
+          invokeSettingsSetTheme(event.payload.darkMode).catch((err) => {
             errorAlert(`Failed to write settings: ${err}`);
           });
-      }
-    });
+        }
+      },
+    );
     invokeHandleSettings();
 
     return () => {

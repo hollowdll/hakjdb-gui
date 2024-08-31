@@ -91,7 +91,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
       : await invokeSetTLSCertPath("", true);
     const errMsg = await handleConnect(connectionInfo);
     if (errMsg != "") {
-      setErrorMsg(errMsg)
+      setErrorMsg(errMsg);
     } else {
       handleClose();
       setErrorMsg("");

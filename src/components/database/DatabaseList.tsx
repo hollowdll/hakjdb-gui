@@ -32,7 +32,9 @@ export default function DatabaseList() {
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
     false,
   );
-  const [infoPanelExpanded, setInfoPanelExpanded] = useState<string | false>(false);
+  const [infoPanelExpanded, setInfoPanelExpanded] = useState<string | false>(
+    false,
+  );
   const databases = useDatabaseStore((state) => state.databases);
   const setDatabases = useDatabaseStore((state) => state.setDatabases);
   const setDefaultDb = useConnectionInfoStore((state) => state.setDefaultDb);
@@ -46,15 +48,15 @@ export default function DatabaseList() {
 
   const handleAccordionChange =
     (panel: string, dbName: string) =>
-      (_event: SyntheticEvent, isExpanded: boolean) => {
-        if (isExpanded) {
-          setAccordionExpanded(panel);
-          setInfoPanelExpanded(false);
-          handleGetDatabaseInfo(dbName);
-        } else {
-          setAccordionExpanded(false);
-        }
-      };
+    (_event: SyntheticEvent, isExpanded: boolean) => {
+      if (isExpanded) {
+        setAccordionExpanded(panel);
+        setInfoPanelExpanded(false);
+        handleGetDatabaseInfo(dbName);
+      } else {
+        setAccordionExpanded(false);
+      }
+    };
 
   const handleInfoPanelExpandChange =
     (panel: string) => (_event: SyntheticEvent, isExpanded: boolean) => {

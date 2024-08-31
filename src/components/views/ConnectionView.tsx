@@ -64,8 +64,8 @@ export default function ConnectionView() {
       })
       .catch((err) => {
         errorAlert(`Connection failed: ${err}`);
-      })
-  }
+      });
+  };
 
   return (
     <Box sx={{ width: "100%" }}>

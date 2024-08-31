@@ -37,7 +37,7 @@ const tauriInvokeCommands: TauriInvokeCommands = {
   authenticate: "authenticate",
   unaryEcho: "unary_echo",
   handleSettings: "handle_settings",
-  settingsSetTheme: "settings_set_theme"
+  settingsSetTheme: "settings_set_theme",
 };
 
 export const invokeOpenFile = (): Promise<string | null> => {
@@ -240,8 +240,8 @@ export const invokeUnaryEcho = (msg: string): Promise<string> => {
 
 export const invokeHandleSettings = (): Promise<void> => {
   return invoke<void>(tauriInvokeCommands.handleSettings);
-}
+};
 
 export const invokeSettingsSetTheme = (darkMode: boolean): Promise<void> => {
   return invoke<void>(tauriInvokeCommands.settingsSetTheme, { darkMode });
-}
+};
