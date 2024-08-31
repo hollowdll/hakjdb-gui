@@ -29,6 +29,7 @@ use app::{
         string_kv::{__cmd__get_string, __cmd__set_string, get_string, set_string},
     },
     server::{__cmd__get_server_info, __cmd__get_server_logs, get_server_info, get_server_logs},
+    settings::{AppSettingsState, __cmd__settings_set_theme, settings_set_theme},
 };
 use std::error::Error;
 use tauri::{CustomMenuItem, Manager, Menu, Submenu};
@@ -45,7 +46,7 @@ const EVENT_ID_SET_DARK_MODE: &str = "set-dark-mode";
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let _ = create_settings_file_if_not_exists();
-    let _settings = load_settings_file()?;
+    let settings = load_settings_file()?;
 
     tauri::Builder::default()
         .menu(
@@ -86,6 +87,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         })
         .setup(|app| {
             app.manage(GrpcConnection::new());
+            app.manage(AppSettingsState::new(settings));
 
             Ok(())
         })
@@ -113,7 +115,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
             set_tls_cert_path,
             open_file,
             authenticate,
-            unary_echo
+            unary_echo,
+            settings_set_theme,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
