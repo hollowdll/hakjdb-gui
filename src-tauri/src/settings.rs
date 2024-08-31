@@ -3,12 +3,11 @@ use serde::{Deserialize, Serialize};
 use tauri::{AppHandle, Manager, State};
 use tokio::sync::Mutex;
 
-pub const THEME_LIGHT: &str = "light";
-pub const THEME_DARK: &str = "dark";
 pub const EVENT_ID_SET_DARK_MODE: &str = "set-dark-mode";
 
 #[derive(Serialize, Deserialize)]
 pub enum AppTheme {
+    /// Default theme
     Light,
     Dark,
 }
@@ -21,7 +20,7 @@ pub struct AppSettings {
 impl AppSettings {
     pub fn new() -> Self {
         Self {
-            theme: AppTheme::Dark,
+            theme: AppTheme::Light,
         }
     }
 }
@@ -40,6 +39,7 @@ impl AppSettingsState {
 
 #[derive(Serialize, Clone)]
 pub struct EventPayloadSetTheme {
+    #[serde(rename = "darkMode")]
     pub dark_mode: bool,
     pub save: bool,
 }
@@ -56,10 +56,10 @@ pub fn deserialize_settings_toml(toml: &str) -> Result<AppSettings, toml::de::Er
 
 #[tauri::command]
 pub async fn settings_set_theme(
-    settings_state: State<'_, AppSettingsState>,
+    state: State<'_, AppSettingsState>,
     dark_mode: bool,
 ) -> Result<(), String> {
-    let mut settings = settings_state.settings.lock().await;
+    let mut settings = state.settings.lock().await;
     if dark_mode {
         settings.theme = AppTheme::Dark;
     } else {
@@ -72,9 +72,12 @@ pub async fn settings_set_theme(
     Ok(())
 }
 
-pub async fn handle_settings(app_handle: &AppHandle) {
+#[tauri::command]
+pub async fn handle_settings(
+    app_handle: AppHandle,
+    state: State<'_, AppSettingsState>,
+) -> Result<(), String> {
     println!("handling settings");
-    let state = app_handle.state::<AppSettingsState>();
     let settings = state.settings.lock().await;
     match settings.theme {
         AppTheme::Light => {
@@ -96,4 +99,6 @@ pub async fn handle_settings(app_handle: &AppHandle) {
             );
         }
     }
+
+    Ok(())
 }

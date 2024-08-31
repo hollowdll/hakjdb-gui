@@ -12,10 +12,12 @@ import LoadingBackdrop from "./components/common/LoadingBackdrop";
 import AlertBox from "./components/common/AlertBox";
 import { useThemeStore } from "./state/store";
 import { useEffect, useMemo } from "react";
-import { tauriListenEvents } from "./tauri/event";
+import { EventPayloadSetDarkMode, tauriListenEvents } from "./tauri/event";
 import { listen } from "@tauri-apps/api/event";
 import { getDesignTokens } from "./style";
 import { BottomBar } from "./components/layout/BottomBar";
+import { invokeHandleSettings, invokeSettingsSetTheme } from "./tauri/command";
+import { errorAlert } from "./utility/alert";
 
 function App() {
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
@@ -27,9 +29,16 @@ function App() {
   );
 
   useEffect(() => {
-    const unlisten = listen<boolean>(tauriListenEvents.setDarkMode, (event) => {
-      setDarkMode(event.payload);
+    const unlisten = listen<EventPayloadSetDarkMode>(tauriListenEvents.setDarkMode, (event) => {
+      setDarkMode(event.payload.darkMode);
+      if (event.payload.save) {
+        invokeSettingsSetTheme(event.payload.darkMode)
+          .catch((err) => {
+            errorAlert(`Failed to write settings: ${err}`);
+          });
+      }
     });
+    invokeHandleSettings();
 
     return () => {
       unlisten.then((resolve) => resolve());

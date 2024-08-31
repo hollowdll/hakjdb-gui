@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 
 use crate::settings::{deserialize_settings_toml, serialize_settings_toml, AppSettings};
 
-pub const SETTINGS_FILE_NAME: &str = "hakjdb-gui.yaml";
+pub const SETTINGS_FILE_NAME: &str = "hakjdb-gui-settings.toml";
 pub const SUBDIR_NAME: &str = "hakjdb-gui";
 
 /// Writes the settings file.

@@ -31,7 +31,7 @@ use app::{
     server::{__cmd__get_server_info, __cmd__get_server_logs, get_server_info, get_server_logs},
     settings::{
         AppSettingsState, __cmd__settings_set_theme, handle_settings, settings_set_theme,
-        EventPayloadSetTheme, EVENT_ID_SET_DARK_MODE,
+        EventPayloadSetTheme, __cmd__handle_settings, EVENT_ID_SET_DARK_MODE,
     },
 };
 use std::error::Error;
@@ -125,15 +125,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
             authenticate,
             unary_echo,
             settings_set_theme,
+            handle_settings
         ])
         .setup(|app| {
-            let app_handle = app.handle();
             app.manage(GrpcConnection::new());
             app.manage(AppSettingsState::new(settings));
-
-            tauri::async_runtime::spawn(async move {
-                handle_settings(&app_handle).await;
-            });
 
             Ok(())
         })

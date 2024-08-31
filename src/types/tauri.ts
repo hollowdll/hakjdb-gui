@@ -23,6 +23,8 @@ export type TauriInvokeCommands = {
   openFile: string;
   authenticate: string;
   unaryEcho: string;
+  handleSettings: string;
+  settingsSetTheme: string;
 };
 
 export type TauriListenEvents = {
