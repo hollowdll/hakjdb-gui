@@ -5,8 +5,8 @@ use app::{
     auth::{__cmd__authenticate, authenticate},
     connection::{
         __cmd__connect, __cmd__disconnect, __cmd__open_file, __cmd__reset_auth_token,
-        __cmd__set_tls_cert_path, connect, disconnect, open_file, reset_auth_token,
-        set_tls_cert_path,
+        __cmd__set_tls_ca_cert, __cmd__set_tls_client_cert_auth, connect, disconnect, open_file,
+        reset_auth_token, set_tls_ca_cert, set_tls_client_cert_auth,
     },
     db::{
         __cmd__change_database, __cmd__create_database, __cmd__delete_database,
@@ -120,7 +120,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
             delete_hashmap_fields,
             get_hashmap_field_values,
             reset_auth_token,
-            set_tls_cert_path,
+            set_tls_ca_cert,
+            set_tls_client_cert_auth,
             open_file,
             authenticate,
             unary_echo,

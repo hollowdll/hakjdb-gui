@@ -7,7 +7,7 @@ use hakjdb_api::{
 use std::path::PathBuf;
 use tauri::State;
 use tokio::sync::Mutex;
-use tonic::transport::{Certificate, Channel, ClientTlsConfig, Error};
+use tonic::transport::{Certificate, Channel, ClientTlsConfig, Error, Identity};
 use tonic::Request;
 
 pub mod kvdb {
@@ -28,6 +28,16 @@ pub const MD_KEY_DATABASE: &str = "database";
 pub const MD_KEY_AUTH_TOKEN: &str = "auth-token";
 /// gRPC metadata key for API version.
 pub const MD_KEY_API_VERSION: &str = "api-version";
+
+pub struct ClientCertConfig {
+    pub client_cert_pem: String,
+    pub client_key_pem: String,
+}
+
+pub struct ClientCertPaths {
+    pub public_key_path: PathBuf,
+    pub private_key_path: PathBuf,
+}
 
 pub struct GrpcClient {
     pub auth_client: AuthServiceClient<Channel>,
@@ -62,9 +72,20 @@ impl GrpcClient {
     /// Returns a new secure gRPC client that uses TLS.
     /// pem_content is the content of the server certificate file.
     /// It needs to be a PEM encoded X509 certificate.
-    pub async fn new_secure(host: &str, port: u16, pem_content: &str) -> Result<GrpcClient, Error> {
-        let ca = Certificate::from_pem(pem_content);
-        let tls = ClientTlsConfig::new().ca_certificate(ca).domain_name(host);
+    pub async fn new_secure(
+        host: &str,
+        port: u16,
+        ca_pem_content: &str,
+        client_cert_cfg: Option<ClientCertConfig>,
+    ) -> Result<GrpcClient, Error> {
+        let ca = Certificate::from_pem(ca_pem_content);
+        let mut tls = ClientTlsConfig::new().ca_certificate(ca).domain_name(host);
+        if let Some(client_cert_cfg) = client_cert_cfg {
+            tls = tls.identity(Identity::from_pem(
+                client_cert_cfg.client_cert_pem,
+                client_cert_cfg.client_key_pem,
+            ));
+        }
         let channel = Channel::from_shared(format!("https://{}:{}", host, port))
             .unwrap()
             .tls_config(tls)?
@@ -85,7 +106,8 @@ impl GrpcClient {
 
 pub struct GrpcConnection {
     pub client: Mutex<Option<GrpcClient>>,
-    pub tls_cert_path: Mutex<Option<PathBuf>>,
+    pub tls_ca_cert_path: Mutex<Option<PathBuf>>,
+    pub tls_client_cert_paths: Mutex<Option<ClientCertPaths>>,
     pub auth_token: Mutex<Option<String>>,
 }
 
@@ -93,7 +115,8 @@ impl GrpcConnection {
     pub fn new() -> GrpcConnection {
         GrpcConnection {
             client: None.into(),
-            tls_cert_path: None.into(),
+            tls_ca_cert_path: None.into(),
+            tls_client_cert_paths: None.into(),
             auth_token: None.into(),
         }
     }
