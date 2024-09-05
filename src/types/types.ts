@@ -3,9 +3,12 @@ export interface ConnectionInfo {
   port: number;
   defaultDb: string;
   password: string;
-  tlsCertFilePath: string;
-  isUsePassword: boolean;
-  isUseTLS: boolean;
+  caCertFilePath: string;
+  clientCertFilePath: string;
+  clientKeyFilePath: string;
+  usePassword: boolean;
+  useTLS: boolean;
+  useClientCertAuth: boolean;
 }
 
 export interface NavItem {

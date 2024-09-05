@@ -148,7 +148,7 @@ export default function ConnectionView() {
           >
             <ListItemText primary="Using Password" {...allyPropsField()} />
             <ListItemText
-              primary={connectionInfo.isUsePassword ? "Yes" : "No"}
+              primary={connectionInfo.usePassword ? "Yes" : "No"}
               {...allyPropsValue()}
             />
           </AccordionSummary>
@@ -157,7 +157,7 @@ export default function ConnectionView() {
               If password is used for the connection. Password is needed to
               access password protected servers.
             </Typography>
-            {connectionInfo.isUsePassword ? (
+            {connectionInfo.usePassword ? (
               <>
                 <Divider sx={{ marginTop: "10px", marginBottom: "10px" }} />
                 <Box sx={{ display: "flex" }}>
@@ -202,7 +202,7 @@ export default function ConnectionView() {
           >
             <ListItemText primary="Using TLS" {...allyPropsField()} />
             <ListItemText
-              primary={connectionInfo.isUseTLS ? "Yes" : "No"}
+              primary={connectionInfo.useTLS ? "Yes" : "No"}
               {...allyPropsValue()}
             />
           </AccordionSummary>
@@ -211,7 +211,7 @@ export default function ConnectionView() {
               If TLS is used for the connection. TLS is needed to access TLS
               enabled servers for secure communication.
             </Typography>
-            {connectionInfo.isUseTLS ? (
+            {connectionInfo.useTLS ? (
               <>
                 <Divider sx={{ marginTop: "10px", marginBottom: "10px" }} />
                 <Box sx={{ display: "flex" }}>
@@ -220,7 +220,7 @@ export default function ConnectionView() {
                     {...allyPropsField()}
                   />
                   <ListItemText
-                    primary={connectionInfo.tlsCertFilePath}
+                    primary={connectionInfo.caCertFilePath}
                     sx={{
                       textAlign: "end",
                       color: "text.secondary",

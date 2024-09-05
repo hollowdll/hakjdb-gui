@@ -38,7 +38,7 @@ export default function ConnectionManager() {
     setIsLoadingBackdropOpen(true);
     try {
       const connResult = await invokeConnect(connectionInfo);
-      if (connectionInfo.isUsePassword) {
+      if (connectionInfo.usePassword) {
         await invokeAuthenticate(connectionInfo.password);
       } else {
         await invokeResetAuthToken();

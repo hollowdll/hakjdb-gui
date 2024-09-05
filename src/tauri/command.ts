@@ -32,7 +32,8 @@ const tauriInvokeCommands: TauriInvokeCommands = {
   deleteHashMapFields: "delete_hashmap_fields",
   getHashMapFieldValues: "get_hashmap_field_values",
   resetAuthToken: "reset_auth_token",
-  setTLSCertPath: "set_tls_cert_path",
+  setTLSCACert: "set_tls_ca_cert",
+  setTLSClientCertAuth: "set_tls_client_cert_auth",
   openFile: "open_file",
   authenticate: "authenticate",
   unaryEcho: "unary_echo",
@@ -61,13 +62,25 @@ export const invokeResetAuthToken = (): Promise<void> => {
   return invoke<void>(tauriInvokeCommands.resetAuthToken);
 };
 
-export const invokeSetTLSCertPath = (
-  certPath: string,
+export const invokeSetTLSCACert = (
   disable: boolean,
+  caCertPath: string,
 ): Promise<void> => {
-  return invoke<void>(tauriInvokeCommands.setTLSCertPath, {
-    certPath,
+  return invoke<void>(tauriInvokeCommands.setTLSCACert, {
     disable,
+    caCertPath,
+  });
+};
+
+export const invokeSetTLSClientCertAuth = (
+  disable: boolean,
+  clientCertPath: string,
+  clientKeyPath: string,
+): Promise<void> => {
+  return invoke<void>(tauriInvokeCommands.setTLSClientCertAuth, {
+    disable,
+    clientCertPath,
+    clientKeyPath,
   });
 };
 

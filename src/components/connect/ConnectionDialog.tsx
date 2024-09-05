@@ -23,7 +23,11 @@ import { listen } from "@tauri-apps/api/event";
 import { useEffect, useState, ChangeEvent } from "react";
 import { ConnectionInfo } from "../../types/types";
 import { tauriListenEvents } from "../../tauri/event";
-import { invokeOpenFile, invokeSetTLSCertPath } from "../../tauri/command";
+import {
+  invokeOpenFile,
+  invokeSetTLSCACert,
+  invokeSetTLSClientCertAuth,
+} from "../../tauri/command";
 import {
   allyPropsDialogTextField,
   allyPropsDialogContentText,
@@ -34,6 +38,12 @@ type ConnectionDialogProps = {
   handleConnect: (connectionInfo: ConnectionInfo) => Promise<string>;
 };
 
+type FilesChosen = {
+  caCert: boolean;
+  clientCert: boolean;
+  clientKey: boolean;
+};
+
 export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>({
@@ -41,12 +51,19 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
     port: 12345,
     defaultDb: "default",
     password: "",
-    tlsCertFilePath: "",
-    isUsePassword: false,
-    isUseTLS: false,
+    caCertFilePath: "",
+    clientCertFilePath: "",
+    clientKeyFilePath: "",
+    usePassword: false,
+    useTLS: false,
+    useClientCertAuth: false,
   });
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [isTLSCertFileChosen, setIsTLSCertFileChosen] = useState(false);
+  const [filesChosen, setFilesChosen] = useState<FilesChosen>({
+    caCert: false,
+    clientCert: false,
+    clientKey: false,
+  });
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleChangeBooleanField = (event: SelectChangeEvent) => {
@@ -54,6 +71,28 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
       ...connectionInfo,
       [event.target.name]: event.target.value === "Yes" ? true : false,
     });
+  };
+
+  const handleChangeUseTLS = (event: SelectChangeEvent) => {
+    if (event.target.value === "No") {
+      setConnectionInfo({
+        ...connectionInfo,
+        useTLS: false,
+        useClientCertAuth: false,
+      });
+    } else if (event.target.value === "Server Side") {
+      setConnectionInfo({
+        ...connectionInfo,
+        useTLS: true,
+        useClientCertAuth: false,
+      });
+    } else if (event.target.value === "Client Certificate Authentication") {
+      setConnectionInfo({
+        ...connectionInfo,
+        useTLS: true,
+        useClientCertAuth: true,
+      });
+    }
   };
 
   const handleClickShowPassword = () => setIsShowPassword((show) => !show);
@@ -64,14 +103,28 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
     event.preventDefault();
   };
 
-  const handleClickOpenFile = () => {
+  const handleClickOpenFile = (file: "caCert" | "clientCert" | "clientKey") => {
     invokeOpenFile().then((result) => {
       if (result) {
-        setConnectionInfo({
-          ...connectionInfo,
-          tlsCertFilePath: result,
-        });
-        setIsTLSCertFileChosen(true);
+        if (file == "caCert") {
+          setConnectionInfo({
+            ...connectionInfo,
+            caCertFilePath: result,
+          });
+          setFilesChosen({ ...filesChosen, caCert: true });
+        } else if (file == "clientCert") {
+          setConnectionInfo({
+            ...connectionInfo,
+            clientCertFilePath: result,
+          });
+          setFilesChosen({ ...filesChosen, clientCert: true });
+        } else if (file == "clientKey") {
+          setConnectionInfo({
+            ...connectionInfo,
+            clientKeyFilePath: result,
+          });
+          setFilesChosen({ ...filesChosen, clientKey: true });
+        }
       }
     });
   };
@@ -86,9 +139,22 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
 
   const handleConnectClick = async () => {
     console.log("trying to connect ...");
-    connectionInfo.isUseTLS
-      ? await invokeSetTLSCertPath(connectionInfo.tlsCertFilePath, false)
-      : await invokeSetTLSCertPath("", true);
+
+    if (connectionInfo.useTLS) {
+      await invokeSetTLSCACert(false, connectionInfo.caCertFilePath);
+      if (connectionInfo.useClientCertAuth) {
+        await invokeSetTLSClientCertAuth(
+          false,
+          connectionInfo.clientCertFilePath,
+          connectionInfo.clientKeyFilePath,
+        );
+      } else {
+        invokeSetTLSClientCertAuth(true, "", "");
+      }
+    } else {
+      await invokeSetTLSCACert(true, "");
+    }
+
     const errMsg = await handleConnect(connectionInfo);
     if (errMsg != "") {
       setErrorMsg(errMsg);
@@ -154,8 +220,8 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           >
             <InputLabel>Use Password</InputLabel>
             <Select
-              name="isUsePassword"
-              value={connectionInfo.isUsePassword ? "Yes" : "No"}
+              name="usePassword"
+              value={connectionInfo.usePassword ? "Yes" : "No"}
               label="Use Password"
               onChange={handleChangeBooleanField}
             >
@@ -166,16 +232,25 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           <FormControl sx={{ marginTop: "15px", minWidth: 125 }}>
             <InputLabel>Use TLS</InputLabel>
             <Select
-              name="isUseTLS"
-              value={connectionInfo.isUseTLS ? "Yes" : "No"}
+              name="useTLS"
+              value={
+                connectionInfo.useTLS && !connectionInfo.useClientCertAuth
+                  ? "Server Side"
+                  : connectionInfo.useTLS && connectionInfo.useClientCertAuth
+                    ? "Client Certificate Authentication"
+                    : "No"
+              }
               label="Use TLS"
-              onChange={handleChangeBooleanField}
+              onChange={handleChangeUseTLS}
             >
               <MenuItem value="No">No</MenuItem>
-              <MenuItem value="Yes">Yes</MenuItem>
+              <MenuItem value="Server Side">Server Side</MenuItem>
+              <MenuItem value="Client Certificate Authentication">
+                Client Certificate Authentication
+              </MenuItem>
             </Select>
           </FormControl>
-          {connectionInfo.isUsePassword ? (
+          {connectionInfo.usePassword ? (
             <TextField
               name="password"
               label="Password"
@@ -201,15 +276,15 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
           ) : (
             <></>
           )}
-          {connectionInfo.isUseTLS ? (
+          {connectionInfo.useTLS ? (
             <TextField
               disabled
-              name="tlsCertFilePath"
-              label="TLS certificate file path"
+              name="caCertFilePath"
+              label="CA Certificate File"
               value={
-                isTLSCertFileChosen
-                  ? connectionInfo.tlsCertFilePath
-                  : "No file chosen"
+                filesChosen.caCert
+                  ? connectionInfo.caCertFilePath
+                  : "No File Chosen"
               }
               onChange={inputChanged}
               InputProps={{
@@ -217,7 +292,7 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
                   <InputAdornment position="end">
                     <IconButton
                       edge="end"
-                      onClick={handleClickOpenFile}
+                      onClick={() => handleClickOpenFile("caCert")}
                       sx={{ "&:focus": { outline: "none" } }}
                     >
                       <FolderIcon />
@@ -227,6 +302,62 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
               }}
               {...allyPropsDialogTextField()}
             />
+          ) : (
+            <></>
+          )}
+          {connectionInfo.useClientCertAuth ? (
+            <>
+              <TextField
+                disabled
+                name="clientCertFilePath"
+                label="Client Certificate File"
+                value={
+                  filesChosen.clientCert
+                    ? connectionInfo.clientCertFilePath
+                    : "No File Chosen"
+                }
+                onChange={inputChanged}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => handleClickOpenFile("clientCert")}
+                        sx={{ "&:focus": { outline: "none" } }}
+                      >
+                        <FolderIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                {...allyPropsDialogTextField()}
+              />
+              <TextField
+                disabled
+                name="clientKeyFilePath"
+                label="Client Private Key File"
+                value={
+                  filesChosen.clientKey
+                    ? connectionInfo.clientKeyFilePath
+                    : "No File Chosen"
+                }
+                onChange={inputChanged}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => handleClickOpenFile("clientKey")}
+                        sx={{ "&:focus": { outline: "none" } }}
+                      >
+                        <FolderIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                {...allyPropsDialogTextField()}
+              />
+            </>
           ) : (
             <></>
           )}
