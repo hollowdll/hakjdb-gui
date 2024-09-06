@@ -216,11 +216,68 @@ export default function ConnectionView() {
                 <Divider sx={{ marginTop: "10px", marginBottom: "10px" }} />
                 <Box sx={{ display: "flex" }}>
                   <ListItemText
-                    primary="Certification path"
+                    primary="CA Certification File"
                     {...allyPropsField()}
                   />
                   <ListItemText
                     primary={connectionInfo.caCertFilePath}
+                    sx={{
+                      textAlign: "end",
+                      color: "text.secondary",
+                      wordBreak: "break-word",
+                    }}
+                  />
+                </Box>
+              </>
+            ) : (
+              <></>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion
+          expanded={accordionExpanded === "panel6"}
+          onChange={handleAccordionChange("panel6")}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            {...allyPropsAccordionSummary()}
+          >
+            <ListItemText primary="Using TLS Client Cert Auth" {...allyPropsField()} />
+            <ListItemText
+              primary={connectionInfo.useClientCertAuth ? "Yes" : "No"}
+              {...allyPropsValue()}
+            />
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              If client certificate authentication is used for the TLS connection. Needed if the server TLS setup requires a client certificate signed by the server's root CA to verify the identity of the client.
+            </Typography>
+            {connectionInfo.useClientCertAuth ? (
+              <>
+                <Divider sx={{ marginTop: "10px", marginBottom: "10px" }} />
+                <Box sx={{ display: "flex" }}>
+                  <ListItemText
+                    primary="Client Certification File"
+                    {...allyPropsField()}
+                  />
+                  <ListItemText
+                    primary={connectionInfo.clientCertFilePath}
+                    sx={{
+                      textAlign: "end",
+                      color: "text.secondary",
+                      wordBreak: "break-word",
+                    }}
+                  />
+                </Box>
+                <Divider sx={{ marginTop: "10px", marginBottom: "10px" }} />
+                <Box sx={{ display: "flex" }}>
+                  <ListItemText
+                    primary="Client Private Key File"
+                    {...allyPropsField()}
+                  />
+                  <ListItemText
+                    primary={connectionInfo.clientKeyFilePath}
                     sx={{
                       textAlign: "end",
                       color: "text.secondary",
