@@ -15,7 +15,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import { useNavigationStore } from "../../state/store";
 import { useThemeStore } from "../../state/store";
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 const navItemNames: NavItemNames = {
   connection: "Connection",
   server: "Server",
