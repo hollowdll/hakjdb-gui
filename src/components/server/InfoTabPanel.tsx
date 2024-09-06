@@ -427,14 +427,19 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
           expandIcon={<ExpandMoreIcon />}
           {...allyPropsAccordionSummary()}
         >
-          <ListItemText primary="TLS Client Cert Auth Enabled" {...allyPropsInfoField()} />
+          <ListItemText
+            primary="Client Cert Auth Enabled"
+            {...allyPropsInfoField()}
+          />
           <ListItemText
             primary={info.tlsClientCertAuthEnabled ? "Yes" : "No"}
             {...allyPropsInfoValue("tls-client-cert-auth-enabled")}
           />
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>If client certificate authentication is enabled in TLS. Yes or no.</Typography>
+          <Typography>
+            If client certificate authentication is enabled in TLS. Yes or no.
+          </Typography>
         </AccordionDetails>
       </Accordion>
 

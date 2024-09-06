@@ -14,7 +14,6 @@ import {
   InputLabel,
   SelectChangeEvent,
   Box,
-  Typography,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -64,7 +63,6 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
     clientCert: false,
     clientKey: false,
   });
-  const [errorMsg, setErrorMsg] = useState("");
 
   const handleChangeBooleanField = (event: SelectChangeEvent) => {
     setConnectionInfo({
@@ -155,12 +153,8 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
       await invokeSetTLSCACert(true, "");
     }
 
-    const errMsg = await handleConnect(connectionInfo);
-    if (errMsg != "") {
-      setErrorMsg(errMsg);
-    } else {
+    if (await handleConnect(connectionInfo)) {
       handleClose();
-      setErrorMsg("");
     }
   };
 
@@ -358,11 +352,6 @@ export function ConnectionDialog({ handleConnect }: ConnectionDialogProps) {
                 {...allyPropsDialogTextField()}
               />
             </>
-          ) : (
-            <></>
-          )}
-          {errorMsg !== "" ? (
-            <Typography sx={{ marginTop: "15px" }}>{errorMsg}</Typography>
           ) : (
             <></>
           )}

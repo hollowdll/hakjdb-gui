@@ -243,7 +243,10 @@ export default function ConnectionView() {
             expandIcon={<ExpandMoreIcon />}
             {...allyPropsAccordionSummary()}
           >
-            <ListItemText primary="Using TLS Client Cert Auth" {...allyPropsField()} />
+            <ListItemText
+              primary="Using TLS Client Cert Auth"
+              {...allyPropsField()}
+            />
             <ListItemText
               primary={connectionInfo.useClientCertAuth ? "Yes" : "No"}
               {...allyPropsValue()}
@@ -251,7 +254,10 @@ export default function ConnectionView() {
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              If client certificate authentication is used for the TLS connection. Needed if the server TLS setup requires a client certificate signed by the server's root CA to verify the identity of the client.
+              If client certificate authentication is used for the TLS
+              connection. Needed if the server TLS setup requires a client
+              certificate signed by the server's root CA to verify the identity
+              of the client.
             </Typography>
             {connectionInfo.useClientCertAuth ? (
               <>
