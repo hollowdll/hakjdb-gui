@@ -37,6 +37,7 @@ export interface GeneralInfo {
   uptimeSeconds: string;
   tcpPort: string;
   tlsEnabled: boolean;
+  tlsClientCertAuthEnabled: boolean;
   authEnabled: boolean;
   logfileEnabled: boolean;
   debugEnabled: boolean;

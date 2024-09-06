@@ -427,6 +427,25 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
           expandIcon={<ExpandMoreIcon />}
           {...allyPropsAccordionSummary()}
         >
+          <ListItemText primary="TLS Client Cert Auth Enabled" {...allyPropsInfoField()} />
+          <ListItemText
+            primary={info.tlsClientCertAuthEnabled ? "Yes" : "No"}
+            {...allyPropsInfoValue("tls-client-cert-auth-enabled")}
+          />
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>If client certificate authentication is enabled in TLS. Yes or no.</Typography>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion
+        expanded={accordionExpanded === "panel18"}
+        onChange={handleAccordionChange("panel18")}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          {...allyPropsAccordionSummary()}
+        >
           <ListItemText
             primary="Authentication Enabled"
             {...allyPropsInfoField()}
@@ -442,8 +461,8 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel18"}
-        onChange={handleAccordionChange("panel18")}
+        expanded={accordionExpanded === "panel19"}
+        onChange={handleAccordionChange("panel19")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -461,8 +480,8 @@ function GeneralInfoList({ info, accordion }: GeneralInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel19"}
-        onChange={handleAccordionChange("panel19")}
+        expanded={accordionExpanded === "panel20"}
+        onChange={handleAccordionChange("panel20")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -489,8 +508,8 @@ function DatabaseInfoList({ info, accordion }: DatabaseInfoListProps) {
     <Box sx={{ paddingTop: "1em" }}>
       <h3>Databases</h3>
       <Accordion
-        expanded={accordionExpanded === "panel20"}
-        onChange={handleAccordionChange("panel20")}
+        expanded={accordionExpanded === "panel21"}
+        onChange={handleAccordionChange("panel21")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -508,8 +527,8 @@ function DatabaseInfoList({ info, accordion }: DatabaseInfoListProps) {
       </Accordion>
 
       <Accordion
-        expanded={accordionExpanded === "panel21"}
-        onChange={handleAccordionChange("panel21")}
+        expanded={accordionExpanded === "panel22"}
+        onChange={handleAccordionChange("panel22")}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}

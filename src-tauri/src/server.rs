@@ -75,6 +75,8 @@ pub struct GeneralInfoPayload {
     pub tcp_port: String,
     #[serde(rename = "tlsEnabled")]
     pub tls_enabled: bool,
+    #[serde(rename = "tlsClientCertAuthEnabled")]
+    pub tls_client_cert_auth_enabled: bool,
     #[serde(rename = "authEnabled")]
     pub auth_enabled: bool,
     #[serde(rename = "logfileEnabled")]
@@ -116,6 +118,11 @@ pub async fn get_server_info(
                             .to_string(),
                         tcp_port: resp.general_info.as_ref().unwrap().tcp_port.to_string(),
                         tls_enabled: resp.general_info.as_ref().unwrap().tls_enabled,
+                        tls_client_cert_auth_enabled: resp
+                            .general_info
+                            .as_ref()
+                            .unwrap()
+                            .tls_client_cert_auth_enabled,
                         auth_enabled: resp.general_info.as_ref().unwrap().auth_enabled,
                         logfile_enabled: resp.general_info.as_ref().unwrap().logfile_enabled,
                         debug_enabled: resp.general_info.as_ref().unwrap().debug_enabled,
