@@ -6,7 +6,7 @@ It allows you to control and iteract with HakjDB servers visually with a graphic
 
 hakjctl is a CLI tool for HakjDB that allows you to control HakjDB servers from the command line. HakjDB GUI is more user friendly for people who are not familiar with the command line, allowing you to control HakjDB servers by clicking buttons and filling forms.
 
-Tested platforms: Linux and Windows.
+Tested platforms: Linux and Windows. Supports HakjDB API v1.
 
 # Releases
 
