@@ -12,6 +12,8 @@ Tested platforms: Linux and Windows.
 
 Check out [Releases](https://github.com/hollowdll/hakjdb-gui/releases) page for available downloadable binaries.
 
+Warning! The releases are not code signed, so you will likely get OS warnings telling that the executables are not safe. For now it may be the best to build the executable yourself for your specific platform.
+
 ## For developers
 
 Releases are managed automatically with a GitHub Actions workflow. The workflow is triggered when a new tag is pushed to the remote repository. The tag needs to be of format `v0.0.0`.
