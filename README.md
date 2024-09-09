@@ -6,9 +6,21 @@ It allows you to control and iteract with HakjDB servers visually with a graphic
 
 hakjctl is a CLI tool for HakjDB that allows you to control HakjDB servers from the command line. HakjDB GUI is more user friendly for people who are not familiar with the command line, allowing you to control HakjDB servers by clicking buttons and filling forms.
 
-NOTE: This project is not finished. The `main` branch is currently unstable and being reworked to work with the API v1.
-
 Tested platforms: Linux and Windows.
+
+# Releases
+
+Check out [Releases](https://github.com/hollowdll/hakjdb-gui/releases) page for available downloadable binaries.
+
+## For developers
+
+Releases are managed automatically with a GitHub Actions workflow. The workflow is triggered when a new tag is pushed to the remote repository. The tag needs to be of format `v0.0.0`.
+
+Example:
+```sh
+git tag -a "v0.1.0" -m "Release v0.1.0"
+git push origin v0.1.0
+```
 
 # Build
 
@@ -24,7 +36,7 @@ You will also need Protobuf compiler. Instructions [here](https://github.com/pro
 
 Running the app may vary between Linux distributions.
 
-In some cases you might need to set the following environment variable
+In some cases you might need to set the following environment variable:
 ```sh
 export WEBKIT_DISABLE_COMPOSITING_MODE=1
 ```
