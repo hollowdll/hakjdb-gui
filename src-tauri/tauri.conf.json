@@ -7,7 +7,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "HakjDB GUI",
+    "productName": "hakjdb-gui",
     "version": "0.1.0"
   },
   "tauri": {
