@@ -34,7 +34,7 @@ import {
 } from "../../utility/props";
 
 type ConnectionDialogProps = {
-  handleConnect: (connectionInfo: ConnectionInfo) => Promise<string>;
+  handleConnect: (connectionInfo: ConnectionInfo) => Promise<boolean>;
 };
 
 type FilesChosen = {
