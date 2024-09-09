@@ -63,3 +63,13 @@ Run the app. This will compile the Rust crates and therefore may take some time.
 npm run tauri dev
 ```
 
+## Build in release mode
+
+This builds the release binary, bundle, and installer for your platform.
+
+```sh
+npm run tauri build
+```
+
+See the build logs to know the output locations.
+
