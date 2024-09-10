@@ -6,6 +6,7 @@ import {
   DialogActions,
   Button,
   Typography,
+  DialogContentText,
 } from "@mui/material";
 import { useState, ChangeEvent } from "react";
 import { invokeSetString } from "../../tauri/command";
@@ -13,6 +14,7 @@ import { useLoadingStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
 import {
   allyPropsDialogActions,
+  allyPropsDialogContentText,
   allyPropsDialogTextField,
 } from "../../utility/props";
 import { useConnectionInfoStore } from "../../state/store";
@@ -82,6 +84,9 @@ export default function SetStringDialog(props: SetStringDialogProps) {
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>SetString</DialogTitle>
       <DialogContent>
+        <DialogContentText {...allyPropsDialogContentText()}>
+          Set the value of a String key.
+        </DialogContentText>
         <TextField
           label="Key"
           name="key"

@@ -118,7 +118,9 @@ export default function SetHashMapDialog(props: SetHashMapDialogProps) {
       <DialogContent>
         <DialogContentText
           {...allyPropsDialogContentText()}
-        ></DialogContentText>
+        >
+          Set the specified fields and their values of a HashMap key value.
+        </DialogContentText>
         <TextField
           label="Key"
           name="key"

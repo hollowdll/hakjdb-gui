@@ -6,6 +6,7 @@ import {
   DialogActions,
   Button,
   Typography,
+  DialogContentText,
 } from "@mui/material";
 import { useState, ChangeEvent } from "react";
 import { invokeGetAllHashMapFieldsAndValues } from "../../tauri/command";
@@ -13,6 +14,7 @@ import { useLoadingStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
 import {
   allyPropsDialogActions,
+  allyPropsDialogContentText,
   allyPropsDialogTextField,
 } from "../../utility/props";
 import { useConnectionInfoStore } from "../../state/store";
@@ -91,6 +93,9 @@ export default function GetAllHashMapFieldsAndValuesDialog(
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>GetAllHashMapFieldsAndValues</DialogTitle>
       <DialogContent>
+        <DialogContentText {...allyPropsDialogContentText()}>
+          Get all the fields and values of a HashMap key value.
+        </DialogContentText>
         <TextField
           label="Key"
           name="key"

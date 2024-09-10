@@ -6,6 +6,7 @@ import {
   DialogActions,
   Button,
   Typography,
+  DialogContentText,
 } from "@mui/material";
 import { useState, ChangeEvent } from "react";
 import { invokeGetKeyType } from "../../tauri/command";
@@ -13,6 +14,7 @@ import { useLoadingStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
 import {
   allyPropsDialogActions,
+  allyPropsDialogContentText,
   allyPropsDialogTextField,
 } from "../../utility/props";
 import { useConnectionInfoStore } from "../../state/store";
@@ -81,6 +83,9 @@ export default function GetKeyTypeDialog(props: GetKeyTypeDialogProps) {
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>GetKeyType</DialogTitle>
       <DialogContent>
+        <DialogContentText {...allyPropsDialogContentText()}>
+          Get the data type of a key.
+        </DialogContentText>
         <TextField
           label="Key"
           name="key"

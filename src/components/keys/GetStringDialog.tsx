@@ -6,6 +6,7 @@ import {
   DialogActions,
   Button,
   Typography,
+  DialogContentText,
 } from "@mui/material";
 import { useState, ChangeEvent } from "react";
 import { invokeGetString } from "../../tauri/command";
@@ -13,6 +14,7 @@ import { useLoadingStore } from "../../state/store";
 import { useDialogStore } from "../../state/store";
 import {
   allyPropsDialogActions,
+  allyPropsDialogContentText,
   allyPropsDialogTextField,
 } from "../../utility/props";
 import { useConnectionInfoStore } from "../../state/store";
@@ -83,6 +85,9 @@ export default function GetStringDialog(props: GetStringDialogProps) {
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>GetString</DialogTitle>
       <DialogContent>
+        <DialogContentText {...allyPropsDialogContentText()}>
+          Get the value of a String key.
+        </DialogContentText>
         <TextField
           label="Key"
           name="key"
