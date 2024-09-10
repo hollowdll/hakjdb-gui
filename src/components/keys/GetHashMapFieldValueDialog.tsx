@@ -70,7 +70,7 @@ export default function GetHashMapFieldValuesDialog(
           Object.entries(result.fieldValueMap).forEach(([field, value]) => {
             value.ok
               ? (fieldValueMap[field] =
-                `"${textDecoder.decode(new Uint8Array(value.value))}"`)
+                  `"${textDecoder.decode(new Uint8Array(value.value))}"`)
               : (fieldValueMap[field] = "Field does not exist");
           });
           props.handleDisplayHashMap(fieldValueMap);
@@ -117,9 +117,7 @@ export default function GetHashMapFieldValuesDialog(
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>GetHashMapFieldValues</DialogTitle>
       <DialogContent>
-        <DialogContentText
-          {...allyPropsDialogContentText()}
-        >
+        <DialogContentText {...allyPropsDialogContentText()}>
           Get the values of the specified fields of a HashMap key value.
         </DialogContentText>
         <TextField

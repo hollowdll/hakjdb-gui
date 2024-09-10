@@ -65,8 +65,8 @@ export default function DeleteHashMapFieldsDialog(
       .then((result) => {
         result.ok
           ? props.handleDisplayMsg(
-            `Number of fields removed: ${result.fieldsRemovedCount}`,
-          )
+              `Number of fields removed: ${result.fieldsRemovedCount}`,
+            )
           : props.handleDisplayMsg("Key does not exist");
         handleClose();
         resetForm();
@@ -108,9 +108,7 @@ export default function DeleteHashMapFieldsDialog(
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>DeleteHashMapFields</DialogTitle>
       <DialogContent>
-        <DialogContentText
-          {...allyPropsDialogContentText()}
-        >
+        <DialogContentText {...allyPropsDialogContentText()}>
           Remove the specified fields from a HashMap key value.
         </DialogContentText>
         <TextField
