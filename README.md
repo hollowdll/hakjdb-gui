@@ -8,6 +8,12 @@ hakjctl is a CLI tool for HakjDB that allows you to control HakjDB servers from 
 
 Tested platforms: Linux and Windows. Supports HakjDB API v1.
 
+# Preview
+
+Below is a short preview of the tool
+
+![Preview](./documentation/preview.gif)
+
 # Releases
 
 Check out [Releases](https://github.com/hollowdll/hakjdb-gui/releases) page for available downloadable binaries.
