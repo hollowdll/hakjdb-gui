@@ -26,7 +26,7 @@ Below is a short preview of the tool
 
 # Releases
 
-Check out [Releases](https://github.com/hollowdll/hakjdb-gui/releases) page for available downloadable binaries.
+Check [Releases](https://github.com/hollowdll/hakjdb-gui/releases) page for prebuilt binaries that can be downloaded.
 
 Warning! The releases are not code signed, so you will likely get OS warnings telling that the executables are not safe. For now it may be the best to build the executable yourself for your specific platform.
 
