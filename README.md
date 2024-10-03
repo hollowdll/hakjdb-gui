@@ -14,6 +14,16 @@ Below is a short preview of the tool
 
 ![Preview](./documentation/preview.gif)
 
+# Main Technologies
+
+- Tauri (desktop app framework)
+- TypeScript & Rust (languages)
+- React (UI)
+- Tonic (gRPC client in Rust)
+- Zustand (frontend state management)
+- MUI (UI components)
+- Vite (frontend build tool)
+
 # Releases
 
 Check out [Releases](https://github.com/hollowdll/hakjdb-gui/releases) page for available downloadable binaries.
