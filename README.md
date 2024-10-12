@@ -63,12 +63,12 @@ export WEBKIT_DISABLE_COMPOSITING_MODE=1
 
 Clone with git
 ```sh
-git clone https://github.com/hollowdll/kvdb-gui.git
+git clone https://github.com/hollowdll/hakjdb-gui.git
 ```
 
 Go to the directory depending on where you cloned it
 ```sh
-cd kvdb-gui
+cd hakjdb-gui
 ```
 
 Install node dependencies
